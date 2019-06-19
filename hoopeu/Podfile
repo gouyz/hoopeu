@@ -1,0 +1,32 @@
+use_frameworks!
+platform :ios, "8.0"
+
+target 'hoopeu' do
+
+pod 'SnapKit', '~> 4.2.0' ## 自动布局 https://github.com/SnapKit/SnapKit
+pod 'Alamofire', '~> 4.7.3' ## 网络请求, swift版的AFN  https://github.com/Alamofire/Alamofire
+pod 'Kingfisher', '~> 4.10.0' ## 轻量级的SDWebImage https://github.com/onevcat/Kingfisher
+
+pod 'SwiftyJSON'  ##JSON 解析类 https://github.com/SwiftyJSON/SwiftyJSON
+pod 'MJRefresh'    #快速集成下拉刷新、上拉更多 https://github.com/CoderMJLee/MJRefresh
+pod 'IQKeyboardManagerSwift', '~> 6.2.0' ## #解决键盘弹起遮挡 https://github.com/hackiftekhar/IQKeyboardManager
+pod 'MBProgressHUD', '~> 1.1.0' # 实现多种加载效果 https://github.com/jdg/MBProgressHUD
+
+pod 'Cosmos', '~> 17.0.0' # 星星评分 https://github.com/marketplacer/Cosmos
+
+pod 'DKImagePickerController' #图片选择器 https://github.com/zhangao0086/DKImagePickerController
+pod 'SKPhotoBrowser' #图片浏览器 https://github.com/suzuki-0000/SKPhotoBrowser
+pod 'PYSearch'  # 搜索框 https://github.com/ko1o/PYSearch
+#pod 'FWSideMenu'  # 侧滑控件 https://github.com/choiceyou/FWSideMenu
+
+#pod 'BMPlayer', '~> 1.2.0'  # 基于AVPlayer封装的视频播放器  https://github.com/BrikerMan/BMPlayer
+
+pod 'JPush'  #极光推送
+#pod 'WechatOpenSDK' #微信SDK
+
+#pod 'JMessage' #极光IM
+pod 'FMDB'  #FMDB https://github.com/ccgus/fmdb
+pod 'CocoaMQTT' #MQTT https://github.com/emqtt/CocoaMQTT
+pod "PLPlayerKit", :podspec => 'https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec' #七牛云播放器 使用模拟器 + 真机 鉴于目前 iOS 上架，只支持动态库真机，请在 App 上架前，更换至真机版本
+pod 'Masonry'  #https://github.com/SnapKit/Masonry
+end

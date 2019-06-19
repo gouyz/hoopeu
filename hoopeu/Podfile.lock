@@ -1,0 +1,152 @@
+PODS:
+  - Alamofire (4.7.3)
+  - CLImageEditor (0.2.0):
+    - CLImageEditor/Core (= 0.2.0)
+  - CLImageEditor/Core (0.2.0)
+  - CocoaAsyncSocket (7.6.3)
+  - CocoaMQTT (1.1.3):
+    - CocoaAsyncSocket (~> 7.6.3)
+  - Cosmos (17.0.0)
+  - DKCamera (1.6.2)
+  - DKImagePickerController (4.0.4):
+    - DKImagePickerController/Camera (= 4.0.4)
+    - DKImagePickerController/Core (= 4.0.4)
+    - DKImagePickerController/ImageDataManager (= 4.0.4)
+    - DKImagePickerController/InlineCamera (= 4.0.4)
+    - DKImagePickerController/PhotoEditor (= 4.0.4)
+    - DKImagePickerController/PhotoGallery (= 4.0.4)
+    - DKImagePickerController/Resource (= 4.0.4)
+  - DKImagePickerController/Camera (4.0.4):
+    - DKCamera
+    - DKImagePickerController/Core
+  - DKImagePickerController/Core (4.0.4):
+    - DKImagePickerController/ImageDataManager
+    - DKImagePickerController/Resource
+  - DKImagePickerController/ImageDataManager (4.0.4)
+  - DKImagePickerController/InlineCamera (4.0.4):
+    - DKCamera
+    - DKImagePickerController/Core
+  - DKImagePickerController/PhotoEditor (4.0.4):
+    - CLImageEditor (= 0.2.0)
+    - DKImagePickerController/Core
+  - DKImagePickerController/PhotoGallery (4.0.4):
+    - DKImagePickerController/Core
+    - DKPhotoGallery
+  - DKImagePickerController/Resource (4.0.4)
+  - DKPhotoGallery (0.0.10):
+    - DKPhotoGallery/Core (= 0.0.10)
+    - DKPhotoGallery/Model (= 0.0.10)
+    - DKPhotoGallery/Preview (= 0.0.10)
+    - DKPhotoGallery/Resource (= 0.0.10)
+    - SDWebImage/GIF
+  - DKPhotoGallery/Core (0.0.10):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Preview
+    - SDWebImage/GIF
+  - DKPhotoGallery/Model (0.0.10):
+    - SDWebImage/GIF
+  - DKPhotoGallery/Preview (0.0.10):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Resource
+    - SDWebImage/GIF
+  - DKPhotoGallery/Resource (0.0.10):
+    - SDWebImage/GIF
+  - FLAnimatedImage (1.0.12)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - IQKeyboardManagerSwift (6.2.0)
+  - JCore (1.2.6)
+  - JPush (3.1.2):
+    - JCore (~> 1.2.6)
+  - Kingfisher (4.10.1)
+  - Masonry (1.1.0)
+  - MBProgressHUD (1.1.0)
+  - MJRefresh (3.1.15.7)
+  - PLPlayerKit (3.4.1):
+    - PLPlayerKit/universal (= 3.4.1)
+  - PLPlayerKit/universal (3.4.1)
+  - PYSearch (0.9.1)
+  - SDWebImage/Core (4.4.2)
+  - SDWebImage/GIF (4.4.2):
+    - FLAnimatedImage (~> 1.0)
+    - SDWebImage/Core
+  - SKPhotoBrowser (6.0.0)
+  - SnapKit (4.2.0)
+  - SwiftyJSON (4.2.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.7.3)
+  - CocoaMQTT
+  - Cosmos (~> 17.0.0)
+  - DKImagePickerController
+  - FMDB
+  - IQKeyboardManagerSwift (~> 6.2.0)
+  - JPush
+  - Kingfisher (~> 4.10.0)
+  - Masonry
+  - MBProgressHUD (~> 1.1.0)
+  - MJRefresh
+  - PLPlayerKit (from `https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec`)
+  - PYSearch
+  - SKPhotoBrowser
+  - SnapKit (~> 4.2.0)
+  - SwiftyJSON
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - CLImageEditor
+    - CocoaAsyncSocket
+    - CocoaMQTT
+    - Cosmos
+    - DKCamera
+    - DKImagePickerController
+    - DKPhotoGallery
+    - FLAnimatedImage
+    - FMDB
+    - IQKeyboardManagerSwift
+    - JCore
+    - JPush
+    - Kingfisher
+    - Masonry
+    - MBProgressHUD
+    - MJRefresh
+    - PYSearch
+    - SDWebImage
+    - SKPhotoBrowser
+    - SnapKit
+    - SwiftyJSON
+
+EXTERNAL SOURCES:
+  PLPlayerKit:
+    :podspec: https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec
+
+SPEC CHECKSUMS:
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  CLImageEditor: ec5ae50b3a54c9818c0bdb243b20665a1c6718e3
+  CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
+  CocoaMQTT: b506d38ad3bbe1c55a4f8ee8c9fd02c35da1a7d8
+  Cosmos: 309e489f21ffc91a1eeecfebef7f817cd2fcfba6
+  DKCamera: c25552afb4bc3ef4c7966b16a44352d36475fe5d
+  DKImagePickerController: debcc4eaa09b82c06fc237f1bebd6a9fd4be9fa3
+  DKPhotoGallery: d2ee578ee1ae92f3350de9ebc5e2fb5762a76626
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  IQKeyboardManagerSwift: b07ccf9d8cafe993dcd6cb794eb4ba34611a0c4e
+  JCore: cae516dd2bf1a73b578ce6e1065abd49e709e0f7
+  JPush: d0cead70ba223a6a3b52749899ebda830dfbc49a
+  Kingfisher: c148cd7b47ebde9989f6bc7c27dcaa79d81279a0
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
+  PLPlayerKit: 8dbda4525878842315e0ae6329dcefa7b5d8cc7e
+  PYSearch: 76dee18eea3309b60921a5d6a69390a63a5dda15
+  SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
+  SKPhotoBrowser: 76eb862685761707b5745fde7762757966565e07
+  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
+  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
+
+PODFILE CHECKSUM: 15a0fb21202cca712fee18c7941d71d7b214caa9
+
+COCOAPODS: 1.5.3
