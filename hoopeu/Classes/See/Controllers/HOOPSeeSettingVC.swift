@@ -10,6 +10,7 @@ import UIKit
 import CocoaMQTT
 import MBProgressHUD
 import SwiftyJSON
+import AudioToolbox
 
 private let seeSettingCell = "seeSettingCell"
 private let seeSettingSwitchCell = "seeSettingSwitchCell"
@@ -60,6 +61,8 @@ class HOOPSeeSettingVC: GYZBaseVC {
     
     /// 开关状态
     @objc func onSwitchViewChange(sender: UISwitch){
+        //默认震动效果
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
         let row = sender.tag
         switch row {
         case 1: /// 移动侦测开关

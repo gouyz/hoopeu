@@ -95,7 +95,7 @@ class HOOPPlayerDetailVC: GYZBaseVC {
     lazy var shotBtn : UIButton = {
         let btn = UIButton.init(type: .custom)
         btn.titleLabel?.font = k13Font
-        btn.setTitleColor(kBlackFontColor, for: .normal)
+        btn.setTitleColor(kWhiteColor, for: .normal)
         btn.tag = 101
         btn.addTarget(self, action: #selector(clickedOperateBtn(btn:)), for: .touchUpInside)
         return btn
@@ -104,7 +104,7 @@ class HOOPPlayerDetailVC: GYZBaseVC {
     lazy var shotListBtn : UIButton = {
         let btn = UIButton.init(type: .custom)
         btn.titleLabel?.font = k13Font
-        btn.setTitleColor(kBlackFontColor, for: .normal)
+        btn.setTitleColor(kWhiteColor, for: .normal)
         btn.tag = 102
         btn.addTarget(self, action: #selector(clickedOperateBtn(btn:)), for: .touchUpInside)
         return btn
@@ -118,8 +118,9 @@ class HOOPPlayerDetailVC: GYZBaseVC {
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: "当前视频未播放，不能截图操作！")
             }
-        }else{
-            
+        }else{// 图库
+            let vc = HOOPShotPhotosVC()
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
     /// 上传图片

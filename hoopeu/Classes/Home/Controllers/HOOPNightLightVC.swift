@@ -10,6 +10,7 @@ import UIKit
 import MBProgressHUD
 import CocoaMQTT
 import SwiftyJSON
+import AudioToolbox
 
 class HOOPNightLightVC: GYZBaseVC {
     /// 光感控制
@@ -211,6 +212,8 @@ class HOOPNightLightVC: GYZBaseVC {
     
     /// 开关状态
     @objc func onSwitchViewChange(sender: UISwitch){
+        //默认震动效果
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
         let row = sender.tag
         if row == 101 {
             light_tri = sender.isOn

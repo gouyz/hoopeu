@@ -10,6 +10,7 @@ import UIKit
 import MBProgressHUD
 import CocoaMQTT
 import SwiftyJSON
+import AudioToolbox
 
 class HOOPWarnSettingVC: GYZBaseVC {
     
@@ -24,6 +25,8 @@ class HOOPWarnSettingVC: GYZBaseVC {
     var guard_delay: String = "8"
     /// 是否需要获取信息
     var isRequest: Bool = true
+    /// 是否设置定时布防
+    var isSetDayTime: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +39,7 @@ class HOOPWarnSettingVC: GYZBaseVC {
         setupUI()
         
         iconWarnTimeView.addOnClickListener(target: self, action: #selector(onClickedEditTime))
+        iconWarnTimeView.isUserInteractionEnabled = isSetDayTime
         iconTimeView.addOnClickListener(target: self, action: #selector(onSelectTime))
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -47,6 +51,7 @@ class HOOPWarnSettingVC: GYZBaseVC {
     /// 创建UI
     func setupUI(){
         view.addSubview(desLab)
+        view.addSubview(personSwitchView)
         view.addSubview(bgView)
         bgView.addSubview(warnTimeLab)
         bgView.addSubview(iconWarnTimeView)
@@ -59,8 +64,12 @@ class HOOPWarnSettingVC: GYZBaseVC {
         desLab.snp.makeConstraints { (make) in
             make.top.equalTo(kTitleAndStateHeight)
             make.left.equalTo(kMargin)
-            make.right.equalTo(-kMargin)
+            make.width.equalTo(160)
             make.height.equalTo(kTitleHeight)
+        }
+        personSwitchView.snp.makeConstraints { (make) in
+            make.left.equalTo(desLab.snp.right).offset(kMargin)
+            make.centerY.equalTo(desLab)
         }
         bgView.snp.makeConstraints { (make) in
             make.left.right.equalTo(view)
@@ -109,6 +118,13 @@ class HOOPWarnSettingVC: GYZBaseVC {
         lab.text = "定时布防"
         
         return lab
+    }()
+    /// 定时布防 开关
+    lazy var personSwitchView: UISwitch = {
+        let sw = UISwitch()
+        sw.isOn = isSetDayTime
+        sw.addTarget(self, action: #selector(onSwitchViewChange), for: .valueChanged)
+        return sw
     }()
     ///
     lazy var bgView : UIView = {
@@ -168,6 +184,19 @@ class HOOPWarnSettingVC: GYZBaseVC {
         
         return btn
     }()
+    /// 开关状态
+    @objc func onSwitchViewChange(){
+        //默认震动效果
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+        isSetDayTime = personSwitchView.isOn
+        iconWarnTimeView.isUserInteractionEnabled = isSetDayTime
+        if !isSetDayTime {
+            warnTimeLab.text = "未设置"
+            day_time = ""
+            week_time = ""
+            user_define_times.removeAll()
+        }
+    }
     /// 保存
     @objc func clickedSaveBtn(){
 //        if day_time.isEmpty {
@@ -186,6 +215,7 @@ class HOOPWarnSettingVC: GYZBaseVC {
     
     /// 编辑时间
     @objc func onClickedEditTime(){
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
         let vc = HOOPWarnEditTimeVC()
         vc.resultBlock = {[weak self] (dayTime, weekTime,customWeek) in
             
@@ -200,6 +230,7 @@ class HOOPWarnSettingVC: GYZBaseVC {
     
     /// 选择时间
     @objc func onSelectTime(){
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
         UsefulPickerView.showSingleColPicker("选择延时布防(1-30秒)", data: timeArr, defaultSelectedIndex: nil) {[weak self] (index, value) in
             self?.timeLab.text = value + "秒"
             self?.guard_delay = value
@@ -209,7 +240,7 @@ class HOOPWarnSettingVC: GYZBaseVC {
     /// mqtt发布主题
     func sendSaveMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg":["guard_time":["day_time":day_time,"week_time":week_time,"user_define_times":user_define_times],"guard_delay":guard_delay],"msg_type":"guard_setting","app_interface_tag":""]
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg":["is_set":isSetDayTime,"guard_time":["day_time":day_time,"week_time":week_time,"user_define_times":user_define_times],"guard_delay":guard_delay],"msg_type":"guard_setting","app_interface_tag":""]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -260,8 +291,14 @@ class HOOPWarnSettingVC: GYZBaseVC {
                 hud?.hide(animated: true)
                 if result["ret"].intValue == 1{
                     day_time = result["guard_time"]["day_time"].stringValue
+                    if !day_time.isEmpty{
+                        isSetDayTime = true
+                        iconWarnTimeView.isUserInteractionEnabled = isSetDayTime
+                    }
                     week_time = result["guard_time"]["week_time"].stringValue
-                    guard_delay = result["guard_delay"].stringValue
+                    if result["guard_delay"].intValue > 0 {
+                        guard_delay = result["guard_delay"].stringValue
+                    }
                     
                     guard let itemInfo = result["guard_time"]["user_define_times"].array else { return }
                     for item in itemInfo{

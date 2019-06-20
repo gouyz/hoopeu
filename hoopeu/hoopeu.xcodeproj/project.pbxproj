@@ -64,6 +64,8 @@
 		0A0C9D56224D09CA0055F7DF /* HOOPCtrlModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0C9D55224D09CA0055F7DF /* HOOPCtrlModel.swift */; };
 		0A0C9D58224D1B2A0055F7DF /* HOOPConditionSceneDoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0C9D57224D1B2A0055F7DF /* HOOPConditionSceneDoVC.swift */; };
 		0A0D70D622AEAF4500F4A564 /* HOOPLinkPersonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D70D522AEAF4500F4A564 /* HOOPLinkPersonModel.swift */; };
+		0A0E566022BBB52C001B6556 /* HOOPShotPhotosVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0E565F22BBB52C001B6556 /* HOOPShotPhotosVC.swift */; };
+		0A0E566222BBB6E4001B6556 /* HOOPShotsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0E566122BBB6E4001B6556 /* HOOPShotsModel.swift */; };
 		0A11E5AB22958D81003EA909 /* HOOPSeeSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A11E5AA22958D81003EA909 /* HOOPSeeSettingVC.swift */; };
 		0A11EFE12247B8D300756F24 /* HOOPBlueToothContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A11EFE02247B8D300756F24 /* HOOPBlueToothContentVC.swift */; };
 		0A11EFE32247BE5E00756F24 /* HOOPConnectWiFiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A11EFE22247BE5E00756F24 /* HOOPConnectWiFiVC.swift */; };
@@ -346,6 +348,8 @@
 		0A0C9D55224D09CA0055F7DF /* HOOPCtrlModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPCtrlModel.swift; sourceTree = "<group>"; };
 		0A0C9D57224D1B2A0055F7DF /* HOOPConditionSceneDoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPConditionSceneDoVC.swift; sourceTree = "<group>"; };
 		0A0D70D522AEAF4500F4A564 /* HOOPLinkPersonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLinkPersonModel.swift; sourceTree = "<group>"; };
+		0A0E565F22BBB52C001B6556 /* HOOPShotPhotosVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPShotPhotosVC.swift; sourceTree = "<group>"; };
+		0A0E566122BBB6E4001B6556 /* HOOPShotsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPShotsModel.swift; sourceTree = "<group>"; };
 		0A11E5AA22958D81003EA909 /* HOOPSeeSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPSeeSettingVC.swift; sourceTree = "<group>"; };
 		0A11EFE02247B8D300756F24 /* HOOPBlueToothContentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPBlueToothContentVC.swift; sourceTree = "<group>"; };
 		0A11EFE22247BE5E00756F24 /* HOOPConnectWiFiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPConnectWiFiVC.swift; sourceTree = "<group>"; };
@@ -1166,6 +1170,7 @@
 		0A3ABA5321DDE8DD0048F0F3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0A0E566122BBB6E4001B6556 /* HOOPShotsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1177,6 +1182,7 @@
 				0A3ABB1C21DDEA9A0048F0F3 /* HOOPSeeVC.swift */,
 				0A3C851A224B1942002C794E /* HOOPSeePlayerVC.swift */,
 				0A11E5AA22958D81003EA909 /* HOOPSeeSettingVC.swift */,
+				0A0E565F22BBB52C001B6556 /* HOOPShotPhotosVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -2289,6 +2295,7 @@
 				0A3DA2C9222FBD3000A03350 /* HOOPSelectARCControlVC.swift in Sources */,
 				0A3B8484221E90DB007ADEAE /* HOOPModifyDeviceNameVC.swift in Sources */,
 				0A3ABAC921DDE8DE0048F0F3 /* JSMWebViewVC.swift in Sources */,
+				0A0E566222BBB6E4001B6556 /* HOOPShotsModel.swift in Sources */,
 				0A3ABB1221DDE8DE0048F0F3 /* GYZLunarFormatter.swift in Sources */,
 				0AB627E62225847F00E60856 /* HOOPLogDetailVC.swift in Sources */,
 				0A3DA2C8222FBD3000A03350 /* HOOPShePinControlVC.swift in Sources */,
@@ -2470,6 +2477,7 @@
 				0A3ABAF221DDE8DE0048F0F3 /* AXBadgeView.swift in Sources */,
 				0A4D228422B9BB37000A56ED /* WNPlayerVideoRGBFrame.m in Sources */,
 				0A11EFE32247BE5E00756F24 /* HOOPConnectWiFiVC.swift in Sources */,
+				0A0E566022BBB52C001B6556 /* HOOPShotPhotosVC.swift in Sources */,
 				0A3B847E221E812D007ADEAE /* HOOPDeviceManagerVC.swift in Sources */,
 				0A4FE1522223E77000CCF442 /* HOOPAddConditionSceneVC.swift in Sources */,
 				0A3DA2D1222FBE1300A03350 /* HOOPCustomControlCell.swift in Sources */,

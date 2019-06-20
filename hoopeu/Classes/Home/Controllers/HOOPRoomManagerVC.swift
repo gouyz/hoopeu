@@ -174,6 +174,7 @@ class HOOPRoomManagerVC: GYZBaseVC {
             if type == "app_room_del_re" && phone == userDefaults.string(forKey: "phone"){
                 self.hud?.hide(animated: true)
                 if result["code"].intValue == kQuestSuccessTag{
+                    userDefaults.set(true, forKey: "isAddRoom")
                     requestRoomList()
                 }else{
                     MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
