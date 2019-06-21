@@ -169,7 +169,7 @@ extension HOOPShotPhotosVC: UICollectionViewDataSource,UICollectionViewDelegate{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: shotPhotosCell, for: indexPath) as! HOOPLogDetailCell
         
         let model = dataList[indexPath.row]
-        cell.nameLab.text = model.createTime?.getDateTime(format: "yyyy-MM-dd HH:mm:ss")
+        cell.nameLab.text = model.createTime?.subString(start: 0, length: (model.createTime?.count)! - 3).getDateTime(format: "yyyy-MM-dd HH:mm:ss")
         cell.iconView.kf.setImage(with: URL.init(string: model.url!), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
         return cell
     }
