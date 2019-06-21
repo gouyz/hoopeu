@@ -27,6 +27,11 @@ pod 'JPush'  #极光推送
 #pod 'JMessage' #极光IM
 pod 'FMDB'  #FMDB https://github.com/ccgus/fmdb
 pod 'CocoaMQTT' #MQTT https://github.com/emqtt/CocoaMQTT
-pod "PLPlayerKit", :podspec => 'https://raw.githubusercontent.com/pili-engineering/PLPlayerKit/master/PLPlayerKit-Universal.podspec' #七牛云播放器 使用模拟器 + 真机 鉴于目前 iOS 上架，只支持动态库真机，请在 App 上架前，更换至真机版本
-pod 'Masonry'  #https://github.com/SnapKit/Masonry
+
+### 支持定制任何播放器SDK和控制层https://github.com/renzifeng/ZFPlayer
+pod 'FDFullscreenPopGesture'
+pod 'ZFPlayer'
+#pod 'ZFPlayer/ijkplayer'
+pod 'ZFPlayer/ControlView'
+pod 'ZFPlayer/AVPlayer'
 end

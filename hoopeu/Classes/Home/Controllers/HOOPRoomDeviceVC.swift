@@ -195,7 +195,7 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                 return
             }
         }
-        let vc = HOOPSeePlayerVC()
+        let vc = HOOPPlayerDetailVC()
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 自定义遥控器

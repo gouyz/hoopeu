@@ -26,10 +26,8 @@
 /// 进度条
 #import "SYLineProgressView.h"
 #import "SYRingProgressView.h"
-/// 七牛云播放器
-#import <PLPlayerKit/PLPlayerKit.h>
-/// WNPlayer 万能播放器
-#import "WNPlayer.h"
+
+#import "ZFIJKPlayerManager.h"
 
 /// 极光推送相关头文件
 // 引入JPush功能所需头文件

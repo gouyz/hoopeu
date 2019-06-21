@@ -12,65 +12,59 @@ import CocoaMQTT
 import SwiftyJSON
 import CallKit
 import CoreTelephony
+import ZFPlayer
 
 class HOOPPlayerDetailVC: GYZBaseVC {
     
-    var wnPlayer:WNPlayer?
+    var player:ZFPlayerController?
     var callCenter : Any?//声明属性
     //(注意：这里必须是全局属性，不能定义局部变量，由于iOS10.0以后版本和之前的版本方法不同，所以我这里声明了一个任意类型的全局变量）
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        self.navigationItem.title = "爱心看护"
+        self.navigationItem.title = "爱心看护"
         self.view.backgroundColor = kBlackColor
         
-       ////获取设备旋转方向的通知,即使关闭了自动旋转,一样可以监测到设备的旋转方向
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(onDeviceOrientationChange(noti:)), name: UIDevice.orientationDidChangeNotification, object: nil)
-        
-//        self.wnPlayer = WNPlayer.init()
-//        self.wnPlayer?.autoplay = true
-//        self.wnPlayer?.title = "爱心看护"
-//        self.wnPlayer?.delegate = self
-//        self.view.addSubview(self.wnPlayer!)
-//        self.wnPlayer?.snp.makeConstraints { (make) in
-//            make.left.right.equalTo(self.view)
-//            make.top.equalTo(self.view)
-//            make.height.equalTo(self.view.snp.width).multipliedBy(9.0/16.0)
-//        }
         showVideo()
         
         requestDevicePlus()
         mqttSetting()
     }
     override var shouldAutorotate: Bool{
-        if wnPlayer?.playerManager.displayView.contentSize.width < wnPlayer?.playerManager.displayView.contentSize.height {
-            return false
-        }
-        return true
+        
+        return (self.player?.shouldAutorotate)!
     }
     func showVideo(){
         
-        self.wnPlayer = WNPlayer.init()
-        self.wnPlayer?.autoplay = true
-        self.wnPlayer?.title = "爱心看护"
-        self.wnPlayer?.delegate = self
-        self.view.addSubview(self.wnPlayer!)
+       
+        self.view.addSubview(self.containerView)
+        self.containerView.addSubview(self.playBtn)
         
         self.view.addSubview(shotBtn)
         self.view.addSubview(shotListBtn)
         
-        self.wnPlayer?.snp.makeConstraints { (make) in
-            make.left.right.equalTo(self.view)
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(kStateHeight)
-                
-            }else{
-                make.top.equalTo(self.view)
-            }
-            make.height.equalTo(self.view.snp.width).multipliedBy(9.0/16.0)
+        let playerManager = ZFIJKPlayerManager.init()
+        self.player = ZFPlayerController.init(playerManager: playerManager, containerView: self.containerView)
+        self.player?.controlView = self.controlView
+        /// 设置退到后台继续播放
+        self.player?.pauseWhenAppResignActive = false
+        self.player?.orientationDidChanged = {[weak self] (player,isFullScreen) in
+            self?.setNeedsStatusBarAppearanceUpdate()
         }
+        self.player?.assetURL = URL.init(string: "rtmp://pili-live-rtmp.hoopeurobot.com/hoopeu-video-camera/" + userDefaults.string(forKey: "devId")!)!
+        self.controlView.showTitle("爱心看护", coverURLString: "", fullScreenMode: .automatic)
+        
+        self.containerView.snp.makeConstraints({ (make) in
+            make.left.right.equalTo(self.view)
+            make.top.equalTo(kTitleAndStateHeight)
+            make.height.equalTo(self.view.snp.width).multipliedBy(9.0/16.0)
+        })
+        self.playBtn.snp.makeConstraints { (make) in
+            make.center.equalTo(self.containerView)
+            make.size.equalTo(CGSize.init(width: kTitleHeight, height: kTitleHeight))
+        }
+        
         shotBtn.snp.makeConstraints { (make) in
             make.right.equalTo(self.view.snp.centerX).offset(-20)
             make.bottom.equalTo(-kTitleAndStateHeight)
@@ -85,12 +79,31 @@ class HOOPPlayerDetailVC: GYZBaseVC {
         shotBtn.set(image: UIImage.init(named: "icon_snapshot"), title: "截图", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
         shotListBtn.set(image: UIImage.init(named: "icon_snapshot_list"), title: "图库", titlePosition: .bottom, additionalSpacing: 5, state: .normal)
         
-        self.wnPlayer?.urlString = "rtmp://pili-live-rtmp.hoopeurobot.com/hoopeu-video-camera/" + userDefaults.string(forKey: "devId")!
-//        self.wnPlayer?.urlString = "http://mov.bn.netease.com/open-movie/nos/flv/2017/01/03/SC8U8K7BC_hd.flv"
-//        self.wnPlayer?.urlString = "rtmp://58.200.131.2:1935/livetv/hunantv"
-//        self.wnPlayer?.open(withTCP: true, optionDic: ["headers":"Cookie:FTN5K=f44da28b"])
-        self.wnPlayer?.play()
     }
+    lazy var controlView: ZFPlayerControlView = {
+        let playerView = ZFPlayerControlView.init()
+        playerView.fastViewAnimated = true
+        playerView.autoHiddenTimeInterval = 5
+        playerView.autoFadeTimeInterval = 0.5
+        playerView.prepareShowLoading = true
+        playerView.prepareShowControlView = true
+        
+        return playerView
+    }()
+    lazy var containerView: UIImageView = {
+        let imgView = UIImageView.init()
+        imgView.setImageWithURLString("", placeholder: ZFUtilities.image(with: UIColor.init(red: 220/255.0, green: 220/255.0, blue: 220/255.0, alpha: 1), size: CGSize.init(width: 1, height: 1)))
+        
+        return imgView
+    }()
+    /// 开始
+    lazy var playBtn : UIButton = {
+        let btn = UIButton.init(type: .custom)
+        btn.setImage(UIImage.init(named: "new_allPlay_44x44_"), for: .normal)
+        btn.tag = 103
+        btn.addTarget(self, action: #selector(clickedOperateBtn(btn:)), for: .touchUpInside)
+        return btn
+    }()
     /// 截图
     lazy var shotBtn : UIButton = {
         let btn = UIButton.init(type: .custom)
@@ -113,14 +126,16 @@ class HOOPPlayerDetailVC: GYZBaseVC {
     @objc func clickedOperateBtn(btn : UIButton){
         let tag = btn.tag
         if tag == 101  {// 截图
-            if (self.wnPlayer?.playerManager.playing)!{
-                requestUpdateHeaderImg(img: (self.wnPlayer?.snapshot((self.wnPlayer?.frame.size)!))!)
+            if (self.player?.currentPlayerManager.isPlaying)!{
+                requestUpdateHeaderImg(img: (self.player?.currentPlayerManager.thumbnailImageAtCurrentTime!())!)
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: "当前视频未播放，不能截图操作！")
             }
-        }else{// 图库
+        }else if tag == 102{// 图库
             let vc = HOOPShotPhotosVC()
             navigationController?.pushViewController(vc, animated: true)
+        }else if tag == 103{// 开始播放
+            
         }
     }
     /// 上传图片
@@ -173,72 +188,36 @@ class HOOPPlayerDetailVC: GYZBaseVC {
     }
     //viewController所支持的全部旋转方向
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask{
-        return UIInterfaceOrientationMask.allButUpsideDown
+        if (self.player?.isFullScreen)! {
+            return .landscape
+        }
+        return .portrait
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        UIApplication.shared.setStatusBarStyle(UIStatusBarStyle.lightContent, animated: false)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.player?.isViewControllerDisappear = false
         
     }
     override func viewWillDisappear(_ animated: Bool) {
 //        super.viewWillDisappear(animated)
-        UIApplication.shared.setStatusBarStyle(UIStatusBarStyle.default, animated: false)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        
         ///检测是否需要关闭推流
         requestDeviceClosed()
-        self.wnPlayer?.close()
+        self.player?.isViewControllerDisappear = true
     }
-    /**
-     *  旋转屏幕通知
-     */
-    @objc func onDeviceOrientationChange(noti:NSNotification){
-        let orientation: UIDeviceOrientation = UIDevice.current.orientation
-        switch orientation {
-        case .portraitUpsideDown://第3个旋转方向---电池栏在下
-            break
-        case .portrait://第0个旋转方向---电池栏在上
-            toOrientation(orientation: .portrait)
-        case .landscapeLeft://第2个旋转方向---电池栏在左
-            toOrientation(orientation: .landscapeLeft)
-        case .landscapeRight://第1个旋转方向---电池栏在右
-            toOrientation(orientation: .landscapeRight)
-        default:
-            break
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        if (self.player?.isFullScreen)! {
+            return .lightContent
         }
+        return .default
     }
-    //点击进入,退出全屏,或者监测到屏幕旋转去调用的方法
-    func toOrientation(orientation: UIDeviceOrientation){
-        if orientation == .portrait {
-            wnPlayer?.snp.remakeConstraints({ (make) in
-                make.left.right.equalTo(self.view)
-                make.top.equalTo(self.view)
-                make.height.equalTo(self.view.snp.width).multipliedBy(9.0/16.0)
-            })
-            self.wnPlayer?.isFullscreen = false
-        }else{
-            wnPlayer?.snp.remakeConstraints({ (make) in
-                if WNPlayer.isiPhoneX(){
-                    if self.wnPlayer?.playerManager.displayView.contentSize.width < wnPlayer?.playerManager.displayView.contentSize.height {
-                        make.edges.equalTo(UIEdgeInsets.init(top: 14, left: 0, bottom: 0, right: 0))
-                    }else{
-                        make.edges.equalTo(0)
-                    }
-                }else{
-                    make.edges.equalTo(0)
-                }
-            })
-            self.wnPlayer?.isFullscreen = true
-        }
-        if #available(iOS 11.0, *) {
-            self.setNeedsUpdateOfHomeIndicatorAutoHidden()
-        }
+    override var prefersStatusBarHidden: Bool{
+        /// 如果只是支持iOS9+ 那直接return NO即可，这里为了适配iOS8
+        return (self.player?.isStatusBarHidden)!
     }
-    
-    deinit {
-        self.wnPlayer?.close()
-    }
-    /// 添加在线人数
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation{
+        return .slide
+    }    /// 添加在线人数
     func requestDevicePlus(){
         if !GYZTool.checkNetWork() {
             return
@@ -269,18 +248,18 @@ class HOOPPlayerDetailVC: GYZBaseVC {
                 caCenter.callEventHandler = { (call: CTCall) -> Void in
                     if call.callState == CTCallStateDisconnected {
                         print("电话挂断")
-                        self.wnPlayer?.play()
+                        self.player?.currentPlayerManager.play!()
                         
                     }else if call.callState == CTCallStateConnected {
                         print("电话接通")
-                        self.wnPlayer?.pause()
+                        self.player?.currentPlayerManager.pause!()
                         
                     }else if call.callState == CTCallStateIncoming {
                         print("电话被叫")
-                        self.wnPlayer?.pause()
+                        self.player?.currentPlayerManager.pause!()
                     }else if call.callState == CTCallStateDialing {
                         print("主动拨打电话")
-                        self.wnPlayer?.pause()
+                        self.player?.currentPlayerManager.pause!()
                     }
                     
                 }
@@ -372,32 +351,6 @@ class HOOPPlayerDetailVC: GYZBaseVC {
         }
     }
 }
-
-extension HOOPPlayerDetailVC: WNPlayerDelegate{
-    //点击关闭按钮代理方法
-    func wnplayer(_ wnplayer: WNPlayer!, clickedClose backBtn: UIButton!) {
-        if (self.wnPlayer?.isFullscreen)! {//全屏
-            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
-        }else{
-            clickedBackBtn()
-        }
-    }
-    func wnplayer(_ wnplayer: WNPlayer!, clickedFullScreenButton fullScreenBtn: UIButton!) {
-        if (self.wnPlayer?.isFullscreen)! {//全屏
-           //强制翻转屏幕，Home键在下边。
-            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
-        }else{
-            UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
-        }
-        UIViewController.attemptRotationToDeviceOrientation()
-    }
-    func wnplayerFailedPlay(_ wnplayer: WNPlayer!, wnPlayerStatus state: WNPlayerStatus) {
-//        if state == WNPlayerStatusPlaying {
-//            hud?.hide(animated: true)
-//            hiddenEmptyView()
-//        }
-    }
-}
 extension HOOPPlayerDetailVC: CXCallObserverDelegate{
     //iOS10.0以后版本下的电话监听代理
     @available(iOS 10.0, *)
@@ -417,12 +370,12 @@ extension HOOPPlayerDetailVC: CXCallObserverDelegate{
         //接通
         if (call.isOutgoing && call.hasConnected && !call.hasEnded) {
             
-            self.wnPlayer?.pause()
+            self.player?.currentPlayerManager.pause!()
         }
         //挂断
         if (call.isOutgoing && call.hasConnected && call.hasEnded) {
             
-            self.wnPlayer?.play()
+            self.player?.currentPlayerManager.play!()
         }
     }
 }
