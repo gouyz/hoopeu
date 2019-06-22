@@ -222,9 +222,10 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
             for (index,model) in dataList.enumerated(){
                 titleArr.append(model.roomName!)
                 roomIdValue.append(model.roomId!)
-                if model.roomId == "0"{
-                    currIndex = 0
-                }else if model.isDefault == "1"{
+//                if model.roomId == "0"{
+//                    currIndex = 0
+//                }else
+                if model.isDefault == "1"{
                     currIndex = index
                 }
             }
