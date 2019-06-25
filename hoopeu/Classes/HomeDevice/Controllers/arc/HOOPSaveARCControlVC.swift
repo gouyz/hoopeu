@@ -12,6 +12,14 @@ import CocoaMQTT
 import SwiftyJSON
 
 class HOOPSaveARCControlVC: GYZBaseVC {
+    /// 当前匹配组
+    var curMatchIndex: Int = 0
+    /// 当前匹配组的品牌下标
+    var curMatchBrandIndex: Int = 0
+    var deviceType: DeviceType = .ARC
+    var ir_type: String = "ir_air"
+    /// 临时id
+    var deviceId: String = ""
     
     /// 房间
     var dataList: [HOOPRoomModel] = [HOOPRoomModel]()
@@ -26,6 +34,13 @@ class HOOPSaveARCControlVC: GYZBaseVC {
         
         setUpUI()
         requestRoomList()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if mqtt == nil {
+            mqttSetting()
+        }
     }
     
     func setUpUI(){
@@ -235,8 +250,15 @@ class HOOPSaveARCControlVC: GYZBaseVC {
     
     /// 保存
     @objc func clickedSendBtn(){
-        
-        
+        if (arcNameTxtFiled.text?.isEmpty)! {
+            MBProgressHUD.showAutoDismissHUD(message: "请输入遥控器名称")
+            return
+        }
+        if selectRoomIndex == -1 {
+            MBProgressHUD.showAutoDismissHUD(message: "请选择遥控器所属房间")
+            return
+        }
+        sendCmdMqtt()
     }
     /// 选择房间
     @objc func onClickedSelectRoom(){
@@ -251,6 +273,49 @@ class HOOPSaveARCControlVC: GYZBaseVC {
                 self?.roomTxtFiled.text = value
                 self?.selectRoomIndex = index
             }
+        }
+    }
+    
+    
+    /// 添加遥控器
+    func sendCmdMqtt(){
+        createHUD(message: "加载中...")
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_add","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":deviceId,"ir_type":ir_type,"ir_name":arcNameTxtFiled.text!,"room_id": dataList[selectRoomIndex].roomId!,"brand":curMatchBrandIndex,"code_bark": curMatchIndex,"mobile_type":"ios","functions":code,"app_interface_tag":""]
+        
+        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    
+    /// 重载CocoaMQTTDelegate
+    override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+        super.mqtt(mqtt, didConnectAck: ack)
+        if ack == .accept {
+            mqtt.subscribe("api_receive", qos: CocoaMQTTQOS.qos1)
+            
+        }
+    }
+    override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
+        super.mqtt(mqtt, didReceiveMessage: message, id: id)
+        
+        if let data = message.string {
+            let result = JSON.init(parseJSON: data)
+            let phone = result["phone"].stringValue
+            let type = result["msg_type"].stringValue
+            if let tag = result["app_interface_tag"].string{
+                if tag.hasPrefix("system_"){
+                    return
+                }
+            }
+            
+            if type == "app_ir_study_re" && phone == userDefaults.string(forKey: "phone"){
+                self.hud?.hide(animated: true)
+                if result["code"].intValue == kQuestSuccessTag{
+                    
+                    MBProgressHUD.showAutoDismissHUD(message: "学习成功")
+                }else{
+                    MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
+                }
+            }
+            
         }
     }
 }

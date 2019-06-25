@@ -60,6 +60,7 @@ class HOOPSelectARCBrandVC: GYZBaseVC {
             vc.brandName = name
             vc.deviceType = self.deviceType
             vc.dataList = deviceModelList
+            vc.curMatchBrandIndex = curIndex
             navigationController?.pushViewController(vc, animated: true)
         }else{
            MBProgressHUD.showAutoDismissHUD(message: "该品牌暂无遥控器方案")
