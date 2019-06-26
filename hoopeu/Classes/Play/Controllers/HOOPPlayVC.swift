@@ -32,8 +32,8 @@ class HOOPPlayVC: GYZBaseVC {
         rightBtn?.frame = CGRect.init(x: 0, y: 0, width: kTitleHeight, height: kTitleHeight)
         rightBtn?.addTarget(self, action: #selector(clickedMessageBtn), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightBtn!)
-        rightBtn?.badgeView.style = .normal
-        rightBtn?.showBadge(animated: false)
+//        rightBtn?.badgeView.style = .normal
+//        rightBtn?.showBadge(animated: false)
         
         view.addSubview(tableView)
         view.addSubview(bottomView)

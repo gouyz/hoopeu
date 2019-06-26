@@ -59,6 +59,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     }
     
     func moveToRoom(){
+    
         if dataList.count > 0 {
             if let roomId = userDefaults.string(forKey: "roomId"){
                 for (index,item) in roomIdValue.enumerated() {

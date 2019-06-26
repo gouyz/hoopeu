@@ -41,11 +41,12 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         tableView.snp.makeConstraints { (make) in
             make.left.right.equalTo(view)
             make.bottom.equalTo(addBtn.snp.top).offset(-kMargin)
-            if #available(iOS 11.0, *) {
-                make.top.equalTo(view)
-            }else{
-                make.top.equalTo(kTitleAndStateHeight)
-            }
+            make.top.equalTo(view)
+//            if #available(iOS 11.0, *) {
+//                make.top.equalTo(view)
+//            }else{
+//                make.top.equalTo(kTitleAndStateHeight)
+//            }
         }
         
     }
@@ -56,7 +57,17 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         if mqtt == nil {
             mqttSetting()
         }else {
-            sendMqttCmd()
+            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
+                self.mqtt?.connect()
+            }else{
+                sendMqttCmd()
+            }
+        }
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if mqtt == nil {
+            mqttSetting()
         }
     }
     lazy var tableView : UITableView = {
@@ -247,7 +258,11 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     // MARK: - 上拉加载更多/下拉刷新
     /// 下拉刷新
     func refresh(){
-        sendMqttCmd()
+        if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
+            self.mqtt?.connect()
+        }else{
+            sendMqttCmd()
+        }
     }
     /// 关闭上拉/下拉刷新
     func closeRefresh(){

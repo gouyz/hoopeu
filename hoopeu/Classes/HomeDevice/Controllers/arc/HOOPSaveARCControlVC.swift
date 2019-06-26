@@ -280,7 +280,7 @@ class HOOPSaveARCControlVC: GYZBaseVC {
     /// 添加遥控器
     func sendCmdMqtt(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_add","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":deviceId,"ir_type":ir_type,"ir_name":arcNameTxtFiled.text!,"room_id": dataList[selectRoomIndex].roomId!,"brand":curMatchBrandIndex,"code_bark": curMatchIndex,"mobile_type":"ios","functions":code,"app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_add","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":deviceId,"ir_type":ir_type,"ir_name":arcNameTxtFiled.text!,"room_id": dataList[selectRoomIndex].roomId!,"brand":curMatchBrandIndex,"code_bark": curMatchIndex,"mobile_type":"ios","functions":"","app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }

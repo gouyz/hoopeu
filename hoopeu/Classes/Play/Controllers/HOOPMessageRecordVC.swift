@@ -22,12 +22,13 @@ class HOOPMessageRecordVC: GYZBaseVC {
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
-            make.edges.equalTo(0)
+            make.left.right.bottom.equalTo(view)
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(view)
+            }else{
+                make.top.equalTo(kTitleAndStateHeight)
+            }
         }
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
         requestDataList()
     }
     lazy var tableView : UITableView = {
