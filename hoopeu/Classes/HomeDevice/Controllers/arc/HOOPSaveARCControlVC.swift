@@ -20,6 +20,14 @@ class HOOPSaveARCControlVC: GYZBaseVC {
     var ir_type: String = "ir_air"
     /// 临时id
     var deviceId: String = ""
+    /// 临时开按键id
+    var onId: String = ""
+    /// 临时关按键id
+    var offId: String = ""
+    /// 开按键code
+    var onKeyCode: String = ""
+    /// 关按键code
+    var offKeyCode: String = ""
     
     /// 房间
     var dataList: [HOOPRoomModel] = [HOOPRoomModel]()
@@ -258,7 +266,8 @@ class HOOPSaveARCControlVC: GYZBaseVC {
             MBProgressHUD.showAutoDismissHUD(message: "请选择遥控器所属房间")
             return
         }
-        sendCmdMqtt()
+        createHUD(message: "加载中...")
+        requestDeviceId(isOn: true)
     }
     /// 选择房间
     @objc func onClickedSelectRoom(){
@@ -276,11 +285,37 @@ class HOOPSaveARCControlVC: GYZBaseVC {
         }
     }
     
-    
+    /// 获取临时id
+    func requestDeviceId(isOn: Bool){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("homeCtrl", parameters: ["id":deviceId],  success: { (response) in
+            
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                if isOn{
+                    weakSelf?.onId = response["data"].stringValue
+                    weakSelf?.requestDeviceId(isOn: false)
+                }else{
+                    weakSelf?.offId = response["data"].stringValue
+                    weakSelf?.sendCmdMqtt()
+                }
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            GYZLog(error)
+        })
+    }
     /// 添加遥控器
     func sendCmdMqtt(){
-        createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_add","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":deviceId,"ir_type":ir_type,"ir_name":arcNameTxtFiled.text!,"room_id": dataList[selectRoomIndex].roomId!,"brand":curMatchBrandIndex,"code_bark": curMatchIndex,"mobile_type":"ios","functions":"","app_interface_tag":""]
+
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_add","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":deviceId,"ir_type":ir_type,"ir_name":arcNameTxtFiled.text!,"room_id": dataList[selectRoomIndex].roomId!,"brand":curMatchBrandIndex,"code_bark": curMatchIndex,"mobile_type":"ios","functions":[["func_id":onId,"func_type":"switch_open","func_name":"开","func_code":onKeyCode],["func_id":offId,"func_type":"switch_close","func_name":"关","func_code":offKeyCode]],"app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -306,11 +341,11 @@ class HOOPSaveARCControlVC: GYZBaseVC {
                 }
             }
             
-            if type == "app_ir_study_re" && phone == userDefaults.string(forKey: "phone"){
+            if type == "app_ir_add_re" && phone == userDefaults.string(forKey: "phone"){
                 self.hud?.hide(animated: true)
                 if result["code"].intValue == kQuestSuccessTag{
                     
-                    MBProgressHUD.showAutoDismissHUD(message: "学习成功")
+                    MBProgressHUD.showAutoDismissHUD(message: "添加成功")
                 }else{
                     MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 }

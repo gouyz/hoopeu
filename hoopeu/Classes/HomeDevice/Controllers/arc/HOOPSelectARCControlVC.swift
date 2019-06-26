@@ -241,6 +241,16 @@ class HOOPSelectARCControlVC: GYZBaseVC {
     /// 保存遥控器
     func goSaveArcControl(){
         let vc = HOOPSaveARCControlVC()
+        vc.curMatchIndex = self.curMatchIndex
+        vc.curMatchBrandIndex = self.curMatchBrandIndex
+        vc.ir_type = self.ir_type
+        vc.deviceId = self.deviceId
+        vc.deviceType = self.deviceType
+        if deviceType == .ARC {
+            vc.onKeyCode = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: 0x77))!
+            vc.offKeyCode = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: 0x88))!
+        }
+        
         navigationController?.pushViewController(vc, animated: true)
     }
     
