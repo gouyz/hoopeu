@@ -106,7 +106,7 @@ class HOOPSetKeyNameView: UIView {
         lab.font = k13Font
         lab.textColor = kGaryFontColor
         lab.textAlignment = .center
-        lab.text = "说明：命名不能超过6个汉字"
+        lab.text = "说明：命名不能超过4个汉字"
         
         return lab
     }()
@@ -146,8 +146,8 @@ class HOOPSetKeyNameView: UIView {
         if (nameTxtFiled.text?.isEmpty)! {
             MBProgressHUD.showAutoDismissHUD(message: "请输入按键名称")
             return
-        }else if nameTxtFiled.text!.count > 6{
-            MBProgressHUD.showAutoDismissHUD(message: "命名不能超过6个汉字")
+        }else if nameTxtFiled.text!.count > 4{
+            MBProgressHUD.showAutoDismissHUD(message: "命名不能超过4个汉字")
             return
         }
         if action != nil {

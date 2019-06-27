@@ -68,6 +68,10 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         super.viewDidAppear(animated)
         if mqtt == nil {
             mqttSetting()
+        }else {
+            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
+                self.mqtt?.connect()
+            }
         }
     }
     lazy var tableView : UITableView = {
@@ -193,9 +197,20 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         }
     }
     
+    /// 遥控器跳转
+    func goIRControlVC(model:HOOPRoomIntelligentDeviceModel ){
+        switch model.type_lower! {
+        case "ir_air":// 空调
+            goArcControllVC(arcId: model.id!)
+        default:
+            break
+        }
+    }
+    
     /// 空调遥控
-    func goArcControllVC(){
+    func goArcControllVC(arcId: String){
         let vc = HOOPARCControlVC()
+        vc.controlId = arcId
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 爱心看护
@@ -430,7 +445,7 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                     
                     self.dataModel = HOOPRoomDeviceModel.init(dict: itemInfo)
                     self.tableView.reloadData()
-                    if self.dataModel?.exist == "0" && self.dataModel?.switchList.count == 0 && self.dataModel?.intelligentDeviceList.count == 0{
+                    if self.dataModel?.exist == "0" && self.dataModel?.switchList.count == 0 && self.dataModel?.intelligentDeviceList.count == 0 && self.dataModel?.sensorList.count == 0{
                         self.showEmptyView(content: "暂无设备信息,请点击刷新", reload: {
                             self.hiddenEmptyView()
                             self.refresh()
@@ -660,12 +675,12 @@ extension HOOPRoomDeviceVC: UITableViewDelegate,UITableViewDataSource{
                 if model?.type == "pt2262" || model?.type == "other"{// 自定义遥控
                     goControlVC(deviceControlId: (model?.id)!,type: (model?.type)!)
                 }else if model?.type == "ir"{// 家电遥控
-                    goArcControllVC()
+                    
+                    goIRControlVC(model: model!)
                 }
             }else if indexPath.section == 0{
                 if indexPath.row == 2{// 爱心看护
-//                    goSeeVC()
-                    goArcControllVC()
+                    goSeeVC()
                 }
             }
         }else{
@@ -674,7 +689,7 @@ extension HOOPRoomDeviceVC: UITableViewDelegate,UITableViewDataSource{
                 if model?.type == "pt2262" || model?.type == "other"{// 自定义遥控
                     goControlVC(deviceControlId: (model?.id)!,type: (model?.type)!)
                 }else if model?.type == "ir"{// 家电遥控
-                    goArcControllVC()
+                    goIRControlVC(model: model!)
                 }
             }
         }

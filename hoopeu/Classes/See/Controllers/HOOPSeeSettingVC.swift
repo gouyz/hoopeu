@@ -78,6 +78,7 @@ class HOOPSeeSettingVC: GYZBaseVC {
         case 4:/// wifi开关
             wifiStatus = sender.isOn
             userDefaults.set(wifiStatus, forKey: "wifiStatus")
+            MBProgressHUD.showAutoDismissHUD(message: "WiFi状态下观看成功")
         case 5:/// 摄像机开关
             carmanStatus = sender.isOn
             if carmanStatus{
@@ -92,7 +93,7 @@ class HOOPSeeSettingVC: GYZBaseVC {
     // 移动侦测开关
     func sendMqttCmdStatus(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","msg_type":"motion_detect_switch","user_id":userDefaults.string(forKey: "phone") ?? "","msg":["state":zhenCeStatus],"app_interface_tag":""]
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","msg_type":"motion_detect","user_id":userDefaults.string(forKey: "phone") ?? "","msg":["state":zhenCeStatus],"app_interface_tag":"ok"]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -135,7 +136,7 @@ class HOOPSeeSettingVC: GYZBaseVC {
                 }
             }
             
-            if type == "motion_detect_switch_re" && phone == userDefaults.string(forKey: "phone"){
+            if type == "motion_detect_re" && phone == userDefaults.string(forKey: "phone"){
                 hud?.hide(animated: true)
                 if result["ret"].intValue == 1{
                     MBProgressHUD.showAutoDismissHUD(message: "移动侦测修改成功")

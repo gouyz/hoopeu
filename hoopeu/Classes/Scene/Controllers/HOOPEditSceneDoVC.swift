@@ -473,7 +473,7 @@ class HOOPEditSceneDoVC: GYZBaseVC {
         }
         
         if resultBlock != nil {
-            let dic:[String: Any] = ["cmd_type":doType,"cmd":doContent,"time_len":selectSecond]
+            let dic:[String: Any] = ["cmd_type":doType,"cmd":doContent,"time_len":"\(selectSecond)"]
             resultBlock!(dic)
         }
         clickedBackBtn()

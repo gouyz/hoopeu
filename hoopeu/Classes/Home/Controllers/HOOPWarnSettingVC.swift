@@ -298,6 +298,7 @@ class HOOPWarnSettingVC: GYZBaseVC {
                     week_time = result["guard_time"]["week_time"].stringValue
                     if result["guard_delay"].intValue > 0 {
                         guard_delay = result["guard_delay"].stringValue
+                        timeLab.text = guard_delay + "秒"
                     }
                     
                     guard let itemInfo = result["guard_time"]["user_define_times"].array else { return }
@@ -305,7 +306,7 @@ class HOOPWarnSettingVC: GYZBaseVC {
                         user_define_times.append(item.stringValue)
                     }
                     setGuardTime()
-                    timeLab.text = guard_delay + "秒"
+                    
                 }
             }
             

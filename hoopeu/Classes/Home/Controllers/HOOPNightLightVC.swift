@@ -279,7 +279,7 @@ class HOOPNightLightVC: GYZBaseVC {
             }else if type == "ni_light_setting_query_re" && phone == userDefaults.string(forKey: "phone"){
                 //                hud?.hide(animated: true)
                 if result["ret"].intValue == 1{
-                    light_tri = result["tri_type"]["light_tri"].boolValue
+//                    light_tri = result["tri_type"]["light_tri"].boolValue
                     body_tri = result["tri_type"]["body_tri"].boolValue
                     off_delay = result["off_delay"].stringValue
                     

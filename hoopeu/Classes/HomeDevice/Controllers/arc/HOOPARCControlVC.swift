@@ -34,10 +34,8 @@ class HOOPARCControlVC: GYZBaseVC {
         super.viewDidLoad()
         
         self.navigationItem.title = "空调遥控器"
-        
-        setRightBtn()
-        
         setUpUI()
+        setRightBtn()
         requestControlData()
     }
     
@@ -50,8 +48,10 @@ class HOOPARCControlVC: GYZBaseVC {
             rightBtn.frame = CGRect.init(x: 0, y: 0, width: kTitleHeight, height: kTitleHeight)
             rightBtn.addTarget(self, action: #selector(onClickFinishedBtn), for: .touchUpInside)
             navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightBtn)
+            desLab.isHidden = false
         }else{
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_device_setting")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: #selector(clickedSettingBtn))
+            desLab.isHidden = true
         }
     }
     
@@ -387,7 +387,11 @@ class HOOPARCControlVC: GYZBaseVC {
         currTag = btn.tag
         
         if isEdit {// 编辑
-            
+            if btn.accessibilityIdentifier != nil{// 自定义按键
+                showStudyAlert(funcId: Int.init(btn.accessibilityIdentifier!)!)
+            }else{
+                requestDeviceId()
+            }
         }else{
             if btn.accessibilityIdentifier != nil{// 自定义按键
                 sendCmdCustomMqtt(isTest: false, funcId: Int.init(btn.accessibilityIdentifier!)!,code: "")
@@ -406,6 +410,30 @@ class HOOPARCControlVC: GYZBaseVC {
                 sendCmdMqtt()
             }
         }
+    }
+    /// 获取临时id
+    func requestDeviceId(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        createHUD(message: "加载中...")
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("homeCtrl", parameters: ["id":controlId],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.showStudyAlert(funcId: response["data"].intValue)
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+            MBProgressHUD.showAutoDismissHUD(message: "获取临时id失败")
+        })
     }
     /// 完成
     @objc func onClickFinishedBtn(){
@@ -431,71 +459,64 @@ class HOOPARCControlVC: GYZBaseVC {
         GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "确定要删除此遥控器吗?", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
             
             if index != cancelIndex{
+                weakSelf?.sendDelMqttCmd()
             }
         }
     }
     /// 开始学习
-    func showStudyAlert(index: Int,studyState:String){
+    func showStudyAlert(funcId: Int){
         weak var weakSelf = self
         GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "将遥控器对准叮当宝贝\n点击“开始学习”", cancleTitle: "取消", viewController: self, buttonTitles: "开始学习") { (tag) in
             
             if tag != cancelIndex{
-                weakSelf?.sendStudyMqttCmd(studyState: studyState, index: index)
-                weakSelf?.showWaitAlert(index: index)
+                weakSelf?.sendStudyMqttCmd(funcId: funcId)
+                weakSelf?.showWaitAlert(funcId: funcId)
             }
         }
     }
     
     /// 正在等待
-    func showWaitAlert(index: Int){
+    func showWaitAlert(funcId: Int){
         waitAlert = GYZCustomWaitAlert.init()
-        waitAlert?.titleLab.text = "单机遥控器按键\n请勿长按"
+        waitAlert?.titleLab.text = "单击遥控器按键\n请勿长按"
         waitAlert?.action = {[weak self]() in
-            self?.showStudyFailedAlert(index: index)
+            self?.showStudyFailedAlert(funcId: funcId)
             
         }
         waitAlert?.show()
     }
     /// 学习失败
-    func showStudyFailedAlert(index: Int){
+    func showStudyFailedAlert(funcId: Int){
         weak var weakSelf = self
         GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "学习失败，请重新尝试", cancleTitle: "取消", viewController: self, buttonTitles: "重新配置") { (tag) in
             
             if tag != cancelIndex{
-                weakSelf?.showStudyAlert(index: index,studyState: "1")
+                weakSelf?.showStudyAlert(funcId: funcId)
             }
         }
     }
     
     /// 学习成功 测试
-    func showStudySuccessAlert(index: Int,studyState:String){
+    func showStudySuccessAlert(funcId: Int,code:String){
         let alert = HOOPStudyTestView.init()
         alert.titleLab.text = "学到新功能，测试一下是否可用吧"
         alert.action = {[weak self](tag) in
             if tag == 101 {// 发射指令
-                self?.sendZhiLingMqttCmd(studyState: studyState, index: index)
+                self?.sendCmdCustomMqtt(isTest: true, funcId: funcId, code: code)
             }else if tag == 102 {// 没响应
                 //                alert.hide()
             }else if tag == 103 {// 有响应
-                self?.showSetKeyNameAlert(index: index)
+                self?.showSetKeyNameAlert(funcId: funcId)
             }
         }
         alert.show()
     }
     
     /// 按键命名
-    func showSetKeyNameAlert(index: Int){
+    func showSetKeyNameAlert(funcId: Int){
         let alert = HOOPSetKeyNameView.init()
         alert.action = {[weak self](name) in
-            self?.funcArr[index]["func_name"] = name
-            if name.contains("开") {
-                self?.funcArr[index]["func_type"] = "switch_open"
-            }else if name.contains("关") {
-                self?.funcArr[index]["func_type"] = "switch_close"
-            }else{
-                self?.funcArr[index]["func_type"] = ""
-            }
-            self?.collectionView.reloadData()
+            self?.sendSaveMqttCmd(funcId: funcId, name: name)
         }
         alert.show()
     }
@@ -511,9 +532,52 @@ class HOOPARCControlVC: GYZBaseVC {
     /// 遥控器自定义学习
     func sendStudyMqttCmd(funcId:Int){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_extra_study","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":controlId,"ir_type":"ir_air","func_id":funcId,"app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_extra_study","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":controlId,"ir_type":"ir_air","func_id":funcId,"app_interface_tag":String.init(format: "%d", funcId)]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    /// 遥控器删除
+    func sendDelMqttCmd(){
+        createHUD(message: "加载中...")
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_del","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":controlId,"app_interface_tag":""]
+        
+        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    /// 遥控器自定义保存
+    func sendSaveMqttCmd(funcId:Int,name: String){
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+    
+        var customNum: String = ""
+        for item in keyNumList {
+            if item.value == currTag{
+                customNum = item.key
+                break
+            }
+        }
+        let paramDic:[String:Any] = ["msg_type":"app_ir_extra_study","id":controlId,"custom_id":funcId,"custom_num":customNum,"custom_name":name]
+        
+        GYZNetWork.requestNetwork("homeCtrl/ir/addCustom", parameters: paramDic,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.setBtnData(funcId: funcId, name: name)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
+    
+    func setBtnData(funcId:Int,name: String){
+        let btn: UIButton = self.view.viewWithTag(currTag) as! UIButton
+        btn.setTitle(name, for: .normal)
+        btn.accessibilityIdentifier = "\(funcId)"
+        
     }
     /// 遥控器自定义按键控制、学习测试控制
     func sendCmdCustomMqtt(isTest: Bool,funcId:Int,code: String){
@@ -543,9 +607,9 @@ class HOOPARCControlVC: GYZBaseVC {
                     return
                 }
             }
+            self.hud?.hide(animated: true)
             
             if type == "app_ir_ctrl_re" && phone == userDefaults.string(forKey: "phone"){
-                self.hud?.hide(animated: true)
                 MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 if result["code"].intValue == kQuestSuccessTag{
                     if currTag == 0x77{
@@ -563,17 +627,24 @@ class HOOPARCControlVC: GYZBaseVC {
                     setState()
                 }
             }else if type == "app_ir_extra_ctrl_re" && phone == userDefaults.string(forKey: "phone"){
-                self.hud?.hide(animated: true)
                 MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
 //                if result["code"].intValue == kQuestSuccessTag{
 //
 //                }
             }else if type == "app_ir_extra_study_re" && phone == userDefaults.string(forKey: "phone"){
-                self.hud?.hide(animated: true)
+                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
+                
                 if result["code"].intValue == kQuestSuccessTag{
+                    waitAlert?.hide()
                     
-                }else{
-                    
+                    showStudySuccessAlert(funcId: result["data"]["func_id"].intValue, code: result["data"]["code"].stringValue)
+                }else{// 学习失败
+                    showStudyFailedAlert(funcId: result["app_interface_tag"].intValue)
+                }
+            }else if type == "app_ir_del_re" && phone == userDefaults.string(forKey: "phone"){
+                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
+                if result["code"].intValue == kQuestSuccessTag{
+                    self.clickedBackBtn()
                 }
             }
             

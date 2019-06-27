@@ -29,7 +29,11 @@ class HOOPRoomDeviceModel: LHSBaseModel {
             guard let datas = value as? [[String : Any]] else { return }
             for dict in datas {
                 let model = HOOPRoomIntelligentDeviceModel(dict: dict)
-                intelligentDeviceList.append(model)
+                if model.type == "ir"{
+                    if model.mobile_type == "ios"{
+                        intelligentDeviceList.append(model)
+                    }
+                }
             }
         }else if key == "switchs"{
             guard let datas = value as? [[String : Any]] else { return }
@@ -86,4 +90,6 @@ class HOOPRoomIntelligentDeviceModel: LHSBaseModel {
     var type : String? = ""
     /// 设备子类型 ”ir_air”:空调；”ir_tv”：电视 ；”ir_stb”:机顶盒；”ir_iptv”:IPTV遥控器；”ir_sound”:音响；”ir_proj”:投影仪；”ir_fan:”风扇;”ir_other”:自定义遥控
     var type_lower : String? = ""
+    /// ios还是Android
+    var mobile_type: String? = ""
 }

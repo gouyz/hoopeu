@@ -240,7 +240,7 @@ class HOOPAddVoiceSceneVC: GYZBaseVC {
             vc.doType = type
             vc.doTitle = SCENETYPE[type]!
             vc.doContent = doDicArr[index]["cmd"] as! String
-            vc.selectSecond = doDicArr[index]["time_len"] as! Int
+            vc.selectSecond = Int.init(doDicArr[index]["time_len"]  as! String) ?? 0
             vc.resultBlock = {[weak self](dic) in
                 if dic.count == 0{// 删除时
                     self?.doDicArr.remove(at: index)

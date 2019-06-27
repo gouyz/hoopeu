@@ -27,7 +27,6 @@ class HOOPPlayerDetailVC: GYZBaseVC {
         self.view.backgroundColor = kBlackColor
         
         showVideo()
-        
         requestDevicePlus()
         mqttSetting()
     }
@@ -312,7 +311,7 @@ class HOOPPlayerDetailVC: GYZBaseVC {
     override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
         super.mqtt(mqtt, didStateChangeTo: state)
         if state == .connected {
-//            startOrEndPlayer(order: "camera_start_push")
+            startOrEndPlayer(order: "camera_start_push")
         }
     }
     override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
