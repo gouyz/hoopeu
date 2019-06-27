@@ -20,147 +20,147 @@
     return instance;
 }
 
-- (void)resetState
+- (void)resetStateWithControlId:(NSString *)controlId
 {
-    [[NSUserDefaults standardUserDefaults] setInteger:0x19 forKey:@"ctr_temp"];
-    [[NSUserDefaults standardUserDefaults] setInteger:0x01 forKey:@"ctr_volu"];
-    [[NSUserDefaults standardUserDefaults] setInteger:0x02 forKey:@"ctr_manu"];
-    [[NSUserDefaults standardUserDefaults] setInteger:0x01 forKey:@"ctr_auto"];
-    [[NSUserDefaults standardUserDefaults] setInteger:0x02 forKey:@"ctr_mode"];
+    [[NSUserDefaults standardUserDefaults] setInteger:0x19 forKey:[NSString stringWithFormat:@"ctr_temp_%@",controlId]];
+    [[NSUserDefaults standardUserDefaults] setInteger:0x01 forKey:[NSString stringWithFormat:@"ctr_volu_%@",controlId]];
+    [[NSUserDefaults standardUserDefaults] setInteger:0x02 forKey:[NSString stringWithFormat:@"ctr_manu_%@",controlId]];
+    [[NSUserDefaults standardUserDefaults] setInteger:0x01 forKey:[NSString stringWithFormat:@"ctr_auto_%@",controlId]];
+    [[NSUserDefaults standardUserDefaults] setInteger:0x02 forKey:[NSString stringWithFormat:@"ctr_mode_%@",controlId]];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (void)setTemp:(NSInteger)temp
+- (void)setTemp:(NSInteger)temp withControlId:(NSString *)controlId
 {
-    [[NSUserDefaults standardUserDefaults] setInteger:temp forKey:@"ctr_temp"];
+    [[NSUserDefaults standardUserDefaults] setInteger:temp forKey:[NSString stringWithFormat:@"ctr_temp_%@",controlId]];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (NSInteger)getTemp
+- (NSInteger)getTempWithControlId:(NSString *)controlId
 {
-    NSNumber *number = [[NSUserDefaults standardUserDefaults] objectForKey:@"ctr_temp"];
+    NSNumber *number = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"ctr_temp_%@",controlId]];
     
     NSInteger k = [number integerValue];
     
     return k==0?0x19:k;
 }
 
-- (void)setVolu:(NSInteger)volu
+- (void)setVolu:(NSInteger)volu withControlId:(NSString *)controlId
 {
-    [[NSUserDefaults standardUserDefaults] setInteger:volu forKey:@"ctr_volu"];
+    [[NSUserDefaults standardUserDefaults] setInteger:volu forKey:[NSString stringWithFormat:@"ctr_volu_%@",controlId]];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (NSInteger)getVolu
+- (NSInteger)getVoluWithControlId:(NSString *)controlId
 {
-    NSNumber *number = [[NSUserDefaults standardUserDefaults] objectForKey:@"ctr_volu"];
+    NSNumber *number = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"ctr_volu_%@",controlId]];
     NSInteger k = [number integerValue];
     
     return k==0?0x01:k;
 }
 
-- (void)setManu:(NSInteger)manu
+- (void)setManu:(NSInteger)manu withControlId:(NSString *)controlId
 {
-    [[NSUserDefaults standardUserDefaults] setInteger:manu forKey:@"ctr_manu"];
+    [[NSUserDefaults standardUserDefaults] setInteger:manu forKey:[NSString stringWithFormat:@"ctr_manu_%@",controlId]];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (NSInteger)getManu
+- (NSInteger)getManuWithControlId:(NSString *)controlId
 {
-    NSNumber *number = [[NSUserDefaults standardUserDefaults] objectForKey:@"ctr_manu"];
+    NSNumber *number = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"ctr_manu_%@",controlId]];
     NSInteger k = [number integerValue];
     
     return k==0?0x02:k;
 }
 
-- (void)setAuto:(NSInteger)autos
+- (void)setAuto:(NSInteger)autos withControlId:(NSString *)controlId
 {
-    [[NSUserDefaults standardUserDefaults] setInteger:autos forKey:@"ctr_autos"];
+    [[NSUserDefaults standardUserDefaults] setInteger:autos forKey:[NSString stringWithFormat:@"ctr_autos_%@",controlId]];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (NSInteger)getAuto
+- (NSInteger)getAutoWithControlId:(NSString *)controlId
 {
-    NSNumber *number = [[NSUserDefaults standardUserDefaults] objectForKey:@"ctr_autos"];
+    NSNumber *number = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"ctr_autos_%@",controlId]];
     NSInteger k = [number integerValue];
     
     return k==0?0x01:k;
 }
 
-- (void)setMode:(NSInteger)mode
+- (void)setMode:(NSInteger)mode withControlId:(NSString *)controlId
 {
-    [[NSUserDefaults standardUserDefaults] setInteger:mode forKey:@"ctr_mode"];
+    [[NSUserDefaults standardUserDefaults] setInteger:mode forKey:[NSString stringWithFormat:@"ctr_mode_%@",controlId]];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (NSInteger)getMode
+- (NSInteger)getModeWithControlId:(NSString *)controlId
 {
-    NSNumber *number = [[NSUserDefaults standardUserDefaults] objectForKey:@"ctr_mode"];
+    NSNumber *number = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"ctr_mode_%@",controlId]];
     NSInteger k = [number integerValue];
     
     return k==0?0x02:k;
 }
 
-- (void)chageStateByType:(ARCStateType)type
+- (void)chageStateByType:(ARCStateType)type withControlId:(NSString *)controlId
 {
     if(type==ARCStateTypeTmpAdd)
     {
-        NSInteger tem = [self getTemp];
+        NSInteger tem = [self getTempWithControlId:controlId];
         tem++;
         if(tem<=0x1E&&tem>=0x13)
         {
-            [self setTemp:tem];
+            [self setTemp:tem withControlId:controlId];
         }
 
     }
     else if(type==ARCStateTypeTmpRdu)
     {
-        NSInteger tem = [self getTemp];
+        NSInteger tem = [self getTempWithControlId:controlId];
         tem--;
         if(tem<=0x1E&&tem>=0x13)
         {
-            [self setTemp:tem];
+            [self setTemp:tem withControlId:controlId];
         }
     }
     else if(type==ARCStateTypeVle)
     {
-        NSInteger vol = [self getVolu];
+        NSInteger vol = [self getVoluWithControlId:controlId];
         vol++;
         if(vol>0x04)
         {
             vol = 0x01;
         }
-        [self setVolu:vol];
+        [self setVolu:vol withControlId:controlId];
     }
     else if(type==ARCStateTypeMnl)
     {
-        NSInteger man = [self getManu];
+        NSInteger man = [self getManuWithControlId:controlId];
         man++;
         if(man>0x03)
         {
             man = 0x01;
         }
-        [self setManu:man];
+        [self setManu:man withControlId:controlId];
     }
     else if(type==ARCStateTypeAto)
     {
-        NSInteger aot = [self getAuto];
+        NSInteger aot = [self getAutoWithControlId:controlId];
         aot++;
         if(aot>0x01)
         {
             aot=0x00;
         }
-        [self setAuto:aot];
+        [self setAuto:aot withControlId:controlId];
     }
     else if(type==ARCStateTypeMod)
     {
-        NSInteger mod = [self getMode];
+        NSInteger mod = [self getModeWithControlId:controlId];
         mod++;
         if(mod>0x05)
         {
             mod = 0x01;
         }
-        [self setMode:mod];
+        [self setMode:mod withControlId:controlId];
     }
 }
 
@@ -173,7 +173,7 @@
 /*       自动风向：0x05,温度加：0x06,  温度减：0x07, // 表示当前按下的是哪个键 */
 /* 7B6:其中第6个字节：模式对应数据和显示：自动（默认）：0x01,制冷：0X02,抽湿：0X03,送风：0x04;制热：0x05,这些值按模式键实现 */
 
-- (NSData *)get7B_DataWithTag:(NSInteger)tag
+- (NSData *)get7B_DataWithTag:(NSInteger)tag withControlId:(NSString *)controlId
 {
     NSInteger keyValue = 0x0;
     if(tag==0x77||tag==0x88)//开、关
@@ -185,42 +185,42 @@
         keyValue = tag;
         if(tag==0x02)
         {
-            [self chageStateByType:ARCStateTypeMod];
+            [self chageStateByType:ARCStateTypeMod withControlId:controlId];
         }
         else if(tag==0x03)
         {
-            [self chageStateByType:ARCStateTypeVle];
+            [self chageStateByType:ARCStateTypeVle withControlId:controlId];
         }
         else if(tag==0x04)
         {
-            [self chageStateByType:ARCStateTypeMnl];
+            [self chageStateByType:ARCStateTypeMnl withControlId:controlId];
         }
         else if(tag==0x05)
         {
-            [self chageStateByType:ARCStateTypeAto];
+            [self chageStateByType:ARCStateTypeAto withControlId:controlId];
         }
         else if(tag==0x06)
         {
-            [self chageStateByType:ARCStateTypeTmpAdd];
+            [self chageStateByType:ARCStateTypeTmpAdd withControlId:controlId];
         }
         else if(tag==0x07)
         {
-            [self chageStateByType:ARCStateTypeTmpRdu];
+            [self chageStateByType:ARCStateTypeTmpRdu withControlId:controlId];
         }
     }
     
     NSMutableData *data = [NSMutableData new];
     
-    NSInteger _temperature = [self getTemp];
+    NSInteger _temperature = [self getTempWithControlId:controlId];
     [data appendData:[NSData dataWithBytes:&_temperature length:1]]; //7B0
     
-    NSInteger _volume = [self getVolu];
+    NSInteger _volume = [self getVoluWithControlId:controlId];
     [data appendData:[NSData dataWithBytes:&_volume length:1]];      //7B1
     
-    NSInteger _manual = [self getManu];
+    NSInteger _manual = [self getManuWithControlId:controlId];
     [data appendData:[NSData dataWithBytes:&_manual length:1]];      //7B2
     
-    NSInteger _autos = [self getAuto];
+    NSInteger _autos = [self getAutoWithControlId:controlId];
     [data appendData:[NSData dataWithBytes:&_autos length:1]];       //7B3
     
     int switchState = 0x01;
@@ -231,7 +231,7 @@
     [data appendData:[NSData dataWithBytes:&switchState length:1]];       //7B4
     [data appendData:[NSData dataWithBytes:&keyValue length:1]];          //7B5
     
-    NSInteger _mode = [self getMode];
+    NSInteger _mode = [self getModeWithControlId:controlId];
     [data appendData:[NSData dataWithBytes:&_mode length:1]];             //7B6
     
     return data;
@@ -245,7 +245,7 @@
  @param tag 按键tag
  @return base64加密为字符串
  */
-- (NSString *)getARCKeyCode:(NSData *)data withTag:(NSInteger)tag
+- (NSString *)getARCKeyCode:(NSData *)data withTag:(NSInteger)tag withControlId:(NSString *)controlId
 {
     //head
     NSMutableData *muti = [NSMutableData new];
@@ -256,7 +256,7 @@
     [muti appendData:[data subdataWithRange:NSMakeRange(0, 2)]];
     
     //7B
-    [muti appendData:[self get7B_DataWithTag:tag]];
+    [muti appendData:[self get7B_DataWithTag:tag withControlId:controlId]];
     
     //1B
     [muti appendData:[data subdataWithRange:NSMakeRange(9, 1)]];

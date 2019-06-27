@@ -664,7 +664,8 @@ extension HOOPRoomDeviceVC: UITableViewDelegate,UITableViewDataSource{
                 }
             }else if indexPath.section == 0{
                 if indexPath.row == 2{// 爱心看护
-                    goSeeVC()
+//                    goSeeVC()
+                    goArcControllVC()
                 }
             }
         }else{

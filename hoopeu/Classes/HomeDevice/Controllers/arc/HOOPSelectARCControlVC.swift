@@ -190,7 +190,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
     }()
     /// 发射
     @objc func clickedSendBtn(){
-        sendCmdMqtt(code: (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: mKeyCodeTag))!)
+        sendCmdMqtt(code: (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: mKeyCodeTag,withControlId: deviceId))!)
         
         noResponseBtn.backgroundColor = kWhiteColor
         noResponseBtn.borderColor = kBtnClickBGColor
@@ -247,8 +247,8 @@ class HOOPSelectARCControlVC: GYZBaseVC {
         vc.deviceId = self.deviceId
         vc.deviceType = self.deviceType
         if deviceType == .ARC {
-            vc.onKeyCode = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: 0x77))!
-            vc.offKeyCode = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: 0x88))!
+            vc.onKeyCode = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: 0x77,withControlId: deviceId))!
+            vc.offKeyCode = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: 0x88,withControlId: deviceId))!
         }
         
         navigationController?.pushViewController(vc, animated: true)

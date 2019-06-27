@@ -24,18 +24,18 @@ typedef NS_ENUM(NSInteger,ARCStateType) {
 + (instancetype)shareInstance;
 
 //重置状态
-- (void)resetState;
+- (void)resetStateWithControlId:(NSString *)controlId;
 
-- (NSInteger)getTemp;
-- (NSInteger)getVolu;
-- (NSInteger)getManu;
-- (NSInteger)getAuto;
-- (NSInteger)getMode;
+- (NSInteger)getTempWithControlId:(NSString *)controlId;
+- (NSInteger)getVoluWithControlId:(NSString *)controlId;
+- (NSInteger)getManuWithControlId:(NSString *)controlId;
+- (NSInteger)getAutoWithControlId:(NSString *)controlId;
+- (NSInteger)getModeWithControlId:(NSString *)controlId;
 
 
 //空调7B数据组装
-- (NSData *)get7B_DataWithTag:(NSInteger)tag;
+- (NSData *)get7B_DataWithTag:(NSInteger)tag withControlId:(NSString *)controlId;
 //空调按键红外码数据组装 base64加密为字符串
-- (NSString *)getARCKeyCode:(NSData *)data withTag:(NSInteger)tag;
+- (NSString *)getARCKeyCode:(NSData *)data withTag:(NSInteger)tag withControlId:(NSString *)controlId;
 
 @end

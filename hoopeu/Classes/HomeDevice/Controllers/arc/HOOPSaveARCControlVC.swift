@@ -346,6 +346,10 @@ class HOOPSaveARCControlVC: GYZBaseVC {
                 if result["code"].intValue == kQuestSuccessTag{
                     
                     MBProgressHUD.showAutoDismissHUD(message: "添加成功")
+                    if deviceType == .ARC{
+                        ARCStateCtr.shareInstance()?.resetState(withControlId: deviceId)
+                    }
+                    _ = navigationController?.popToRootViewController(animated: true)
                 }else{
                     MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 }

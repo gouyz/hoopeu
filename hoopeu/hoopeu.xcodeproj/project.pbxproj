@@ -206,6 +206,7 @@
 		0A4A27C222BCD9040070605A /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4A27C022BCD9040070605A /* IJKMediaFramework.framework */; };
 		0A4AF262223F7F8000E2E891 /* HOOPSeeVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4AF261223F7F8000E2E891 /* HOOPSeeVideoCell.swift */; };
 		0A4D229B22B9BD0D000A56ED /* HOOPPlayerDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4D229A22B9BD0D000A56ED /* HOOPPlayerDetailVC.swift */; };
+		0A4F901422C4974B00E3337F /* HOOPControlModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4F901322C4974B00E3337F /* HOOPControlModel.swift */; };
 		0A4FE14E2223C7AE00CCF442 /* HOOPEditSayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4FE14D2223C7AE00CCF442 /* HOOPEditSayVC.swift */; };
 		0A4FE1502223D1C600CCF442 /* HOOPEditSceneDoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4FE14F2223D1C600CCF442 /* HOOPEditSceneDoVC.swift */; };
 		0A4FE1522223E77000CCF442 /* HOOPAddConditionSceneVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4FE1512223E77000CCF442 /* HOOPAddConditionSceneVC.swift */; };
@@ -483,6 +484,7 @@
 		0A4AF261223F7F8000E2E891 /* HOOPSeeVideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPSeeVideoCell.swift; sourceTree = "<group>"; };
 		0A4D229822B9BCCF000A56ED /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		0A4D229A22B9BD0D000A56ED /* HOOPPlayerDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HOOPPlayerDetailVC.swift; sourceTree = "<group>"; };
+		0A4F901322C4974B00E3337F /* HOOPControlModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPControlModel.swift; sourceTree = "<group>"; };
 		0A4FE14D2223C7AE00CCF442 /* HOOPEditSayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPEditSayVC.swift; sourceTree = "<group>"; };
 		0A4FE14F2223D1C600CCF442 /* HOOPEditSceneDoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPEditSceneDoVC.swift; sourceTree = "<group>"; };
 		0A4FE1512223E77000CCF442 /* HOOPAddConditionSceneVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPAddConditionSceneVC.swift; sourceTree = "<group>"; };
@@ -1313,6 +1315,7 @@
 			isa = PBXGroup;
 			children = (
 				0A723A2D2267039700A27051 /* HOOPCustomControlModel.swift */,
+				0A4F901322C4974B00E3337F /* HOOPControlModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1735,6 +1738,7 @@
 				0A38805A221FCA6B00E51EDA /* HOOPUseHelpVC.swift in Sources */,
 				0A3ABAEF21DDE8DE0048F0F3 /* GYZDate+Extension.swift in Sources */,
 				0A388064221FDBB000E51EDA /* HOOPAboutUsVC.swift in Sources */,
+				0A4F901422C4974B00E3337F /* HOOPControlModel.swift in Sources */,
 				0A3ABB1421DDE8DE0048F0F3 /* GYZAlertViewTools.swift in Sources */,
 				0A0BEF97224B9EF9009983AE /* HOOPArticlesModel.swift in Sources */,
 				0A11EFE52247C36C00756F24 /* HOOPWiFiListVC.swift in Sources */,
