@@ -15,7 +15,7 @@
 /// 红外设备
 #import "Device.h"
 #import "IRDBManager.h"
-//#import "BLTAssist.h"
+#import "BLTAssist.h"
 #import "ARCStateCtr.h"
 
 /// 多标签选择

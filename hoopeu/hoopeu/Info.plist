@@ -33,6 +33,8 @@
 	<string>请求打开蓝牙连接智能设备</string>
 	<key>NSCameraUsageDescription</key>
 	<string>用于修改首页图片或上传照片</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>用于保存视频截图或报警日志图片</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>用于修改首页图片或上传照片</string>
 	<key>UILaunchStoryboardName</key>

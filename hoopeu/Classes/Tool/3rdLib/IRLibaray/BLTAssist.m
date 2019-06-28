@@ -77,7 +77,7 @@
 #pragma mark -
 #pragma mark -
 
-+ (NSData *)nomarlCode:(NSData *)data key:(NSInteger)tag
++ (NSString *)nomarlCode:(NSData *)data key:(NSInteger)tag
 {
     NSMutableData *muti = [NSMutableData new];
     NSData *head = [data subdataWithRange:NSMakeRange(0, 1)];
@@ -86,7 +86,24 @@
     [muti appendData:head];
     [muti appendData:body];
     [muti appendData:tail];
-    return muti;
+    
+    uint8_t h[] = {0x30,0x00};
+    [muti appendBytes:h length:2];
+    [muti appendData:data];
+    
+    //校验位
+    uint8_t j = 0;
+    for(int i=0;i<muti.length;i++)
+    {
+        uint8_t tmp = 0;
+        [muti getBytes:&tmp range:NSMakeRange(i, 1)];
+        j+=tmp;
+    }
+    [muti appendBytes:&j length:1];
+    
+    uint8_t a[] = {0x56,0x78};
+    [muti appendBytes:a length:2];
+    return [muti base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 }
 
 + (NSData *)processLearnCode:(NSData *)data

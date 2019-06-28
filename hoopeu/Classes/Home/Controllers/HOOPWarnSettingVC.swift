@@ -39,7 +39,6 @@ class HOOPWarnSettingVC: GYZBaseVC {
         setupUI()
         
         iconWarnTimeView.addOnClickListener(target: self, action: #selector(onClickedEditTime))
-        iconWarnTimeView.isUserInteractionEnabled = isSetDayTime
         iconTimeView.addOnClickListener(target: self, action: #selector(onSelectTime))
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -188,14 +187,8 @@ class HOOPWarnSettingVC: GYZBaseVC {
     @objc func onSwitchViewChange(){
         //默认震动效果
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
-        isSetDayTime = personSwitchView.isOn
-        iconWarnTimeView.isUserInteractionEnabled = isSetDayTime
-        if !isSetDayTime {
-            warnTimeLab.text = "未设置"
-            day_time = ""
-            week_time = ""
-            user_define_times.removeAll()
-        }
+        
+        sendGuardTimerMqttCmd(state: personSwitchView.isOn ? "on" : "off")
     }
     /// 保存
     @objc func clickedSaveBtn(){
@@ -224,6 +217,7 @@ class HOOPWarnSettingVC: GYZBaseVC {
             self?.day_time = dayTime
             self?.user_define_times = customWeek
             self?.setGuardTime()
+            self?.isSetDayTime = true
         }
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -248,6 +242,13 @@ class HOOPWarnSettingVC: GYZBaseVC {
     func sendMqttCmd(){
         createHUD(message: "加载中...")
         let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"guard_setting_query","app_interface_tag":""]
+        
+        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    /// 安防设置定时布防开关
+    func sendGuardTimerMqttCmd(state:String){
+        createHUD(message: "加载中...")
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"guard_timer_ctrl","msg":["guard_timer_state":state],"app_interface_tag":"ok"]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -290,10 +291,10 @@ class HOOPWarnSettingVC: GYZBaseVC {
             }else if type == "guard_setting_query_re" && phone == userDefaults.string(forKey: "phone"){
                 hud?.hide(animated: true)
                 if result["ret"].intValue == 1{
+                    personSwitchView.isOn = result["guard_timer_state"].boolValue
                     day_time = result["guard_time"]["day_time"].stringValue
                     if !day_time.isEmpty{
                         isSetDayTime = true
-                        iconWarnTimeView.isUserInteractionEnabled = isSetDayTime
                     }
                     week_time = result["guard_time"]["week_time"].stringValue
                     if result["guard_delay"].intValue > 0 {
@@ -307,6 +308,13 @@ class HOOPWarnSettingVC: GYZBaseVC {
                     }
                     setGuardTime()
                     
+                }
+            }else if type == "guard_timer_ctrl_re" && phone == userDefaults.string(forKey: "phone"){
+                hud?.hide(animated: true)
+                if result["ret"].intValue == 1{
+                    MBProgressHUD.showAutoDismissHUD(message: "安防定时设置成功")
+                }else{
+                    MBProgressHUD.showAutoDismissHUD(message: "安防定时设置失败")
                 }
             }
             

@@ -175,13 +175,15 @@ class GYZTool: NSObject {
     
     /// 封装查看图片大图的URL
     ///
-    class func createWebPhotos(urls: [String]?) -> [SKPhotoProtocol] {
+    class func createWebPhotos(urls: [String]?,isShowDel:Bool = false,isShowAction:Bool = false) -> [SKPhotoProtocol] {
         return (0..<(urls?.count)!).map { (i: Int) -> SKPhotoProtocol in
             
             let photo = SKPhoto.photoWithImageURL((urls?[i])!)
             //            SKPhotoBrowserOptions.displayToolbar = false
-            ///隐藏分享按钮
-            SKPhotoBrowserOptions.displayAction = false
+            ///分享按钮
+            SKPhotoBrowserOptions.displayAction = isShowAction
+            ///删除按钮
+            SKPhotoBrowserOptions.displayDeleteButton = isShowDel
             //            photo.shouldCachePhotoURLImage = true
             return photo
         }

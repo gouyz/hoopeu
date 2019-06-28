@@ -24,7 +24,7 @@
 int compareMatch(const uint8_t *rev,int revLenth,const uint8_t *loc,int locLenth);
 
 //一般code处理
-+ (NSData *)nomarlCode:(NSData *)data key:(NSInteger)tag;
++ (NSString *)nomarlCode:(NSData *)data key:(NSInteger)tag;
 
 //学习到的数据处理
 + (NSData *)processLearnCode:(NSData *)data;

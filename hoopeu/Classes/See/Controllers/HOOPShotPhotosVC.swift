@@ -148,11 +148,41 @@ class HOOPShotPhotosVC: GYZBaseVC {
     ///   - index: 索引
     ///   - urls: 图片路径
     func goBigPhotos(index: Int){
-        let browser = SKPhotoBrowser(photos: GYZTool.createWebPhotos(urls: urlList))
+        let browser = SKPhotoBrowser(photos: GYZTool.createWebPhotos(urls: urlList,isShowDel:true,isShowAction:true))
         browser.initializePageIndex(index)
-        //        browser.delegate = self
+            browser.delegate = self
         
         present(browser, animated: true, completion: nil)
+    }
+    ///删除图片
+    func requestDelectPhoto(index: Int,reload: @escaping (() -> Void)){
+        
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("gallery/del",parameters: ["id":dataList[index].id!],method:.get,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.dataList.remove(at: index)
+                weakSelf?.urlList.remove(at: index)
+                reload()
+                weakSelf?.collectionView.reloadData()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
 }
 extension HOOPShotPhotosVC: UICollectionViewDataSource,UICollectionViewDelegate{
@@ -178,3 +208,10 @@ extension HOOPShotPhotosVC: UICollectionViewDataSource,UICollectionViewDelegate{
         goBigPhotos(index: indexPath.row)
     }
 }
+/// SKPhotoBrowserDelegate
+extension HOOPShotPhotosVC: SKPhotoBrowserDelegate{
+    func removePhoto(_ browser: SKPhotoBrowser, index: Int, reload: @escaping (() -> Void)) {
+        requestDelectPhoto(index: index,reload: reload)
+    }
+}
+

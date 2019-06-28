@@ -33,7 +33,7 @@ class GYZCustomWaitAlert: UIView {
         addSubview(backgroundView)
         
         setupUI()
-        startSMSWithDuration(duration: 20)
+        startSMSWithDuration(duration: 12)
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -67,10 +67,14 @@ class HOOPSeeSettingVC: GYZBaseVC {
         switch row {
         case 1: /// 移动侦测开关
             zhenCeStatus = sender.isOn
+            if zhenCeStatus{
+                MBProgressHUD.showAutoDismissHUD(message: "使用移动侦测录像需要插入TF卡")
+            }
             sendMqttCmdStatus()
         case 2:/// 24小时录像开关
             luxiangStatus = sender.isOn
             if luxiangStatus{
+                MBProgressHUD.showAutoDismissHUD(message: "使用24小时录像需要插入TF卡")
                 startOrEndPlayer(order: "camera_start_record")
             }else{
                 startOrEndPlayer(order: "camera_stop_record")
@@ -78,7 +82,7 @@ class HOOPSeeSettingVC: GYZBaseVC {
         case 4:/// wifi开关
             wifiStatus = sender.isOn
             userDefaults.set(wifiStatus, forKey: "wifiStatus")
-            MBProgressHUD.showAutoDismissHUD(message: "WiFi状态下观看成功")
+            MBProgressHUD.showAutoDismissHUD(message: "WiFi状态下观看修改成功")
         case 5:/// 摄像机开关
             carmanStatus = sender.isOn
             if carmanStatus{

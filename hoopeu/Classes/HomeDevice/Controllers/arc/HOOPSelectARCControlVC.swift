@@ -190,7 +190,13 @@ class HOOPSelectARCControlVC: GYZBaseVC {
     }()
     /// 发射
     @objc func clickedSendBtn(){
-        sendCmdMqtt(code: (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: mKeyCodeTag,withControlId: deviceId))!)
+        var code: String = ""
+        if deviceType == .ARC {
+            code = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: mKeyCodeTag,withControlId: deviceId))!
+        }else{
+            code = BLTAssist.nomarlCode(dataList[curMatchIndex].code, key: mKeyCodeTag)
+        }
+        sendCmdMqtt(code: code)
         
         noResponseBtn.backgroundColor = kWhiteColor
         noResponseBtn.borderColor = kBtnClickBGColor
@@ -249,14 +255,24 @@ class HOOPSelectARCControlVC: GYZBaseVC {
         if deviceType == .ARC {
             vc.onKeyCode = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: 0x77,withControlId: deviceId))!
             vc.offKeyCode = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: 0x88,withControlId: deviceId))!
+        }else if deviceType == .TV || deviceType == .DVD {// 除空调外,开和关的code一样
+            let code:String = BLTAssist.nomarlCode(dataList[curMatchIndex].code, key: 11)
+            vc.onKeyCode = code
+            vc.offKeyCode = code
+        }else{
+            let code:String = BLTAssist.nomarlCode(dataList[curMatchIndex].code, key: 1)
+            vc.onKeyCode = code
+            vc.offKeyCode = code
         }
         
         navigationController?.pushViewController(vc, animated: true)
     }
     
     func initStepKey(){
+        /// 设备子类型 ”ir_air”:空调；”ir_tv”：电视 ；”ir_stb”:机顶盒；”ir_iptv”:IPTV遥控器；”ir_sound”:音响；”ir_proj”:投影仪；”ir_fan:”风扇;”ir_other”:自定义遥控
         switch deviceType {
         case .ARC: //空调
+            ir_type = "ir_air"
             mDeviceTypeName = "空调"
             if stepIndex == 1{
                 mKeyName = "开"
@@ -269,6 +285,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyCodeTag = 0x07
             }
         case .TV: //电视机
+            ir_type = "ir_tv"
             mDeviceTypeName = "电视机"
             if stepIndex == 1{
                 mKeyName = "电源"
@@ -281,6 +298,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyCodeTag = 3
             }
         case .tvBox: //机顶盒
+            ir_type = "ir_stb"
             mDeviceTypeName = "机顶盒"
             if stepIndex == 1{
                 mKeyName = "待机"
@@ -293,6 +311,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyCodeTag = 45
             }
         case .IPTV: //IPTV 网络电视
+            ir_type = "ir_iptv"
             mDeviceTypeName = "网络电视"
             if stepIndex == 1{
                 mKeyName = "电源"
@@ -305,6 +324,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyCodeTag = 5
             }
         case .DVD: //音响
+            ir_type = "ir_sound"
             mDeviceTypeName = "音响"
             if stepIndex == 1{
                 mKeyName = "电源"
@@ -317,6 +337,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyCodeTag = 13
             }
         case .PJT: //投影仪
+            ir_type = "ir_proj"
             mDeviceTypeName = "投影仪"
             if stepIndex == 1{
                 mKeyName = "开机"
@@ -329,6 +350,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyCodeTag = 33
             }
         case .fan: //风扇
+            ir_type = "ir_fan"
             mDeviceTypeName = "风扇"
             if stepIndex == 1{
                 mKeyName = "开关"
