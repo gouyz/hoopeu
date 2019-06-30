@@ -35,6 +35,7 @@ class HOOPARCControlVC: GYZBaseVC {
         
         self.navigationItem.title = "空调遥控器"
         setUpUI()
+        mqttSetting()
         setRightBtn()
         requestControlData()
     }

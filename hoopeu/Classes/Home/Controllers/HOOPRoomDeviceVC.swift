@@ -54,15 +54,15 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if mqtt == nil {
-            mqttSetting()
-        }else {
-            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
-                self.mqtt?.connect()
-            }else{
-                sendMqttCmd()
-            }
-        }
+//        if mqtt == nil {
+//            mqttSetting()
+//        }else {
+//            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
+//                self.mqtt?.connect()
+//            }else{
+//                sendMqttCmd()
+//            }
+//        }
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -71,6 +71,8 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         }else {
             if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
                 self.mqtt?.connect()
+            }else{
+                sendMqttCmd()
             }
         }
     }
