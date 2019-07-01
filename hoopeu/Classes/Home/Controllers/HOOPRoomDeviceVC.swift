@@ -105,18 +105,19 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     
     /// 添加智能设备
     @objc func clickedAddBtn(){
-        GYZAlertViewTools.alertViewTools.showSheet(title: nil, message: nil, cancleTitle: "取消", titleArray: ["家电遥控","智能开关","射频遥控","传感设备"], viewController: self) { [weak self](index) in
-            
-            if index == 0{//家电遥控
-                self?.goJiaDianVC()
-            }else if index == 1{//智能开关
-                self?.goSwitchVC()
-            }else if index == 2{//射频遥控
-                self?.goShePinVC()
-            }else if index == 3{//传感设备
-                self?.goChuanGanVC()
-            }
-        }
+        goTVArcControllVC(arcId: "")
+//        GYZAlertViewTools.alertViewTools.showSheet(title: nil, message: nil, cancleTitle: "取消", titleArray: ["家电遥控","智能开关","射频遥控","传感设备"], viewController: self) { [weak self](index) in
+//
+//            if index == 0{//家电遥控
+//                self?.goJiaDianVC()
+//            }else if index == 1{//智能开关
+//                self?.goSwitchVC()
+//            }else if index == 2{//射频遥控
+//                self?.goShePinVC()
+//            }else if index == 3{//传感设备
+//                self?.goChuanGanVC()
+//            }
+//        }
     }
     
     /// 家电遥控
@@ -200,6 +201,8 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         switch model.type_lower! {
         case "ir_air":// 空调
             goArcControllVC(arcId: model.id!)
+        case "ir_tv":// 电视
+            goTVArcControllVC(arcId: model.id!)
         default:
             break
         }
@@ -209,6 +212,12 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     func goArcControllVC(arcId: String){
         let vc = HOOPARCControlVC()
         vc.controlId = arcId
+        vc.ir_type = "ir_air"
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    /// 电视遥控器
+    func goTVArcControllVC(arcId: String){
+        let vc = HOOPTVControlVC()
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 爱心看护

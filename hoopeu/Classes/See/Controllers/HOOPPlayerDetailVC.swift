@@ -27,7 +27,7 @@ class HOOPPlayerDetailVC: GYZBaseVC {
         self.view.backgroundColor = kBlackColor
         
         showVideo()
-        requestDevicePlus()
+//        requestDevicePlus()
         mqttSetting()
     }
     override var shouldAutorotate: Bool{
@@ -201,7 +201,7 @@ class HOOPPlayerDetailVC: GYZBaseVC {
 //        super.viewWillDisappear(animated)
         
         ///检测是否需要关闭推流
-        requestDeviceClosed()
+//        requestDeviceClosed()
         self.player?.isViewControllerDisappear = true
     }
     override var preferredStatusBarStyle: UIStatusBarStyle{
@@ -217,19 +217,19 @@ class HOOPPlayerDetailVC: GYZBaseVC {
     override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation{
         return .slide
     }    /// 添加在线人数
-    func requestDevicePlus(){
-        if !GYZTool.checkNetWork() {
-            return
-        }
-        
-        GYZNetWork.requestNetwork("device/plus", parameters: ["deviceId": userDefaults.string(forKey: "devId") ?? ""],  success: { (response) in
-            
-            GYZLog(response)
-            
-        }, failture: { (error) in
-            GYZLog(error)
-        })
-    }
+//    func requestDevicePlus(){
+//        if !GYZTool.checkNetWork() {
+//            return
+//        }
+//
+//        GYZNetWork.requestNetwork("device/plus", parameters: ["deviceId": userDefaults.string(forKey: "devId") ?? ""],  success: { (response) in
+//
+//            GYZLog(response)
+//
+//        }, failture: { (error) in
+//            GYZLog(error)
+//        })
+//    }
     /// 监听电话
     func checkPhoneState(){
         if #available(iOS 10.0, *) {//ios10.0之后调用此方法
@@ -277,35 +277,35 @@ class HOOPPlayerDetailVC: GYZBaseVC {
     }
     
     /// 检测是否需要关闭推流
-    func requestDeviceClosed(){
-        if !GYZTool.checkNetWork() {
-            return
-        }
-        weak var weakSelf = self
-        GYZNetWork.requestNetwork("device/reduce", parameters: ["deviceId": userDefaults.string(forKey: "devId") ?? ""],  success: { (response) in
-            
-            GYZLog(response)
-            if response["code"].intValue == kQuestSuccessTag{//请求成功
-                ///1需要关闭推流  0不需要关闭推流
-                if response["data"].intValue == 1{
-                    ///停止推流
-                    weakSelf?.startOrEndPlayer(order: "camera_stop_push")
-                }
-                
-                if weakSelf?.mqtt != nil {
-                    weakSelf?.isUserDisConnect = true
-                    /// 关闭mqtt
-                    weakSelf?.mqtt?.disconnect()
-                    weakSelf?.mqtt = nil
-                }
-                
-            }else{
-                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
-            }
-        }, failture: { (error) in
-            GYZLog(error)
-        })
-    }
+//    func requestDeviceClosed(){
+//        if !GYZTool.checkNetWork() {
+//            return
+//        }
+//        weak var weakSelf = self
+//        GYZNetWork.requestNetwork("device/reduce", parameters: ["deviceId": userDefaults.string(forKey: "devId") ?? ""],  success: { (response) in
+//
+//            GYZLog(response)
+//            if response["code"].intValue == kQuestSuccessTag{//请求成功
+//                ///1需要关闭推流  0不需要关闭推流
+//                if response["data"].intValue == 1{
+//                    ///停止推流
+//                    weakSelf?.startOrEndPlayer(order: "camera_stop_push")
+//                }
+//
+//                if weakSelf?.mqtt != nil {
+//                    weakSelf?.isUserDisConnect = true
+//                    /// 关闭mqtt
+//                    weakSelf?.mqtt?.disconnect()
+//                    weakSelf?.mqtt = nil
+//                }
+//
+//            }else{
+//                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+//            }
+//        }, failture: { (error) in
+//            GYZLog(error)
+//        })
+//    }
     
     /// 重载CocoaMQTTDelegate
     override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {

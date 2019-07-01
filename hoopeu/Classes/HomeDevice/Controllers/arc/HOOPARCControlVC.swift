@@ -11,49 +11,20 @@ import MBProgressHUD
 import CocoaMQTT
 import SwiftyJSON
 
-class HOOPARCControlVC: GYZBaseVC {
+class HOOPARCControlVC: HOOPBaseControlVC {
     
-    /// 自定义编辑
-    var isEdit: Bool = false
-    /// 所选品牌的方案
-    var deviceModelList: [DeviceM] = [DeviceM]()
-    /// 所有品牌
-    var brandList: [[String:String]] = [[String:String]]()
-    var dataModel: HOOPControlModel?
-    /// 遥控器id
-    var controlId: String = ""
-    /// 遥控器code
-    var controlCode: Data?
     /// 按钮位置
     var keyNumList: [String:Int] = ["arc_open":0x77,"arc_close":0x88,"arc_temp_add":0x06,"arc_temp_minus":0x07,"arc_model":0x02,"arc_wind_speed":0x03,"arc_shou_auto":0x04,"arc_auto":0x05]
     /// 当前操作按键tag
     var currTag:Int = 0x77
-    var waitAlert: GYZCustomWaitAlert?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "空调遥控器"
         setUpUI()
-        mqttSetting()
-        setRightBtn()
-        requestControlData()
-    }
     
-    func setRightBtn(){
-        if isEdit {
-            let rightBtn = UIButton(type: .custom)
-            rightBtn.setTitle("完成", for: .normal)
-            rightBtn.titleLabel?.font = k15Font
-            rightBtn.setTitleColor(kBlackFontColor, for: .normal)
-            rightBtn.frame = CGRect.init(x: 0, y: 0, width: kTitleHeight, height: kTitleHeight)
-            rightBtn.addTarget(self, action: #selector(onClickFinishedBtn), for: .touchUpInside)
-            navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightBtn)
-            desLab.isHidden = false
-        }else{
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_device_setting")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: #selector(clickedSettingBtn))
-            desLab.isHidden = true
-        }
+        requestControlData()
     }
     
     /// 获取家电遥控
@@ -189,16 +160,6 @@ class HOOPARCControlVC: GYZBaseVC {
         bgview.isUserInteractionEnabled = true
         
         return bgview
-    }()
-    ///提示
-    lazy var desLab : UILabel = {
-        let lab = UILabel()
-        lab.font = k13Font
-        lab.textColor = kRedFontColor
-        lab.text = "您可以点击任意键开始自定义学习啦！"
-        lab.textAlignment = .center
-        
-        return lab
     }()
     lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_arc_temp_bg"))
     
@@ -408,62 +369,11 @@ class HOOPARCControlVC: GYZBaseVC {
                         return
                     }
                 }
-                sendCmdMqtt()
-            }
-        }
-    }
-    /// 获取临时id
-    func requestDeviceId(){
-        if !GYZTool.checkNetWork() {
-            return
-        }
-        createHUD(message: "加载中...")
-        weak var weakSelf = self
-        
-        GYZNetWork.requestNetwork("homeCtrl", parameters: ["id":controlId],  success: { (response) in
-            
-            weakSelf?.hud?.hide(animated: true)
-            GYZLog(response)
-            if response["code"].intValue == kQuestSuccessTag{//请求成功
-                weakSelf?.showStudyAlert(funcId: response["data"].intValue)
-            }else{
-                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
-            }
-            
-        }, failture: { (error) in
-            weakSelf?.hud?.hide(animated: true)
-            GYZLog(error)
-            MBProgressHUD.showAutoDismissHUD(message: "获取临时id失败")
-        })
-    }
-    /// 完成
-    @objc func onClickFinishedBtn(){
-        isEdit = false
-        setRightBtn()
-    }
-    /// 设置
-    @objc func clickedSettingBtn(){
-        GYZAlertViewTools.alertViewTools.showSheet(title: nil, message: nil, cancleTitle: "取消", titleArray: ["自定义","删除"], viewController: self) { [weak self](index) in
-            
-            if index == 0{//自定义
-                self?.isEdit = true
-                self?.setRightBtn()
-            }else if index == 1{//删除
-                self?.showDeleteAlert()
+                sendCmdMqtt(studyCode: (ARCStateCtr.shareInstance()?.getARCKeyCode(controlCode, withTag: currTag,withControlId: controlId))!)
             }
         }
     }
     
-    /// 删除
-    func showDeleteAlert(){
-        weak var weakSelf = self
-        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "确定要删除此遥控器吗?", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
-            
-            if index != cancelIndex{
-                weakSelf?.sendDelMqttCmd()
-            }
-        }
-    }
     /// 开始学习
     func showStudyAlert(funcId: Int){
         weak var weakSelf = self
@@ -521,28 +431,29 @@ class HOOPARCControlVC: GYZBaseVC {
         }
         alert.show()
     }
-    
-    /// 遥控器控制
-    func sendCmdMqtt(){
-        
+    /// 获取临时id
+    func requestDeviceId(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_ctrl","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":controlId,"ir_type":"ir_air","study_code":(ARCStateCtr.shareInstance()?.getARCKeyCode(controlCode, withTag: currTag,withControlId: controlId))!,"app_interface_tag":""]
+        weak var weakSelf = self
         
-        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
-    }
-    /// 遥控器自定义学习
-    func sendStudyMqttCmd(funcId:Int){
-        createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_extra_study","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":controlId,"ir_type":"ir_air","func_id":funcId,"app_interface_tag":String.init(format: "%d", funcId)]
-        
-        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
-    }
-    /// 遥控器删除
-    func sendDelMqttCmd(){
-        createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_del","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":controlId,"app_interface_tag":""]
-        
-        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+        GYZNetWork.requestNetwork("homeCtrl", parameters: ["id":controlId],  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.showStudyAlert(funcId: response["data"].intValue)
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+            MBProgressHUD.showAutoDismissHUD(message: "获取临时id失败")
+        })
     }
     /// 遥控器自定义保存
     func sendSaveMqttCmd(funcId:Int,name: String){
@@ -580,22 +491,7 @@ class HOOPARCControlVC: GYZBaseVC {
         btn.accessibilityIdentifier = "\(funcId)"
         
     }
-    /// 遥控器自定义按键控制、学习测试控制
-    func sendCmdCustomMqtt(isTest: Bool,funcId:Int,code: String){
-        
-        createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_extra_ctrl","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":controlId,"ir_type":"ir_air","ctrl_test":isTest,"func_id":funcId,"code":code,"app_interface_tag":""]
-        
-        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
-    }
     /// 重载CocoaMQTTDelegate
-    override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        super.mqtt(mqtt, didConnectAck: ack)
-        if ack == .accept {
-            mqtt.subscribe("api_receive", qos: CocoaMQTTQOS.qos1)
-            
-        }
-    }
     override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
         super.mqtt(mqtt, didReceiveMessage: message, id: id)
         
@@ -627,11 +523,6 @@ class HOOPARCControlVC: GYZBaseVC {
                     }
                     setState()
                 }
-            }else if type == "app_ir_extra_ctrl_re" && phone == userDefaults.string(forKey: "phone"){
-                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
-//                if result["code"].intValue == kQuestSuccessTag{
-//
-//                }
             }else if type == "app_ir_extra_study_re" && phone == userDefaults.string(forKey: "phone"){
                 MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 
@@ -641,11 +532,6 @@ class HOOPARCControlVC: GYZBaseVC {
                     showStudySuccessAlert(funcId: result["data"]["func_id"].intValue, code: result["data"]["code"].stringValue)
                 }else{// 学习失败
                     showStudyFailedAlert(funcId: result["app_interface_tag"].intValue)
-                }
-            }else if type == "app_ir_del_re" && phone == userDefaults.string(forKey: "phone"){
-                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
-                if result["code"].intValue == kQuestSuccessTag{
-                    self.clickedBackBtn()
                 }
             }
             
