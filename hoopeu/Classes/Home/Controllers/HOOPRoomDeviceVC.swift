@@ -53,19 +53,15 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-//        if mqtt == nil {
-//            mqttSetting()
-//        }else {
-//            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
-//                self.mqtt?.connect()
-//            }else{
-//                sendMqttCmd()
-//            }
-//        }
+
+        settingMqtt()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        settingMqtt()
+    }
+    
+    func settingMqtt(){
         if mqtt == nil {
             mqttSetting()
         }else {
@@ -403,7 +399,7 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     
     /// 重载CocoaMQTTDelegate
     override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
-        GYZLog("new state: \(state)")
+        GYZLog("new state\(roomId): \(state)")
         if state == .connected {
             if !isNetWork{
                 sendMqttCheckOnlineCmd()
@@ -412,10 +408,10 @@ class HOOPRoomDeviceVC: GYZBaseVC {
             sendMqttCmd()
             
         }
-        else if state == .disconnected && self.mqtt != nil && !self.isUserDisConnect{//   断线重连
-            self.mqtt = nil
-            mqttSetting()
-        }
+//        else if state == .disconnected && self.mqtt != nil && !self.isUserDisConnect{//   断线重连
+//            self.mqtt = nil
+//            mqttSetting()
+//        }
     }
     override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
         super.mqtt(mqtt, didConnectAck: ack)

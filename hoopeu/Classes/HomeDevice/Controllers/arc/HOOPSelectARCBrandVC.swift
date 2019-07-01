@@ -24,7 +24,7 @@ class HOOPSelectARCBrandVC: GYZBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "选择空调品牌"
+        self.navigationItem.title = "选择品牌"
         
         dealData()
         

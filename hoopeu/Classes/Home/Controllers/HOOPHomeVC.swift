@@ -126,19 +126,22 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         
         scrollPageView?.titleBtnOnClick = {[unowned self] (label: UILabel, index: Int) in
            
-            if self.currIndex != index {
-                if (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt != nil {//类似viewWillDisappear
-                    self.isUserDisConnect = true
-                    /// 关闭mqtt
-                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt?.disconnect()
-                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt = nil
-                }
-                self.currIndex = index
-                if (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt == nil {//类似viewWillAppear
-                    self.isUserDisConnect = false
-                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqttSetting()
-                }
-            }
+            self.currIndex = index
+            (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).settingMqtt()
+//            if self.currIndex != index {
+//                if (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt != nil {//类似viewWillDisappear
+//                    self.isUserDisConnect = true
+//                    /// 关闭mqtt
+//                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt?.disconnect()
+//                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt = nil
+//                }
+//                self.currIndex = index
+//                if (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt == nil {//类似viewWillAppear
+//                    self.isUserDisConnect = false
+//                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).roomId = self.roomIdValue[self.currIndex]
+//                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqttSetting()
+//                }
+//            }
             self.setScrollIndex()
         }
         

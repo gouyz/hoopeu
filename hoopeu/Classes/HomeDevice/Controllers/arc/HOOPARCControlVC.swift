@@ -618,7 +618,7 @@ class HOOPARCControlVC: GYZBaseVC {
                         windSpeedDesLab.isHidden = false
                         modelDesLab.isHidden = false
                         ARCStateCtr.shareInstance()?.powerOn = true
-                    }else{
+                    }else if currTag == 0x88{
                         tempLab.text = "--"
                         windDesLab.isHidden = true
                         windSpeedDesLab.isHidden = true

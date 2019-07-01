@@ -70,6 +70,7 @@ PODS:
     - SDWebImage/Core
   - SKPhotoBrowser (6.0.0)
   - SnapKit (4.2.0)
+  - SPPageMenu (3.5.0)
   - SwiftyJSON (4.2.0)
   - ZFPlayer (3.2.12):
     - ZFPlayer/Core (= 3.2.12)
@@ -94,6 +95,7 @@ DEPENDENCIES:
   - PYSearch
   - SKPhotoBrowser
   - SnapKit (~> 4.2.0)
+  - SPPageMenu (~> 3.5.0)
   - SwiftyJSON
   - ZFPlayer
   - ZFPlayer/AVPlayer
@@ -122,6 +124,7 @@ SPEC REPOS:
     - SDWebImage
     - SKPhotoBrowser
     - SnapKit
+    - SPPageMenu
     - SwiftyJSON
     - ZFPlayer
 
@@ -147,9 +150,10 @@ SPEC CHECKSUMS:
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SKPhotoBrowser: 76eb862685761707b5745fde7762757966565e07
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
+  SPPageMenu: da182aafcec55719d5c326103cc7716c1e48f311
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   ZFPlayer: fdc92702cc611922182a951991dea78566da7605
 
-PODFILE CHECKSUM: 2b06fc521187dff24997f965c6b091ba48e630c6
+PODFILE CHECKSUM: 5b600c337d874a984a821b44939cb15aa8b4237e
 
 COCOAPODS: 1.5.3
