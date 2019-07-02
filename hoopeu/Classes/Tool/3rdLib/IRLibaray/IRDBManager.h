@@ -20,9 +20,36 @@ extern NSString * const kARCTableName;     //空调表名
 extern NSString * const kHWaterTableName;  //热水器表名
 extern NSString * const kAirTableName;     //空气净化器表名
 extern NSString * const kSLRTableName;     //单反表名
+extern NSString * const kADOTableName;     //音响表名
+extern NSString * const kSWEEPERTableName; //扫地机表名
+extern NSString * const kLAMPTableName;    //灯表名
 
 extern NSString * const kArcMatchTableName;//一键匹配表
 extern NSString * const kArcLibraryTableName;//一键匹配对应的配合表
+
+extern NSString * const kAdoMatchTableName;
+extern NSString * const kAdoLibraryTableName;
+extern NSString * const kAirLibraryTableName;
+extern NSString * const kDvdMatchTableName;
+extern NSString * const kDvdLibraryTableName;
+extern NSString * const kFanMatchTableName;
+extern NSString * const kFanLibraryTableName;
+extern NSString * const kIptvMatchTableName;
+extern NSString * const kIptvLibraryTableName;
+extern NSString * const kLampMatchTableName;
+extern NSString * const kLampLibraryTableName;
+extern NSString * const kPjtMatchTableName;
+extern NSString * const kPjtLibraryTableName;
+extern NSString * const kSlrMatchTableName;
+extern NSString * const kSlrLibraryTableName;
+extern NSString * const kSweeperMatchTableName;
+extern NSString * const kSweeperLibraryTableName;
+extern NSString * const kTvboxMatchTableName;
+extern NSString * const kTvboxLibraryTableName;
+extern NSString * const kTvMatchTableName;
+extern NSString * const kTvLibraryTableName;
+extern NSString * const kWaterMatchTableName;
+extern NSString * const kWaterLibraryTableName;
 
 //字段名
 extern NSString * const fSerialFeild;      //索引序号字段（0开始）
@@ -54,12 +81,57 @@ extern NSString * const fCodeFeild;        //码值字段
 //从ARC_LIBRARY_TABLE_NAME表中获取一键匹配结果
 - (NSData *)getARCCodeByPointedIndex:(NSInteger)index;
 
-/*/--------------wjs------后加
-//获取空调的匹配库映射表
-- (NSMutableArray *)getAllARCMatchindex;
 
-//getARCCodeBywjsIndex
-//从ARC_LIBRARY_TABLE_NAME表中获取一键匹配结果
-- (NSData *)getARCCodeBywjsIndex:(NSInteger)index;
-*/
+
+
+//获取非空调的匹配库
+- (NSMutableArray *)getAllADOMatchCode;
+
+- (NSData *)getADOCodeByPointedIndex:(NSInteger)index;
+
+- (NSMutableArray *)getAllAIRMatchCode;
+
+- (NSData *)getAIRCodeByPointedIndex:(NSInteger)index;
+
+- (NSMutableArray *)getAllDVDMatchCode;
+
+- (NSData *)getDVDCodeByPointedIndex:(NSInteger)index;
+
+- (NSMutableArray *)getAllFANMatchCode;
+
+- (NSData *)getFANCodeByPointedIndex:(NSInteger)index;
+
+- (NSMutableArray *)getAllIPTVMatchCode;
+
+- (NSData *)getIPTVCodeByPointedIndex:(NSInteger)index;
+
+- (NSMutableArray *)getAllLAMPMatchCode;
+
+- (NSData *)getLAMPCodeByPointedIndex:(NSInteger)index;
+
+- (NSMutableArray *)getAllPJTMatchCode;
+
+- (NSData *)getPJTCodeByPointedIndex:(NSInteger)index;
+
+- (NSMutableArray *)getAllSLRMatchCode;
+
+- (NSData *)getSLRCodeByPointedIndex:(NSInteger)index;
+
+- (NSMutableArray *)getAllSWEEPERMatchCode;
+
+- (NSData *)getSWEEPERCodeByPointedIndex:(NSInteger)index;
+
+- (NSMutableArray *)getAllTVBOXMatchCode;
+
+- (NSData *)getTVBOXCodeByPointedIndex:(NSInteger)index;
+
+- (NSMutableArray *)getAllTVMatchCode;
+
+- (NSData *)getTVCodeByPointedIndex:(NSInteger)index;
+
+- (NSMutableArray *)getAllWATERMatchCode;
+
+- (NSData *)getWATERCodeByPointedIndex:(NSInteger)index;
+
+
 @end

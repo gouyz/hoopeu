@@ -60,7 +60,7 @@ typedef enum
     FAN_LowSpeed    =39,  //低速
     FAN_MiddleSpeed =41,  //中速
     FAN_HighSpeed   =43   //高速
-
+    
 }FanKeyBoadMap;
 
 typedef enum
@@ -146,6 +146,7 @@ typedef enum
     TV_Left    = 45,  //左
     TV_Right   = 47,  //右
     TV_Down    = 49,  //下
+    TV_Home    = 51,  //主页
     
 }TVKeyBoadMap;
 
@@ -202,14 +203,24 @@ typedef enum
 
 typedef enum
 {
-    AIR_Power   = 1,  //电源
-    AIR_Auto    = 3,  //自动
-    AIR_AirVol  = 5,  //风量
-    AIR_Timer   = 7,  //定时
-    AIR_Mode    = 9,  //模式
-    AIR_Anion   = 11, //负离子
-    AIR_Comfort = 13, //舒适
-    AIR_Mute    = 15  //静音
+    AIR_Power               = 1,  //电源
+    AIR_Auto                = 3,  //自动
+    AIR_AirVol              = 5,  //风量
+    AIR_Timer               = 7,  //定时
+    AIR_Mode                = 9,  //模式
+    AIR_Anion               = 11, //负离子
+    AIR_Comfort             = 13, //舒适
+    AIR_Mute                = 15, //静音
+    AIR_Off                 = 17, //关灯
+    AIR_Strength            = 19, //强劲
+    AIR_natural             = 21, //自然
+    AIR_Close               = 23, //关闭
+    AIR_sleep               = 25, //睡眠
+    AIR_Intelligence        = 27, //智能
+    AIR_lamp1               = 29, //灯1
+    AIR_lamp2               = 31, //灯2
+    AIR_lamp3               = 33, //灯3
+    AIR_Ultraviolet_rays    = 35, //紫外线
     
 }AirKeyBoadMap;
 
@@ -219,23 +230,97 @@ typedef enum
     
 }SLRKeyBoadMap;
 
- /*////空调一键数据表对应的码组号）
-int arcwjs[] =
+typedef enum
 {
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    ADO_Left    = 1,   //左
+    ADO_Up      = 3,   //上
+    ADO_Ok      = 5,   //ok
+    ADO_Down    = 7,   //下
+    ADO_Right   = 9,   //右
+    ADO_Power   = 11,  //电源
+    ADO_VolRed  = 13,  //音量+
+    ADO_Mute    = 15,  //静音
+    ADO_VolAdd  = 17,  //音量-
+    ADO_FBack   = 19,  //快倒
+    ADO_Play    = 21,  //播放
+    ADO_FForwad = 23,  //快进
+    ADO_Last    = 25,  //上一曲
+    ADO_Stop    = 27,  //停止
+    ADO_Next    = 29,  //下一曲
+    ADO_Pause   = 31,  //暂停
+    ADO_SK      = 33,  //菜单
+    ADO_Menu    = 35,  //返回
     
-};
-*/
+}ADOKeyBoadMap;
+
+typedef enum
+{
+    Sweeper_On             =1,   //开机
+    Sweeper_Off            =3,   //关机
+    Sweeper_Up             =5,   //上
+    Sweeper_Down           =7,   //下
+    Sweeper_Left           =9,   //左
+    Sweeper_Right          =11,  //右
+    Sweeper_OK             =13,  //确定
+    Sweeper_Recharge       =15,  //回充
+    Sweeper_Mode           =17,  //模式
+    Sweeper_Home           =19,  //主页
+    Sweeper_Time           =21,  //时间
+    Sweeper_Area           =23,  //区域
+    Sweeper_Along_the_edge =25,  //沿边
+    Sweeper_Local          =27,  //局部
+    Sweeper_Automatic      =29,  //自动
+    Sweeper_Fixed_point    =31,  //定点
+    Sweeper_Bow            =33,  //弓形
+    Sweeper_Sterilization  =35,  //杀菌
+    Sweeper_Reservation    =37,  //预约
+    Sweeper_Speed          =39,  //速度
+    Sweeper_Interpose      =41,  //设置
+    
+}SweeperKeyBoadMap;
+
+typedef enum
+{
+    Lamp_On             = 1,   //开灯
+    Lamp_Off            = 3,   //关灯
+    Lamp_IuminanceRed   = 5,   //亮度+
+    Lamp_IuminanceAdd   = 7,   //亮度-
+    Lamp_Mode           = 9,   //模式
+    Lamp_Interpose      = 11,  //设置
+    Lamp_timingRed      = 13,  //定时+
+    Lamp_timingAdd      = 15,  //定时-
+    Lamp_ColourRed      = 17,  //色温+
+    Lamp_ColourAdd      = 19,  //色温-
+    Lamp_1              = 21,  //1
+    Lamp_2              = 23,  //2
+    Lamp_3              = 25,  //3
+    Lamp_4              = 27,  //4
+    Lamp_5              = 29,  //5
+    Lamp_6              = 31,  //6
+    Lamp_A              = 33,  //A
+    Lamp_B              = 35,  //B
+    Lamp_C              = 37,  //C
+    Lamp_D              = 39,  //D
+    
+}LampKeyBoadMap;
+
+/*////空调一键数据表对应的码组号）
+ int arcwjs[] =
+ {
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 0,
+ 
+ };
+ */
 #endif /* DeviceKeyBoardMap_h */

@@ -20,6 +20,9 @@ typedef NS_ENUM(NSInteger,DeviceType)
     DeviceTypeWheater,      //热水器
     DeviceTypeAir,          //空气净化器
     DeviceTypeSLR,          //单反
+    DeviceTypeADO,          //音响
+    DeviceTypeSWEEPER,      //扫地机
+    DeviceTypeLAMP,         //灯
 };
 
 @interface DeviceM : NSObject

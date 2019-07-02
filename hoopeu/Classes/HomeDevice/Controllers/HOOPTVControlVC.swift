@@ -15,7 +15,7 @@ import AudioToolbox
 class HOOPTVControlVC: HOOPBaseControlVC {
     
     /// 按钮位置
-    var keyNumList: [String:Int] = ["tv_power":1011,"tv_mute":1013,"tv_menu":1005,"tv_back":1039,"tv_1":1015,"tv_2":1017,"tv_3":1019,"tv_4":1021,"tv_5":1023,"tv_6":1025,"tv_7":1027,"tv_8":1029,"tv_9":1031,"tv_0":1035,"tv_line":1033,"tv_tv":1037,"tv_voice_plus":1009,"tv_voice_minus":1001,"tv_up":1043,"tv_ok":1041,"tv_left":1045,"tv_right":1047,"tv_down":1049,"tv_channel_plus":1003,"tv_channel_minus":1007]
+    var keyNumList: [String:Int] = ["tv_power":1011,"tv_mute":1013,"tv_menu":1005,"tv_home":1051,"tv_back":1039,"tv_1":1015,"tv_2":1017,"tv_3":1019,"tv_4":1021,"tv_5":1023,"tv_6":1025,"tv_7":1027,"tv_8":1029,"tv_9":1031,"tv_0":1035,"tv_line":1033,"tv_tv":1037,"tv_voice_plus":1009,"tv_voice_minus":1001,"tv_up":1043,"tv_ok":1041,"tv_left":1045,"tv_right":1047,"tv_down":1049,"tv_channel_plus":1003,"tv_channel_minus":1007]
     /// 当前操作按键tag
     var currTag:Int = 1011
 
@@ -61,6 +61,7 @@ class HOOPTVControlVC: HOOPBaseControlVC {
         bgView.addSubview(onOffBtn)
         bgView.addSubview(muteBtn)
         bgView.addSubview(menuBtn)
+        bgView.addSubview(homeBtn)
         bgView.addSubview(backBtn)
         bgView.addSubview(oneBtn)
         bgView.addSubview(twoBtn)
@@ -110,11 +111,16 @@ class HOOPTVControlVC: HOOPBaseControlVC {
         menuBtn.snp.makeConstraints { (make) in
             make.top.height.equalTo(onOffBtn)
             make.left.equalTo(muteBtn.snp.right).offset(kMargin)
+            make.width.equalTo(homeBtn)
+        }
+        homeBtn.snp.makeConstraints { (make) in
+            make.top.height.equalTo(onOffBtn)
+            make.left.equalTo(menuBtn.snp.right).offset(kMargin)
             make.width.equalTo(backBtn)
         }
         backBtn.snp.makeConstraints { (make) in
             make.top.height.width.equalTo(onOffBtn)
-            make.left.equalTo(menuBtn.snp.right).offset(kMargin)
+            make.left.equalTo(homeBtn.snp.right).offset(kMargin)
             make.right.equalTo(-kMargin)
         }
         oneBtn.snp.makeConstraints { (make) in
@@ -266,6 +272,20 @@ class HOOPTVControlVC: HOOPBaseControlVC {
         btn.setTitleColor(kWhiteColor, for: .normal)
         btn.titleLabel?.font = k13Font
         btn.tag = 1005
+        btn.cornerRadius = kCornerRadius
+        
+        btn.addTarget(self, action: #selector(clickedOperatorBtn(btn:)), for: .touchUpInside)
+        
+        return btn
+    }()
+    /// 主页
+    lazy var homeBtn : UIButton = {
+        let btn = UIButton.init(type: .custom)
+        btn.backgroundColor = kBtnClickBGColor
+        btn.setTitle("主页", for: .normal)
+        btn.setTitleColor(kWhiteColor, for: .normal)
+        btn.titleLabel?.font = k13Font
+        btn.tag = 1051
         btn.cornerRadius = kCornerRadius
         
         btn.addTarget(self, action: #selector(clickedOperatorBtn(btn:)), for: .touchUpInside)

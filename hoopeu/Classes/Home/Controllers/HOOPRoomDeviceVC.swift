@@ -217,6 +217,8 @@ class HOOPRoomDeviceVC: GYZBaseVC {
             goFanControllVC(arcId: arcId)
         case "ir_proj":// 投影仪遥控器
             goPJTControllVC(arcId: arcId)
+        case "ir_sound":// 音响遥控器
+            goADOControllVC(arcId: arcId)
         default:
             break
         }
@@ -255,6 +257,13 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         let vc = HOOPFanControlVC()
         vc.controlId = arcId
         vc.ir_type = "ir_fan"
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    /// 音响遥控器
+    func goADOControllVC(arcId: String){
+        let vc = HOOPSoundControlVC()
+        vc.controlId = arcId
+        vc.ir_type = "ir_sound"
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 投影仪遥控器

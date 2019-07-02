@@ -255,7 +255,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
         if deviceType == .ARC {
             vc.onKeyCode = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: 0x77,withControlId: deviceId))!
             vc.offKeyCode = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: 0x88,withControlId: deviceId))!
-        }else if deviceType == .TV || deviceType == .DVD {// 除空调外,开和关的code一样
+        }else if deviceType == .TV || deviceType == .ADO {// 除空调外,开和关的code一样
             let code:String = BLTAssist.nomarlCode(dataList[curMatchIndex].code, key: 11)
             vc.onKeyCode = code
             vc.offKeyCode = code
@@ -323,7 +323,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyName = "音量+"
                 mKeyCodeTag = 5
             }
-        case .DVD: //音响
+        case .ADO: //音响
             ir_type = "ir_sound"
             mDeviceTypeName = "音响"
             if stepIndex == 1{
@@ -331,10 +331,10 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyCodeTag = 11
             }else if stepIndex == 2{
                 mKeyName = "菜单"
-                mKeyCodeTag = 35
+                mKeyCodeTag = 33
             }else if stepIndex == 3{
                 mKeyName = "静音"
-                mKeyCodeTag = 13
+                mKeyCodeTag = 15
             }
         case .PJT: //投影仪
             ir_type = "ir_proj"
