@@ -69,7 +69,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
                     }
                 }
                 scrollPageView?.selectedIndex(currIndex, animated: true)
-                userDefaults.removeObject(forKey: "roomId")
+//                userDefaults.removeObject(forKey: "roomId")
             }
         }
     }
@@ -127,7 +127,11 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         scrollPageView?.titleBtnOnClick = {[unowned self] (label: UILabel, index: Int) in
            
             self.currIndex = index
-            (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).settingMqtt()
+            if let _ = userDefaults.string(forKey: "roomId"){
+                (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).settingMqtt()
+                userDefaults.removeObject(forKey: "roomId")
+            }
+            
 //            if self.currIndex != index {
 //                if (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt != nil {//类似viewWillDisappear
 //                    self.isUserDisConnect = true

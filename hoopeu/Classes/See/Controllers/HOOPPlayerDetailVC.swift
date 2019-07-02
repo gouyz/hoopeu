@@ -198,10 +198,14 @@ class HOOPPlayerDetailVC: GYZBaseVC {
         
     }
     override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
+        
+        ///停止推流
+        startOrEndPlayer(order: "camera_stop_push")
+        super.viewWillDisappear(animated)
         
         ///检测是否需要关闭推流
 //        requestDeviceClosed()
+    
         self.player?.isViewControllerDisappear = true
     }
     override var preferredStatusBarStyle: UIStatusBarStyle{

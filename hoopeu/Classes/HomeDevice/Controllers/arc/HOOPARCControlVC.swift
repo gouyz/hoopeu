@@ -10,6 +10,7 @@ import UIKit
 import MBProgressHUD
 import CocoaMQTT
 import SwiftyJSON
+import AudioToolbox
 
 class HOOPARCControlVC: HOOPBaseControlVC {
     
@@ -346,6 +347,8 @@ class HOOPARCControlVC: HOOPBaseControlVC {
     }
     /// 操作
     @objc func clickedOperatorBtn(btn: UIButton){
+        //默认震动效果
+        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
         currTag = btn.tag
         
         if isEdit {// 编辑
@@ -504,9 +507,9 @@ class HOOPARCControlVC: HOOPBaseControlVC {
                     return
                 }
             }
-            self.hud?.hide(animated: true)
             
             if type == "app_ir_ctrl_re" && phone == userDefaults.string(forKey: "phone"){
+                self.hud?.hide(animated: true)
                 MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 if result["code"].intValue == kQuestSuccessTag{
                     if currTag == 0x77{
@@ -524,6 +527,7 @@ class HOOPARCControlVC: HOOPBaseControlVC {
                     setState()
                 }
             }else if type == "app_ir_extra_study_re" && phone == userDefaults.string(forKey: "phone"){
+                self.hud?.hide(animated: true)
                 MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 
                 if result["code"].intValue == kQuestSuccessTag{

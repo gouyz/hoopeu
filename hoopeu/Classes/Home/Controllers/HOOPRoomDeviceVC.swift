@@ -58,7 +58,13 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        settingMqtt()
+        if mqtt == nil {
+            mqttSetting()
+        }else {
+            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
+                self.mqtt?.connect()
+            }
+        }
     }
     
     func settingMqtt(){
@@ -105,19 +111,18 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     
     /// 添加智能设备
     @objc func clickedAddBtn(){
-        goTVArcControllVC(arcId: "")
-//        GYZAlertViewTools.alertViewTools.showSheet(title: nil, message: nil, cancleTitle: "取消", titleArray: ["家电遥控","智能开关","射频遥控","传感设备"], viewController: self) { [weak self](index) in
-//
-//            if index == 0{//家电遥控
-//                self?.goJiaDianVC()
-//            }else if index == 1{//智能开关
-//                self?.goSwitchVC()
-//            }else if index == 2{//射频遥控
-//                self?.goShePinVC()
-//            }else if index == 3{//传感设备
-//                self?.goChuanGanVC()
-//            }
-//        }
+        GYZAlertViewTools.alertViewTools.showSheet(title: nil, message: nil, cancleTitle: "取消", titleArray: ["家电遥控","智能开关","射频遥控","传感设备"], viewController: self) { [weak self](index) in
+
+            if index == 0{//家电遥控
+                self?.goJiaDianVC()
+            }else if index == 1{//智能开关
+                self?.goSwitchVC()
+            }else if index == 2{//射频遥控
+                self?.goShePinVC()
+            }else if index == 3{//传感设备
+                self?.goChuanGanVC()
+            }
+        }
     }
     
     /// 家电遥控
@@ -198,11 +203,20 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     
     /// 遥控器跳转
     func goIRControlVC(model:HOOPRoomIntelligentDeviceModel ){
+        let arcId:String = model.id!
         switch model.type_lower! {
         case "ir_air":// 空调
-            goArcControllVC(arcId: model.id!)
+            goArcControllVC(arcId: arcId)
         case "ir_tv":// 电视
-            goTVArcControllVC(arcId: model.id!)
+            goTVControllVC(arcId: arcId)
+        case "ir_stb":// 机顶盒
+            goTVBoxControllVC(arcId: arcId)
+        case "ir_iptv":// IPTV
+            goIPTVControllVC(arcId: arcId)
+        case "ir_fan":// 风扇遥控器
+            goFanControllVC(arcId: arcId)
+        case "ir_proj":// 投影仪遥控器
+            goPJTControllVC(arcId: arcId)
         default:
             break
         }
@@ -216,8 +230,38 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 电视遥控器
-    func goTVArcControllVC(arcId: String){
+    func goTVControllVC(arcId: String){
         let vc = HOOPTVControlVC()
+        vc.controlId = arcId
+        vc.ir_type = "ir_tv"
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    /// 机顶盒遥控器
+    func goTVBoxControllVC(arcId: String){
+        let vc = HOOPSTBControlVC()
+        vc.controlId = arcId
+        vc.ir_type = "ir_stb"
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    /// IPTV遥控器
+    func goIPTVControllVC(arcId: String){
+        let vc = HOOPIPTVControllVC()
+        vc.controlId = arcId
+        vc.ir_type = "ir_iptv"
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    /// 风扇遥控器
+    func goFanControllVC(arcId: String){
+        let vc = HOOPFanControlVC()
+        vc.controlId = arcId
+        vc.ir_type = "ir_fan"
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    /// 投影仪遥控器
+    func goPJTControllVC(arcId: String){
+        let vc = HOOPProjectorControlVC()
+        vc.controlId = arcId
+        vc.ir_type = "ir_proj"
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 爱心看护

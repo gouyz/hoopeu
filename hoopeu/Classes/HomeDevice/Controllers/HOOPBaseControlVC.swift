@@ -141,15 +141,16 @@ class HOOPBaseControlVC: GYZBaseVC {
                     return
                 }
             }
-            self.hud?.hide(animated: true)
             
             if type == "app_ir_extra_ctrl_re" && phone == userDefaults.string(forKey: "phone"){
+                self.hud?.hide(animated: true)
                 MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 //                if result["code"].intValue == kQuestSuccessTag{
                 //
                 //                }
             }else if type == "app_ir_del_re" && phone == userDefaults.string(forKey: "phone"){
                 MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
+                self.hud?.hide(animated: true)
                 if result["code"].intValue == kQuestSuccessTag{
                     self.clickedBackBtn()
                 }

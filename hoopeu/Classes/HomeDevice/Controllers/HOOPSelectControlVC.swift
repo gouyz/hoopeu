@@ -43,36 +43,7 @@ class HOOPSelectControlVC: GYZBaseVC {
         vc.deviceType = self.deviceType
         navigationController?.pushViewController(vc, animated: true)
     }
-    /// 电视遥控器
-    func goSelectTV(){
-        let vc = HOOPTVControlVC()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    /// 机顶盒遥控器
-    func goSelectSTB(){
-        let vc = HOOPSTBControlVC()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    /// IPTV遥控器
-    func goSelectIPTV(){
-        let vc = HOOPIPTVControllVC()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    /// 音响遥控器
-    func goSelectSound(){
-        let vc = HOOPSoundControlVC()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    /// 投影仪遥控器
-    func goSelectProjector(){
-        let vc = HOOPProjectorControlVC()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    /// 风扇遥控器
-    func goSelectFan(){
-        let vc = HOOPFanControlVC()
-        navigationController?.pushViewController(vc, animated: true)
-    }
+    
 }
 
 extension HOOPSelectControlVC: UITableViewDelegate,UITableViewDataSource{
