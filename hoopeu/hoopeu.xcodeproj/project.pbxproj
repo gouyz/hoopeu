@@ -33,6 +33,10 @@
 		0A06D90622242B3000D68CAA /* HOOPSelectConditionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A06D90522242B3000D68CAA /* HOOPSelectConditionCell.swift */; };
 		0A07043C223158E500DD5C12 /* HOOPStudyTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A07043B223158E500DD5C12 /* HOOPStudyTestView.swift */; };
 		0A0B16D622AB8B8E00825FA3 /* HOOPChuanGanListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B16D522AB8B8E00825FA3 /* HOOPChuanGanListVC.swift */; };
+		0A0B324D22CCF3C200679E58 /* HOOPCustomOtherControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B324C22CCF3C200679E58 /* HOOPCustomOtherControlVC.swift */; };
+		0A0B324F22CCF4A100679E58 /* HOOPSaveCustomOtherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B324E22CCF4A100679E58 /* HOOPSaveCustomOtherVC.swift */; };
+		0A0B325322CCF53600679E58 /* HOOPCustomIRVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B325122CCF53600679E58 /* HOOPCustomIRVC.swift */; };
+		0A0B325422CCF53600679E58 /* HOOPSaveCustomIRVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B325222CCF53600679E58 /* HOOPSaveCustomIRVC.swift */; };
 		0A0B57E1224E4BF90085BEFA /* HOOPHomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B57E0224E4BF90085BEFA /* HOOPHomeModel.swift */; };
 		0A0B57E3224E673A0085BEFA /* HOOPRoomDeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B57E2224E673A0085BEFA /* HOOPRoomDeviceModel.swift */; };
 		0A0B6D93223FDFFB00CBF406 /* HOOPSwitchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B6D92223FDFFB00CBF406 /* HOOPSwitchVC.swift */; };
@@ -280,6 +284,10 @@
 		0A06D90522242B3000D68CAA /* HOOPSelectConditionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPSelectConditionCell.swift; sourceTree = "<group>"; };
 		0A07043B223158E500DD5C12 /* HOOPStudyTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPStudyTestView.swift; sourceTree = "<group>"; };
 		0A0B16D522AB8B8E00825FA3 /* HOOPChuanGanListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPChuanGanListVC.swift; sourceTree = "<group>"; };
+		0A0B324C22CCF3C200679E58 /* HOOPCustomOtherControlVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPCustomOtherControlVC.swift; sourceTree = "<group>"; };
+		0A0B324E22CCF4A100679E58 /* HOOPSaveCustomOtherVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPSaveCustomOtherVC.swift; sourceTree = "<group>"; };
+		0A0B325122CCF53600679E58 /* HOOPCustomIRVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HOOPCustomIRVC.swift; sourceTree = "<group>"; };
+		0A0B325222CCF53600679E58 /* HOOPSaveCustomIRVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HOOPSaveCustomIRVC.swift; sourceTree = "<group>"; };
 		0A0B57E0224E4BF90085BEFA /* HOOPHomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPHomeModel.swift; sourceTree = "<group>"; };
 		0A0B57E2224E673A0085BEFA /* HOOPRoomDeviceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPRoomDeviceModel.swift; sourceTree = "<group>"; };
 		0A0B6D92223FDFFB00CBF406 /* HOOPSwitchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPSwitchVC.swift; sourceTree = "<group>"; };
@@ -615,6 +623,8 @@
 		0A0530262226D72100567F3B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0A0B325022CCF53600679E58 /* customIR */,
+				0A0B324B22CCF38800679E58 /* customControl */,
 				0A0B6D91223FDFD800CBF406 /* switch */,
 				0A3DA2C1222FBD3000A03350 /* arc */,
 				0A3DA2BC222FBD3000A03350 /* chuangan */,
@@ -630,6 +640,24 @@
 				0A0D106B22CA5F7E00675409 /* HOOPBaseControlVC.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		0A0B324B22CCF38800679E58 /* customControl */ = {
+			isa = PBXGroup;
+			children = (
+				0A0B324C22CCF3C200679E58 /* HOOPCustomOtherControlVC.swift */,
+				0A0B324E22CCF4A100679E58 /* HOOPSaveCustomOtherVC.swift */,
+			);
+			path = customControl;
+			sourceTree = "<group>";
+		};
+		0A0B325022CCF53600679E58 /* customIR */ = {
+			isa = PBXGroup;
+			children = (
+				0A0B325122CCF53600679E58 /* HOOPCustomIRVC.swift */,
+				0A0B325222CCF53600679E58 /* HOOPSaveCustomIRVC.swift */,
+			);
+			path = customIR;
 			sourceTree = "<group>";
 		};
 		0A0B6D91223FDFD800CBF406 /* switch */ = {
@@ -1713,6 +1741,7 @@
 				0A3ABB0621DDE8DE0048F0F3 /* MMShareSheet.swift in Sources */,
 				0A40AAF7222E5987006B3D93 /* SYLineProgressView.m in Sources */,
 				0A3B8478221E7EFF007ADEAE /* HOOPModifyOldPwdVC.swift in Sources */,
+				0A0B324D22CCF3C200679E58 /* HOOPCustomOtherControlVC.swift in Sources */,
 				0A388062221FD95000E51EDA /* HOOPOnOffProblemVC.swift in Sources */,
 				0A3C851F224B65AD002C794E /* HOOPLeaveMessageVC.swift in Sources */,
 				0A3ABB0F21DDE8DE0048F0F3 /* GYZNetWork.swift in Sources */,
@@ -1758,6 +1787,7 @@
 				0A3ABAF621DDE8DE0048F0F3 /* HXTagsView.m in Sources */,
 				0A3ABADA21DDE8DE0048F0F3 /* GYZBottomSendView.swift in Sources */,
 				0A3ABB0021DDE8DE0048F0F3 /* UsefulPickerView.swift in Sources */,
+				0A0B324F22CCF4A100679E58 /* HOOPSaveCustomOtherVC.swift in Sources */,
 				0A3ABAD121DDE8DE0048F0F3 /* LHSCheckView.swift in Sources */,
 				0A05E4AF2243C50B00050F49 /* HOOPDeviceModel.swift in Sources */,
 				0A3ABB0C21DDE8DE0048F0F3 /* ScrollPageView.swift in Sources */,
@@ -1771,6 +1801,7 @@
 				0A0B6DA522B528A50030D254 /* HOOPLabAndLabCell.swift in Sources */,
 				0A3DA2D3222FC0AB00A03350 /* HOOPCustomControlAddCell.swift in Sources */,
 				0A649F5D22A0D213001829A9 /* ARCStateCtr.m in Sources */,
+				0A0B325422CCF53600679E58 /* HOOPSaveCustomIRVC.swift in Sources */,
 				0A3ABB0821DDE8DE0048F0F3 /* GYZScanQrcodeVC.swift in Sources */,
 				0A0D106C22CA5F7E00675409 /* HOOPBaseControlVC.swift in Sources */,
 				0A649F5B22A0D213001829A9 /* BLTAssist.m in Sources */,
@@ -1810,6 +1841,7 @@
 				0A723A2E2267039700A27051 /* HOOPCustomControlModel.swift in Sources */,
 				0A40E439222930AE00E49689 /* HOOPSoundControlVC.swift in Sources */,
 				0A3ABADB21DDE8DE0048F0F3 /* GYZCommonSwitchCell.swift in Sources */,
+				0A0B325322CCF53600679E58 /* HOOPCustomIRVC.swift in Sources */,
 				0A3ABAEC21DDE8DE0048F0F3 /* GYZString+Extension.swift in Sources */,
 				0AA23F32222683BA0090F58B /* GYZSheetView.swift in Sources */,
 				0A0530292226D74400567F3B /* HOOPSelectControlVC.swift in Sources */,

@@ -43,7 +43,11 @@ class HOOPSelectControlVC: GYZBaseVC {
         vc.deviceType = self.deviceType
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+    /// 自定义遥控器
+    func goCustomIrVC(){
+        let vc = HOOPCustomIRVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 extension HOOPSelectControlVC: UITableViewDelegate,UITableViewDataSource{
@@ -88,7 +92,7 @@ extension HOOPSelectControlVC: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if indexPath.row == 7 {// 自定义遥控器
-            
+            goCustomIrVC()
         }else{
             
             switch indexPath.row {

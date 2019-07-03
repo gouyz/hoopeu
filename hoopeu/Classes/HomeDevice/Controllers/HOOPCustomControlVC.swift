@@ -109,6 +109,8 @@ class HOOPCustomControlVC: GYZBaseVC {
             if index == 0{//重新配置
                 if self?.controlType == "pt2262" {/// 射频遥控
                     self?.goShePinVC()
+                }else if self?.controlType == "pt2262" {/// 自定义遥控
+                    self?.goShePinVC()
                 }
             }else if index == 1{//删除
                 self?.showDeleteAlert()
