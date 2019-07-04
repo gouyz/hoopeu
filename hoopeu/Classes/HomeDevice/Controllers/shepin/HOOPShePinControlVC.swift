@@ -244,12 +244,12 @@ class HOOPShePinControlVC: GYZBaseVC {
     }
     
     /// 学习成功 测试
-    func showStudySuccessAlert(index: Int,studyState:String){
+    func showStudySuccessAlert(index: Int,code:String){
         let alert = HOOPStudyTestView.init()
         alert.titleLab.text = "学到新功能，测试一下是否可用吧"
         alert.action = {[weak self](tag) in
             if tag == 101 {// 发射指令
-                self?.sendZhiLingMqttCmd(studyState: studyState, index: index)
+                self?.sendZhiLingMqttCmd(code: code, index: index)
             }else if tag == 102 {// 没响应
 //                alert.hide()
             }else if tag == 103 {// 有响应
@@ -279,19 +279,19 @@ class HOOPShePinControlVC: GYZBaseVC {
     /// mqtt发布主题 学习
     func sendStudyMqttCmd(studyState: String,index: Int){
         
-        var count: Int = 0
-        for item in funcArr {
-            if item.count > 0{
-                count += 1
-            }
-        }
+//        var count: Int = 0
+//        for item in funcArr {
+//            if item.count > 0{
+//                count += 1
+//            }
+//        }
         
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_num":count,"func_id":funcArr[index]["func_id"]!,"study_state":studyState,"msg_type":"app_pt2262_study","app_interface_tag":index]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_id":funcArr[index]["func_id"]!,"study_state":studyState,"msg_type":"app_pt2262_study","app_interface_tag":index]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
     /// mqtt发布主题 发射指令
-    func sendZhiLingMqttCmd(studyState: String,index: Int){
+    func sendZhiLingMqttCmd(code: String,index: Int){
         
         var count: Int = 0
         for item in funcArr {
@@ -300,7 +300,7 @@ class HOOPShePinControlVC: GYZBaseVC {
             }
         }
         
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_num":count,"func_id":funcArr[index]["func_id"]!,"study_state":studyState,"msg_type":"app_pt2262_ctrl","app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_num":count,"func_id":funcArr[index]["func_id"]!,"code":code,"ctrl_test":true,"msg_type":"app_pt2262_ctrl","app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -332,7 +332,7 @@ class HOOPShePinControlVC: GYZBaseVC {
                     if self.dataModel == nil {
                         self.funcArr[result["app_interface_tag"].intValue]["func_code"] = result["data"].stringValue
                     }
-                    showStudySuccessAlert(index: result["app_interface_tag"].intValue, studyState: "1")
+                    showStudySuccessAlert(index: result["app_interface_tag"].intValue, code: result["data"].stringValue)
                 }else{// 学习失败
                     showStudyFailedAlert(index: result["app_interface_tag"].intValue)
                 }

@@ -111,7 +111,7 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     
     /// 添加智能设备
     @objc func clickedAddBtn(){
-        GYZAlertViewTools.alertViewTools.showSheet(title: nil, message: nil, cancleTitle: "取消", titleArray: ["家电遥控","智能开关","射频遥控","传感设备"], viewController: self) { [weak self](index) in
+        GYZAlertViewTools.alertViewTools.showSheet(title: nil, message: nil, cancleTitle: "取消", titleArray: ["家电遥控","智能开关","射频遥控","传感设备","自定义遥控"], viewController: self) { [weak self](index) in
 
             if index == 0{//家电遥控
                 self?.goJiaDianVC()
@@ -121,6 +121,8 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                 self?.goShePinVC()
             }else if index == 3{//传感设备
                 self?.goChuanGanVC()
+            }else if index == 4{//自定义遥控
+                self?.goCustomOtherVC()
             }
         }
     }
@@ -138,6 +140,11 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     /// 传感设备
     func goChuanGanVC(){
         let vc = HOOPChuanGanListVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    /// 自定义遥控
+    func goCustomOtherVC(){
+        let vc = HOOPCustomOtherControlVC()
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 智能开关

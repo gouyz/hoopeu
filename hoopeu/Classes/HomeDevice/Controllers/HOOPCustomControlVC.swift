@@ -148,7 +148,7 @@ class HOOPCustomControlVC: GYZBaseVC {
     /// mqtt发布主题 发射指令
     func sendZhiLingMqttCmd(index: Int){
         
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":(dataModel?.id)!,"phone":userDefaults.string(forKey: "phone") ?? "","func_num":(dataModel?.funcList.count)!,"func_id":dataModel?.funcList[index].func_id ?? "","study_state":"1","msg_type":"app_pt2262_ctrl","app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":(dataModel?.id)!,"phone":userDefaults.string(forKey: "phone") ?? "","func_num":(dataModel?.funcList.count)!,"func_id":dataModel?.funcList[index].func_id ?? "","ctrl_test":false,"code":"","msg_type":"app_pt2262_ctrl","app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
