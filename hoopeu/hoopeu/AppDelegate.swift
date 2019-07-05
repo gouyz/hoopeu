@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        window?.rootViewController = GYZBaseNavigationVC(rootViewController: HOOPRegisterFirstVC())
         window?.makeKeyAndVisible()
         
-        setTimer()
+//        setTimer()
         // 获取推送消息
         let remote = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [AnyHashable : Any]
         // 如果remote不为空，就代表应用在未打开的时候收到了推送消息
@@ -184,30 +184,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enableAutoToolbar = false
     }
     
-    func setTimer(){
-        timer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(requestDeviceNetWork), userInfo: nil, repeats: true)
-    }
-    /// 报警轮询
-    @objc func requestDeviceNetWork(){
-        if !userDefaults.bool(forKey: kIsLoginTagKey) {
-            return
-        }
-        if !GYZTool.checkNetWork() {
-            return
-        }
-        
-        GYZNetWork.requestNetwork("alert", parameters: nil,method :.get,  success: { (response) in
-            
-            GYZLog(response)
-//            if response["code"].intValue == -203{//未检测到正在使用的设备，请重新配网连接……
-//                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
-//                KeyWindow.rootViewController = GYZBaseNavigationVC(rootViewController: HOOPLoginVC())
-//            }
-            
-        }, failture: { (error) in
-            GYZLog(error)
-        })
-    }
+//    func setTimer(){
+//        timer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(requestDeviceNetWork), userInfo: nil, repeats: true)
+//    }
+//    /// 报警轮询
+//    @objc func requestDeviceNetWork(){
+//        if !userDefaults.bool(forKey: kIsLoginTagKey) {
+//            return
+//        }
+//        if !GYZTool.checkNetWork() {
+//            return
+//        }
+//
+//        GYZNetWork.requestNetwork("alert", parameters: nil,method :.get,  success: { (response) in
+//
+//            GYZLog(response)
+////            if response["code"].intValue == -203{//未检测到正在使用的设备，请重新配网连接……
+////                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+////                KeyWindow.rootViewController = GYZBaseNavigationVC(rootViewController: HOOPLoginVC())
+////            }
+//
+//        }, failture: { (error) in
+//            GYZLog(error)
+//        })
+//    }
 }
 
 // MARK: - JPUSHRegisterDelegate 极光推送代理

@@ -206,6 +206,10 @@ extension GYZBaseVC: CocoaMQTTDelegate {
                 KeyWindow.rootViewController = GYZBaseNavigationVC(rootViewController: HOOPLoginVC())
                 
                 return
+            }else if result["code"].int == -203{
+                let vc = HOOPLinkPowerVC()
+                navigationController?.pushViewController(vc, animated: true)
+                return
             }
         }
     }

@@ -607,6 +607,8 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                 self.tableView.reloadData()
             }else if type == "query_online_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
                 self.isNetWork = true
+            }else if type == "device_start" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){// 设备启动完成
+                self.refresh()
             }
             
         }
