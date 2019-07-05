@@ -266,7 +266,7 @@ class HOOPSaveCustomOtherVC: GYZBaseVC {
         }
         
         
-        var paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","room_id":dataList[selectRoomIndex].roomId!,"ctrl_dev_id":deviceControlId,"ctrl_dev_name":arcNameTxtFiled.text!,"func_num":funcArr.count,"functions":funcArr,"room_name":dataList[selectRoomIndex].roomName!,"phone":userDefaults.string(forKey: "phone") ?? "","study_state":"1","app_interface_tag":""]
+        var paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","room_id":dataList[selectRoomIndex].roomId!,"ctrl_dev_id":deviceControlId,"ctrl_dev_name":arcNameTxtFiled.text!,"func_num":funcArr.count,"functions":funcArr,"room_name":dataList[selectRoomIndex].roomName!,"phone":userDefaults.string(forKey: "phone") ?? "","app_interface_tag":""]
         
         if isEdit {
             paramDic["msg_type"] = "app_other_edit"

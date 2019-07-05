@@ -109,8 +109,8 @@ class HOOPCustomControlVC: GYZBaseVC {
             if index == 0{//重新配置
                 if self?.controlType == "pt2262" {/// 射频遥控
                     self?.goShePinVC()
-                }else if self?.controlType == "pt2262" {/// 自定义遥控
-                    self?.goShePinVC()
+                }else if self?.controlType == "other" {/// 自定义遥控
+                    self?.goCustomVC()
                 }
             }else if index == 1{//删除
                 self?.showDeleteAlert()
@@ -124,6 +124,12 @@ class HOOPCustomControlVC: GYZBaseVC {
         vc.dataModel = dataModel
         navigationController?.pushViewController(vc, animated: true)
     }
+    /// 自定义遥控 重新配置
+    func goCustomVC(){
+        let vc = HOOPCustomOtherControlVC()
+        vc.dataModel = dataModel
+        navigationController?.pushViewController(vc, animated: true)
+    }
     /// 删除
     func showDeleteAlert(){
         weak var weakSelf = self
@@ -132,23 +138,39 @@ class HOOPCustomControlVC: GYZBaseVC {
             if index != cancelIndex{
                 if weakSelf?.controlType == "pt2262" {/// 射频遥控
                     weakSelf?.sendDeleteMqttCmd()
+                }else if weakSelf?.controlType == "other" {/// 自定义遥控
+                    weakSelf?.sendDeleteCustomMqttCmd()
                 }
                 
             }
         }
     }
     
-    /// mqtt发布主题 删除
+    /// mqtt发布主题 删除射频遥控器
     func sendDeleteMqttCmd(){
         
         let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":(dataModel?.id)!,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_pt2262_del","app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
-    /// mqtt发布主题 发射指令
+    /// mqtt发布主题 删除自定义遥控器
+    func sendDeleteCustomMqttCmd(){
+        
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":(dataModel?.id)!,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_other_del","app_interface_tag":""]
+        
+        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    /// mqtt发布主题 发射指令射频遥控
     func sendZhiLingMqttCmd(index: Int){
         
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":(dataModel?.id)!,"phone":userDefaults.string(forKey: "phone") ?? "","func_num":(dataModel?.funcList.count)!,"func_id":dataModel?.funcList[index].func_id ?? "","ctrl_test":false,"code":"","msg_type":"app_pt2262_ctrl","app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":(dataModel?.id)!,"phone":userDefaults.string(forKey: "phone") ?? "","func_id":dataModel?.funcList[index].func_id ?? "","ctrl_test":false,"code":"","msg_type":"app_pt2262_ctrl","app_interface_tag":""]
+        
+        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    /// mqtt发布主题 发射指令自定义遥控
+    func sendZhiLingCustomMqttCmd(index: Int){
+        
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":(dataModel?.id)!,"phone":userDefaults.string(forKey: "phone") ?? "","func_id":dataModel?.funcList[index].func_id ?? "","ctrl_test":false,"code":"","msg_type":"app_other_ctrl","app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -181,6 +203,16 @@ class HOOPCustomControlVC: GYZBaseVC {
             }else if type == "app_pt2262_ctrl_re" && phone == userDefaults.string(forKey: "phone"){
                 //                hud?.hide(animated: true)
                 MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
+            }else if type == "app_other_del_re" && phone == userDefaults.string(forKey: "phone"){
+                //                hud?.hide(animated: true)
+                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
+                
+                if result["code"].intValue == kQuestSuccessTag{
+                    clickedBackBtn()
+                }
+            }else if type == "app_other_ctrl_re" && phone == userDefaults.string(forKey: "phone"){
+                //                hud?.hide(animated: true)
+                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
             }
             
         }
@@ -208,6 +240,8 @@ extension HOOPCustomControlVC : UICollectionViewDataSource,UICollectionViewDeleg
         
         if controlType == "pt2262" {/// 射频遥控
             sendZhiLingMqttCmd(index: indexPath.row)
+        }else if controlType == "other" {/// 自定义遥控
+            sendZhiLingCustomMqttCmd(index: indexPath.row)
         }
     }
 }

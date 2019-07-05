@@ -141,7 +141,7 @@ class HOOPShePinControlVC: GYZBaseVC {
                     weakSelf?.deviceControlId = response["data"].stringValue
                 }else{// 获取按键id
                     weakSelf?.funcArr[row]["func_id"] = response["data"].stringValue
-                    weakSelf?.showStudyAlert(index: row,studyState: "0")
+                    weakSelf?.showStudyAlert(index: row)
                 }
                 
             }else{
@@ -192,7 +192,7 @@ class HOOPShePinControlVC: GYZBaseVC {
     @objc func onClickStudy(sender: UITapGestureRecognizer){
         let tag: Int = (sender.view?.tag)!
         if funcArr[tag].count > 0 {// 不是第一次学习
-            showStudyAlert(index: tag,studyState: "1")
+            showStudyAlert(index: tag)
         }else {
             requestDeviceId(param: ["id":deviceControlId],row: tag)
         }
@@ -211,12 +211,12 @@ class HOOPShePinControlVC: GYZBaseVC {
     }
     
     /// 开始学习
-    func showStudyAlert(index: Int,studyState:String){
+    func showStudyAlert(index: Int){
         weak var weakSelf = self
         GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "将遥控器对准叮当宝贝\n点击“开始学习”", cancleTitle: "取消", viewController: self, buttonTitles: "开始学习") { (tag) in
             
             if tag != cancelIndex{
-                weakSelf?.sendStudyMqttCmd(studyState: studyState, index: index)
+                weakSelf?.sendStudyMqttCmd(index: index)
                 weakSelf?.showWaitAlert(index: index)
             }
         }
@@ -238,7 +238,7 @@ class HOOPShePinControlVC: GYZBaseVC {
         GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "学习失败，请重新尝试", cancleTitle: "取消", viewController: self, buttonTitles: "重新配置") { (tag) in
             
             if tag != cancelIndex{
-                weakSelf?.showStudyAlert(index: index,studyState: "1")
+                weakSelf?.showStudyAlert(index: index)
             }
         }
     }
@@ -277,7 +277,7 @@ class HOOPShePinControlVC: GYZBaseVC {
     }
     
     /// mqtt发布主题 学习
-    func sendStudyMqttCmd(studyState: String,index: Int){
+    func sendStudyMqttCmd(index: Int){
         
 //        var count: Int = 0
 //        for item in funcArr {
@@ -286,21 +286,21 @@ class HOOPShePinControlVC: GYZBaseVC {
 //            }
 //        }
         
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_id":funcArr[index]["func_id"]!,"study_state":studyState,"msg_type":"app_pt2262_study","app_interface_tag":index]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_id":funcArr[index]["func_id"]!,"msg_type":"app_pt2262_study","app_interface_tag":index]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
     /// mqtt发布主题 发射指令
     func sendZhiLingMqttCmd(code: String,index: Int){
         
-        var count: Int = 0
-        for item in funcArr {
-            if item.count > 0{
-                count += 1
-            }
-        }
+//        var count: Int = 0
+//        for item in funcArr {
+//            if item.count > 0{
+//                count += 1
+//            }
+//        }
         
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_num":count,"func_id":funcArr[index]["func_id"]!,"code":code,"ctrl_test":true,"msg_type":"app_pt2262_ctrl","app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_id":funcArr[index]["func_id"]!,"code":code,"ctrl_test":true,"msg_type":"app_pt2262_ctrl","app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }

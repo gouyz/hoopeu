@@ -12,7 +12,7 @@ private let selectControlCell = "selectControlCell"
 
 class HOOPSelectControlVC: GYZBaseVC {
 
-    let titleArray = ["空调遥控器", "电视遥控器", "机顶盒遥控器", "IPTV遥控器", "音响遥控器", "投影仪遥控器", "风扇遥控器", "自定义遥控器"]
+    let titleArray = ["空调遥控器", "电视遥控器", "机顶盒遥控器", "IPTV遥控器", "音响遥控器", "投影仪遥控器", "风扇遥控器"]
     var deviceType: DeviceType = .ARC
     
     override func viewDidLoad() {
@@ -41,11 +41,6 @@ class HOOPSelectControlVC: GYZBaseVC {
     func goSelectARC(){
         let vc = HOOPSelectARCBrandVC()
         vc.deviceType = self.deviceType
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    /// 自定义遥控器
-    func goCustomIrVC(){
-        let vc = HOOPCustomIRVC()
         navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -91,31 +86,26 @@ extension HOOPSelectControlVC: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if indexPath.row == 7 {// 自定义遥控器
-            goCustomIrVC()
-        }else{
-            
-            switch indexPath.row {
-            case 0://空调遥控器
-                deviceType = .ARC
-            case 1://电视遥控器
-                deviceType = .TV
-            case 2://机顶盒遥控器
-                deviceType = .tvBox
-            case 3://IPTV遥控器
-                deviceType = .IPTV
-            case 4://音响遥控器
-                deviceType = .DVD
-            case 5://投影仪遥控器
-                deviceType = .PJT
-            case 6://风扇遥控器
-                deviceType = .fan
-            default:
-                break
-            }
-            
-            goSelectARC()
+        switch indexPath.row {
+        case 0://空调遥控器
+            deviceType = .ARC
+        case 1://电视遥控器
+            deviceType = .TV
+        case 2://机顶盒遥控器
+            deviceType = .tvBox
+        case 3://IPTV遥控器
+            deviceType = .IPTV
+        case 4://音响遥控器
+            deviceType = .ADO
+        case 5://投影仪遥控器
+            deviceType = .PJT
+        case 6://风扇遥控器
+            deviceType = .fan
+        default:
+            break
         }
+        
+        goSelectARC()
         
     }
 }
