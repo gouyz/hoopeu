@@ -9,13 +9,17 @@
 import UIKit
 import IQKeyboardManagerSwift
 import MBProgressHUD
+import CocoaMQTT
+import SwiftyJSON
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var timer: Timer?
-
+    var mqtt: CocoaMQTT?
+    /// mqtt是否断开
+    var isNetWorkMqtt = false
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         /// 检测网络状态
@@ -50,7 +54,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        window?.rootViewController = GYZBaseNavigationVC(rootViewController: HOOPRegisterFirstVC())
         window?.makeKeyAndVisible()
         
-//        setTimer()
+        setTimer()
+        mqttSetting()
         // 获取推送消息
         let remote = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [AnyHashable : Any]
         // 如果remote不为空，就代表应用在未打开的时候收到了推送消息
@@ -143,6 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// APP在后台或运行时，接收到报警推送
     func showWarnAlert(){
         let alert = UIAlertView.init(title: "提示", message: "有新的报警信息，请先去处理!", delegate: self, cancelButtonTitle: "去处理")
+        alert.tag = 101
         alert.show()
     }
     
@@ -184,30 +190,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enableAutoToolbar = false
     }
     
-//    func setTimer(){
-//        timer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(requestDeviceNetWork), userInfo: nil, repeats: true)
-//    }
-//    /// 报警轮询
-//    @objc func requestDeviceNetWork(){
-//        if !userDefaults.bool(forKey: kIsLoginTagKey) {
-//            return
-//        }
-//        if !GYZTool.checkNetWork() {
-//            return
-//        }
-//
-//        GYZNetWork.requestNetwork("alert", parameters: nil,method :.get,  success: { (response) in
-//
-//            GYZLog(response)
-////            if response["code"].intValue == -203{//未检测到正在使用的设备，请重新配网连接……
-////                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
-////                KeyWindow.rootViewController = GYZBaseNavigationVC(rootViewController: HOOPLoginVC())
-////            }
-//
-//        }, failture: { (error) in
-//            GYZLog(error)
-//        })
-//    }
 }
 
 // MARK: - JPUSHRegisterDelegate 极光推送代理
@@ -264,21 +246,191 @@ extension AppDelegate : JPUSHRegisterDelegate{
 
 extension AppDelegate : UIAlertViewDelegate{
     func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
-        if buttonIndex == 0 {//去处理
-            if let menuVC = self.window?.rootViewController as? FWSideMenuContainerViewController{
-                if let tabBarVC = menuVC.centerViewController as? UITabBarController{
-                    let nvc: UINavigationController = tabBarVC.selectedViewController as! UINavigationController
-                    let currVC = nvc.visibleViewController
-                    if UIApplication.shared.applicationState == .active{
-                        //防止同一界面多次 push
-                        if !(currVC?.isMember(of: HOOPWarnLogVC.self))!{
-                            let logVC = HOOPWarnLogVC()
-                            currVC?.navigationController?.pushViewController(logVC, animated: true)
+        let tag = alertView.tag
+        if tag == 101 {  // 处理报警
+            if buttonIndex == 0 {//去处理
+                if let menuVC = self.window?.rootViewController as? FWSideMenuContainerViewController{
+                    if let tabBarVC = menuVC.centerViewController as? UITabBarController{
+                        let nvc: UINavigationController = tabBarVC.selectedViewController as! UINavigationController
+                        let currVC = nvc.visibleViewController
+                        if UIApplication.shared.applicationState == .active{
+                            //防止同一界面多次 push
+                            if !(currVC?.isMember(of: HOOPWarnLogVC.self))!{
+                                let logVC = HOOPWarnLogVC()
+                                currVC?.navigationController?.pushViewController(logVC, animated: true)
+                            }
                         }
                     }
+                    
                 }
-                
+            }
+        }else if tag == 102{// 处理断网
+            if buttonIndex == 1 {//去配网
+                if let menuVC = self.window?.rootViewController as? FWSideMenuContainerViewController{
+                    if let tabBarVC = menuVC.centerViewController as? UITabBarController{
+                        let nvc: UINavigationController = tabBarVC.selectedViewController as! UINavigationController
+                        let currVC = nvc.visibleViewController
+                        if UIApplication.shared.applicationState == .active{
+                            //防止同一界面多次 push
+                            if !(currVC?.isMember(of: HOOPLinkPowerVC.self))!{
+                                let logVC = HOOPLinkPowerVC()
+                                currVC?.navigationController?.pushViewController(logVC, animated: true)
+                            }
+                        }
+                    }
+                    
+                }
             }
         }
+        
+    }
+}
+extension AppDelegate: CocoaMQTTDelegate {
+    
+    func setTimer(){
+        timer = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(onClickTimer), userInfo: nil, repeats: true)
+    }
+    
+    @objc func onClickTimer(){
+        if mqtt == nil {
+            return
+        }
+        if userDefaults.string(forKey: "devId") == nil {
+            return
+        }
+        if mqtt?.connState == CocoaMQTTConnState.disconnected{
+            mqtt?.connect()
+        }else{
+            sendMqttCheckOnlineCmd()
+        }
+    }
+    
+    /// 检测网络信息查询
+    func sendMqttCheckOnlineCmd(){
+        
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_online","app_interface_tag":"ok"]
+        
+        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    
+    /// 创建mqtt
+    func mqttSetting() {
+        let clientID = "hoopeu-" + String(ProcessInfo().processIdentifier)
+        mqtt = CocoaMQTT(clientID: clientID, host: kDefaultMQTTHost, port: kDefaultMQTTPort)
+        mqtt!.username = kDefaultMQTTUserName
+        mqtt!.password = kDefaultMQTTUserPwd
+        //        mqtt!.willMessage = CocoaMQTTWill(topic: "hoopeu_app", message: "dieout")
+        mqtt!.keepAlive = 150
+        mqtt!.delegate = self
+        mqtt!.connect()
+    }
+    /// 配网提示
+    func showNetWorkAlert(){
+        
+        let alert = UIAlertView.init(title: "提示", message: "当前设备网络异常，是否重新配网？", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "去配网")
+        alert.tag = 102
+        alert.show()
+    }
+    /// 倒计时
+    ///
+    /// - Parameter duration: 倒计时时间
+    func startSMSWithDuration(duration:Int){
+        var times = duration
+        
+        let timer:DispatchSourceTimer = DispatchSource.makeTimerSource(flags: [], queue:DispatchQueue.global())
+        
+        timer.setEventHandler {
+            if times > 0{
+                DispatchQueue.main.async(execute: {
+                    times -= 1
+                })
+            } else{
+                DispatchQueue.main.async(execute: {
+                    if !self.isNetWorkMqtt{// 没有网络，去配网
+                        self.showNetWorkAlert()
+                        self.isNetWorkMqtt = false
+                    }
+                    
+                    timer.cancel()
+                })
+            }
+        }
+        
+        // timer.scheduleOneshot(deadline: .now())
+        timer.schedule(deadline: .now(), repeating: .seconds(1), leeway: .milliseconds(100))
+        
+        timer.resume()
+        
+        // 在调用DispatchSourceTimer时, 无论设置timer.scheduleOneshot, 还是timer.scheduleRepeating代码 不调用cancel(), 系统会自动调用
+        // 另外需要设置全局变量引用, 否则不会调用事件
+    }
+    // Optional ssl CocoaMQTTDelegate
+    func mqtt(_ mqtt: CocoaMQTT, didReceive trust: SecTrust, completionHandler: @escaping (Bool) -> Void) {
+        /// Validate the server certificate
+        ///
+        /// Some custom validation...
+        ///
+        /// if validatePassed {
+        ///     completionHandler(true)
+        /// } else {
+        ///     completionHandler(false)
+        /// }
+        completionHandler(true)
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+        
+        if ack == .accept {
+            mqtt.subscribe("hoopeu_app", qos: CocoaMQTTQOS.qos1)
+        }
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
+        GYZLog("new state: \(state)")
+        if state == .connected {
+            sendMqttCheckOnlineCmd()
+            
+        }
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
+        GYZLog("message: \(message.string!.description), id: \(id)")
+        startSMSWithDuration(duration: 120)
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
+        GYZLog("id: \(id)")
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
+        GYZLog("message: \(message.string!.description), id: \(id)")
+        
+        if let data = message.string {
+            let result = JSON.init(parseJSON: data)
+            let type = result["msg_type"].stringValue
+            if type == "query_online_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
+                isNetWorkMqtt = true
+            }
+        }
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopic topic: String) {
+        GYZLog("topic: \(topic)")
+    }
+    
+    func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopic topic: String) {
+        GYZLog("topic: \(topic)")
+    }
+    
+    func mqttDidPing(_ mqtt: CocoaMQTT) {
+    }
+    
+    func mqttDidReceivePong(_ mqtt: CocoaMQTT) {
+        
+    }
+    
+    func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
+        GYZLog("\(err.debugDescription)")
+        //        mqttSetting()
     }
 }

@@ -207,6 +207,7 @@ extension GYZBaseVC: CocoaMQTTDelegate {
                 
                 return
             }else if result["code"].int == -203{
+                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 let vc = HOOPLinkPowerVC()
                 navigationController?.pushViewController(vc, animated: true)
                 return

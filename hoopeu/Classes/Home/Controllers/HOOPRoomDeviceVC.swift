@@ -15,8 +15,6 @@ import AudioToolbox
 private let roomDeviceCell = "roomDeviceCell"
 
 class HOOPRoomDeviceVC: GYZBaseVC {
-    /// 是否有网络
-    var isNetWork: Bool = false
     var roomId: String = ""
     var dataModel: HOOPRoomDeviceModel?
 
@@ -354,7 +352,7 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     }
     /// mqtt发布主题
     func sendMqttCmd(){
-//        createHUD(message: "加载中...")
+        createHUD(message: "加载中...")
         let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","phone":userDefaults.string(forKey: "phone") ?? "","room_id":roomId,"msg_type":"app_room_devices","app_interface_tag":roomId]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
@@ -412,68 +410,10 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
     
-    /// 检测网络信息查询
-    func sendMqttCheckOnlineCmd(){
-        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_online","app_interface_tag":"ok"]
-        
-        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
-    }
-    /// 连接电源
-    func goLinkPower(){
-        let vc = HOOPLinkPowerVC()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    /// 配网提示
-    func showNetWorkAlert(){
-        weak var weakSelf = self
-        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "当前设备网络异常，是否重新配网？", cancleTitle: "取消", viewController: self, buttonTitles: "去配网") { (index) in
-            
-            if index != cancelIndex{
-                weakSelf?.goLinkPower()
-            }
-        }
-    }
-    /// 倒计时
-    ///
-    /// - Parameter duration: 倒计时时间
-    func startSMSWithDuration(duration:Int){
-        var times = duration
-        
-        let timer:DispatchSourceTimer = DispatchSource.makeTimerSource(flags: [], queue:DispatchQueue.global())
-        
-        timer.setEventHandler {
-            if times > 0{
-                DispatchQueue.main.async(execute: {
-                    times -= 1
-                })
-            } else{
-                DispatchQueue.main.async(execute: {
-                    if !self.isNetWork{// 没有网络，去配网
-                        self.showNetWorkAlert()
-                    }
-                    
-                    timer.cancel()
-                })
-            }
-        }
-        
-        // timer.scheduleOneshot(deadline: .now())
-        timer.schedule(deadline: .now(), repeating: .seconds(1), leeway: .milliseconds(100))
-        
-        timer.resume()
-        
-        // 在调用DispatchSourceTimer时, 无论设置timer.scheduleOneshot, 还是timer.scheduleRepeating代码 不调用cancel(), 系统会自动调用
-        // 另外需要设置全局变量引用, 否则不会调用事件
-    }
-    
     /// 重载CocoaMQTTDelegate
     override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
         GYZLog("new state\(roomId): \(state)")
         if state == .connected {
-            if !isNetWork{
-                sendMqttCheckOnlineCmd()
-                startSMSWithDuration(duration: 5)
-            }
             sendMqttCmd()
             
         }
@@ -504,10 +444,9 @@ class HOOPRoomDeviceVC: GYZBaseVC {
             }
             
             if type == "app_room_devices_re" && result["phone"].stringValue == userDefaults.string(forKey: "phone") && result["app_interface_tag"].stringValue == roomId{
-//                hud?.hide(animated: true)
+                hud?.hide(animated: true)
                 closeRefresh()
                 if result["code"].intValue == kQuestSuccessTag{
-                    self.isNetWork = true
                     guard let itemInfo = result["data"].dictionaryObject else { return }
                     
                     self.dataModel = HOOPRoomDeviceModel.init(dict: itemInfo)
@@ -605,9 +544,9 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                 }
                 
                 self.tableView.reloadData()
-            }else if type == "query_online_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
-                self.isNetWork = true
             }else if type == "device_start" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){// 设备启动完成
+                hud?.hide(animated: true)
+                closeRefresh()
                 self.refresh()
             }
             
