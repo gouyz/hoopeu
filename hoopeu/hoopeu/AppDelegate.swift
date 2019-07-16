@@ -295,9 +295,7 @@ extension AppDelegate: CocoaMQTTDelegate {
         if mqtt == nil {
             return
         }
-        if userDefaults.string(forKey: "devId") == nil {
-            return
-        }
+        
         if mqtt?.connState == CocoaMQTTConnState.disconnected{
             mqtt?.connect()
         }else{
@@ -307,6 +305,9 @@ extension AppDelegate: CocoaMQTTDelegate {
     
     /// 检测网络信息查询
     func sendMqttCheckOnlineCmd(){
+        if userDefaults.string(forKey: "devId") == nil {
+            return
+        }
         
         let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_online","app_interface_tag":"ok"]
         
