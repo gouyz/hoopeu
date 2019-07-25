@@ -218,6 +218,7 @@
 		0A5D745922321571005048EB /* HOOPSaveShePinControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5D745822321571005048EB /* HOOPSaveShePinControlVC.swift */; };
 		0A5D745B223217B8005048EB /* HOOPCustomControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5D745A223217B8005048EB /* HOOPCustomControlVC.swift */; };
 		0A5D745D223250BE005048EB /* HOOPCustomControlKeyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5D745C223250BE005048EB /* HOOPCustomControlKeyCell.swift */; };
+		0A62BABA22E9817900EC85A3 /* HOOPVersionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A62BAB922E9817900EC85A3 /* HOOPVersionModel.swift */; };
 		0A649F4922A0B5EC001829A9 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A649F4822A0B5EC001829A9 /* FMDB.framework */; };
 		0A649F4B22A0B605001829A9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A649F4A22A0B605001829A9 /* libsqlite3.tbd */; };
 		0A649F5922A0D213001829A9 /* DeviceM.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A649F4F22A0D213001829A9 /* DeviceM.m */; };
@@ -499,6 +500,7 @@
 		0A5D745822321571005048EB /* HOOPSaveShePinControlVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPSaveShePinControlVC.swift; sourceTree = "<group>"; };
 		0A5D745A223217B8005048EB /* HOOPCustomControlVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPCustomControlVC.swift; sourceTree = "<group>"; };
 		0A5D745C223250BE005048EB /* HOOPCustomControlKeyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPCustomControlKeyCell.swift; sourceTree = "<group>"; };
+		0A62BAB922E9817900EC85A3 /* HOOPVersionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPVersionModel.swift; sourceTree = "<group>"; };
 		0A649F4822A0B5EC001829A9 /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A649F4A22A0B605001829A9 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		0A649F4D22A0D213001829A9 /* BLTAssist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLTAssist.h; sourceTree = "<group>"; };
@@ -827,6 +829,7 @@
 				0A0B57E2224E673A0085BEFA /* HOOPRoomDeviceModel.swift */,
 				0A1710472251091000A47FE2 /* HOOPGuardModel.swift */,
 				0A0D70D522AEAF4500F4A564 /* HOOPLinkPersonModel.swift */,
+				0A62BAB922E9817900EC85A3 /* HOOPVersionModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1764,6 +1767,7 @@
 				0A11EFE52247C36C00756F24 /* HOOPWiFiListVC.swift in Sources */,
 				0A40E43722292AFC00E49689 /* HOOPIPTVControllVC.swift in Sources */,
 				0A037358221ADCDE00EBECDC /* HOOPLoginVC.swift in Sources */,
+				0A62BABA22E9817900EC85A3 /* HOOPVersionModel.swift in Sources */,
 				0A41DE4722253B25000FFFEA /* HOOPRoomDeviceCell.swift in Sources */,
 				0A3ABB1621DDE8DE0048F0F3 /* GYZTool.swift in Sources */,
 				0A3B8486221E99C4007ADEAE /* HOOPDeviceInfoVC.swift in Sources */,

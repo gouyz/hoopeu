@@ -23,6 +23,10 @@ class HOOPDeviceDetailVC: GYZBaseVC {
     var roomList: [HOOPRoomModel] = [HOOPRoomModel]()
     var roomNameList: [String] = [String]()
     var deviceStatus: String = "不在线"
+    /// 当前系统版本
+    var currSystemVersion: String = ""
+    /// 最新系统版本model
+    var newSystemVersionModel: HOOPVersionModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -179,14 +183,50 @@ class HOOPDeviceDetailVC: GYZBaseVC {
     }
     // 系统升级
     func showSystemVersion(){
-        weak var weakSelf = self
-        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "系统将升级为最新版本", cancleTitle: "取消", viewController: self, buttonTitles: "确认") { (index) in
-            
-            if index != cancelIndex{
-                weakSelf?.sendMqttCmdVerison()
+        if newSystemVersionModel != nil && newSystemVersionModel?.versionName != currSystemVersion {
+            weak var weakSelf = self
+            GYZAlertViewTools.alertViewTools.showAlert(title: "系统升级", message: newSystemVersionModel?.updateMessage, cancleTitle: "取消", viewController: self, buttonTitles: "确认") { (index) in
+                
+                if index != cancelIndex{
+                    weakSelf?.sendMqttCmdUpdateVerison()
+                }
+            }
+        }else{ GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "当前已是最新版本", cancleTitle: nil, viewController: self, buttonTitles: "我知道了") { (index) in
+                
             }
         }
         
+    }
+    ///获取设备版本信息
+    func requestDeviceVersion(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("app/appVersion",parameters: nil,method:.get,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["data"].dictionaryObject else { return }
+                
+                weakSelf?.newSystemVersionModel = HOOPVersionModel.init(dict: data)
+                weakSelf?.tableView.reloadData()
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
     
     ///获取房间数据
@@ -266,7 +306,14 @@ class HOOPDeviceDetailVC: GYZBaseVC {
     /// mqtt发布主题 系统更新检测
     func sendMqttCmdVerison(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["device_id":(deviceModel?.deviceId)!,"pro_type":"1","msg_type":"get_sys_update","app_interface_tag":""]
+        let paramDic:[String:Any] = ["device_id":(deviceModel?.deviceId)!,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"get_dev_info","app_interface_tag":"ok"]
+        
+        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    /// mqtt发布主题 系统更新
+    func sendMqttCmdUpdateVerison(){
+        createHUD(message: "加载中...")
+        let paramDic:[String:Any] = ["device_id":(deviceModel?.deviceId)!,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"send_sys_update","app_interface_tag":"ok"]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -278,12 +325,12 @@ class HOOPDeviceDetailVC: GYZBaseVC {
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
     /// 重载CocoaMQTTDelegate
-//    override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
-//        super.mqtt(mqtt, didStateChangeTo: state)
-//        if state == .connected {
-//            sendMqttCmd()
-//        }
-//    }
+    override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
+        super.mqtt(mqtt, didStateChangeTo: state)
+        if state == .connected {
+            sendMqttCmdVerison()
+        }
+    }
     override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
         super.mqtt(mqtt, didConnectAck: ack)
         if ack == .accept {
@@ -307,15 +354,17 @@ class HOOPDeviceDetailVC: GYZBaseVC {
                 hud?.hide(animated: true)
                 MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 
-            }else if type == "get_sys_update_re"{
+            }else if type == "get_dev_info_re"{
                 hud?.hide(animated: true)
-                let isUpdate = result["is_sys_updated"].intValue
-                if isUpdate == 1{
-                    MBProgressHUD.showAutoDismissHUD(message: "设备系统有更新")
+                currSystemVersion = result["msg"]["sys_version"].stringValue
+                requestDeviceVersion()
+            }else if type == "send_sys_update_re"{
+                hud?.hide(animated: true)
+                if result["ret"].intValue == 1{
+                    MBProgressHUD.showAutoDismissHUD(message: "发送成功")
                 }else{
-                    MBProgressHUD.showAutoDismissHUD(message: "当前设备系统已是最新的")
+                    MBProgressHUD.showAutoDismissHUD(message: "发送失败")
                 }
-                
             }else if type == "bt_open_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
                 hud?.hide(animated: true)
                 
@@ -347,6 +396,9 @@ extension HOOPDeviceDetailVC: UITableViewDelegate,UITableViewDataSource{
         cell.nameLab.text = titleArray[indexPath.row]
         
         cell.contentLab.isHidden = true
+        cell.nameLab.snp.updateConstraints { (make) in
+            make.width.equalTo(120)
+        }
         
         if indexPath.row == 0 {
             cell.contentLab.isHidden = false
@@ -354,6 +406,14 @@ extension HOOPDeviceDetailVC: UITableViewDelegate,UITableViewDataSource{
         }else if indexPath.row == 1{
             cell.contentLab.isHidden = false
             cell.contentLab.text = deviceModel != nil ? deviceModel?.roomName : ""
+        }else if indexPath.row == titleArray.count - 1 {
+            if newSystemVersionModel != nil && newSystemVersionModel?.versionName != currSystemVersion{
+                cell.contentLab.badgeView.style = .normal
+                cell.contentLab.showBadge(animated: false)
+            }
+            cell.nameLab.snp.updateConstraints { (make) in
+                make.width.equalTo(70)
+            }
         }
         
         cell.selectionStyle = .none

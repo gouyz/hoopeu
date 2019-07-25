@@ -53,7 +53,7 @@ class HOOPDeviceInfoVC: GYZBaseVC {
         infoArray.append((deviceInfoModel?.sys_version)!)
         tableView.reloadData()
     }
-    /// mqtt发布主题 查询设备在线状态
+    /// mqtt发布主题 查询设备信息
     func sendMqttCmd(){
         createHUD(message: "加载中...")
         let paramDic:[String:Any] = ["device_id":deviceId,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"get_dev_info","app_interface_tag":"ok"]
