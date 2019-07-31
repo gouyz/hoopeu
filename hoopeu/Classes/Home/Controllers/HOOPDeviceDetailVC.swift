@@ -206,7 +206,7 @@ class HOOPDeviceDetailVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("app/appVersion",parameters: nil,method:.get,  success: { (response) in
+        GYZNetWork.requestNetwork("appVersion",parameters: nil,method:.get,  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
@@ -398,6 +398,7 @@ extension HOOPDeviceDetailVC: UITableViewDelegate,UITableViewDataSource{
         cell.contentLab.isHidden = true
         cell.nameLab.snp.updateConstraints { (make) in
             make.width.equalTo(120)
+            make.height.equalTo(kTitleHeight)
         }
         
         if indexPath.row == 0 {
@@ -408,11 +409,12 @@ extension HOOPDeviceDetailVC: UITableViewDelegate,UITableViewDataSource{
             cell.contentLab.text = deviceModel != nil ? deviceModel?.roomName : ""
         }else if indexPath.row == titleArray.count - 1 {
             if newSystemVersionModel != nil && newSystemVersionModel?.versionName != currSystemVersion{
-                cell.contentLab.badgeView.style = .normal
-                cell.contentLab.showBadge(animated: false)
+                cell.nameLab.badgeView.style = .normal
+                cell.nameLab.showBadge(animated: false)
             }
             cell.nameLab.snp.updateConstraints { (make) in
                 make.width.equalTo(70)
+                make.height.equalTo(30)
             }
         }
         

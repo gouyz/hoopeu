@@ -21,9 +21,9 @@ class HOOPEditSceneDoVC: GYZBaseVC {
     var doTitle: String = ""
     var doType: String = ""
     var doContent: String = ""
-    var doDesContent: String = "你想让叮当宝贝播放多长时间（默认为5分钟）"
+    var doDesContent: String = "你想让叮当宝贝多久后执行下一操作（默认为1秒）"
     /// 选择时间换算为秒
-    var selectSecond: Int = 300
+    var selectSecond: Int = 1
     /// 分钟
     var minuteArr: [String] = [String]()
     /// 秒
@@ -70,14 +70,14 @@ class HOOPEditSceneDoVC: GYZBaseVC {
             secondArr.append("\(i)")
         }
         
-        if doType == "control" || doType == "sef_define"  {
-            if !isEdit{
-                selectSecond = 1
-            }
-            doDesContent = "你想让叮当宝贝多久后执行下一操作（默认为1秒）"
-            desContentLab.text = doDesContent
-            timeLab.text = "\(selectSecond / 60)分\(selectSecond % 60)秒"
-        }
+//        if doType == "control" || doType == "sef_define"  {
+//            if !isEdit{
+//                selectSecond = 1
+//            }
+//            doDesContent = "你想让叮当宝贝多久后执行下一操作（默认为1秒）"
+//            desContentLab.text = doDesContent
+//            timeLab.text = "\(selectSecond / 60)分\(selectSecond % 60)秒"
+//        }
     }
     
     func setUpUI(){
