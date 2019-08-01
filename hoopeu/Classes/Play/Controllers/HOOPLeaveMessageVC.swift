@@ -288,6 +288,7 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         fontCountLab.text =  "\(contentTxtView.text.count)/\(contentMaxCount)"
         self.week_time = dataModel.weak_time!
         self.day_time = dataModel.day_time!
+        self.day = dataModel.yml!
         self.user_define_times = dataModel.user_define_times
         self.singleCheckView.tagImgView.isHighlighted = dataModel.loop == "1"
         self.setGuardTime()
