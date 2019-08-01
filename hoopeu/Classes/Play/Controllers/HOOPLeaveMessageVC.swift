@@ -20,6 +20,8 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     var isEdit: Bool = false
     /// 留言id
     var messageId: String = ""
+    /// 用户想要播报的语句的日期
+    var day: String = ""
     /// 用户想要播报的语句的时间
     var day_time: String = ""
     /// 每周循环时间 ,ONCE:仅此一次,EVERYDAY :每天,WEEKDAY:工作日,WEEKEND:每周末,USER_DEFINE:自定义
@@ -334,11 +336,13 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     /// 编辑时间
     @objc func onClickedEditTime(){
         let vc = HOOPWarnEditTimeVC()
-        vc.resultBlock = {[weak self] (dayTime, weekTime,customWeek) in
+        vc.isShowDate = true
+        vc.resultBlock = {[weak self] (dayTime, weekTime,customWeek,day) in
             
             self?.week_time = weekTime
             self?.day_time = dayTime
             self?.user_define_times = customWeek
+            self?.day = day
             self?.setGuardTime()
         }
         navigationController?.pushViewController(vc, animated: true)
@@ -347,14 +351,14 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     /// mqtt发布主题 新增
     func sendSaveMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","day_time":day_time,"loop":isLoop ? 1 : 0,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":contentTxtView.text!,"msg_type":"app_leavemsg_add","app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","day_time":day_time,"loop":isLoop ? 1 : 0,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":contentTxtView.text!,"day_of_year":day,"msg_type":"app_leavemsg_add","app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
     /// mqtt发布主题 修改留言
     func sendSaveEditMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"day_time":day_time,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":contentTxtView.text!,"loop":isLoop ? 1 : 0,"msg_type":"app_leavemsg_edit","app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"day_time":day_time,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":contentTxtView.text!,"loop":isLoop ? 1 : 0,"day_of_year":day,"msg_type":"app_leavemsg_edit","app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -408,6 +412,8 @@ class HOOPLeaveMessageVC: GYZBaseVC {
                 days = days.subString(start: 0, length: days.count - 1)
             }
             timeLab.text = day_time + " " + days
+        }else if week_time == "ONCE"{
+            timeLab.text = day + " " + day_time + " " + GUARDBUFANGTIME[week_time]!
         }else{
             timeLab.text = day_time + " " + GUARDBUFANGTIME[week_time]!
         }

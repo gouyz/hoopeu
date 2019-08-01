@@ -27,7 +27,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         self.view.backgroundColor = kWhiteColor
         self.navigationController?.delegate = self
         
-        userDefaults.set("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMzMqKioqMjE0NiIsInVzZXJJZCI6NTQsImlhdCI6MTU2NDU4MzcxNSwiZXhwIjoxNTY1MTg4NTE1fQ.VLhChXpc3k4rMau4zKLyah-URk2SzVrQZI5ZmNaZbp0", forKey: "token")
+//        userDefaults.set("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMzMqKioqMjE0NiIsInVzZXJJZCI6NTQsImlhdCI6MTU2NDU4MzcxNSwiZXhwIjoxNTY1MTg4NTE1fQ.VLhChXpc3k4rMau4zKLyah-URk2SzVrQZI5ZmNaZbp0", forKey: "token")
 //        var y: CGFloat = kStateHeight
 //        if #available(iOS 11.0, *) {
 //            y = kTitleAndStateHeight + kStateHeight

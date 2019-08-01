@@ -210,7 +210,7 @@ class HOOPWarnSettingVC: GYZBaseVC {
     @objc func onClickedEditTime(){
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
         let vc = HOOPWarnEditTimeVC()
-        vc.resultBlock = {[weak self] (dayTime, weekTime,customWeek) in
+        vc.resultBlock = {[weak self] (dayTime, weekTime,customWeek,day) in
             
             self?.isRequest = false
             self?.week_time = weekTime

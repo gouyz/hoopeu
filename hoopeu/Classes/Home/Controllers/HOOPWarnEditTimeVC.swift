@@ -12,7 +12,7 @@ import MBProgressHUD
 class HOOPWarnEditTimeVC: GYZBaseVC {
     
     /// 选择结果回调
-    var resultBlock:((_ dayTime: String,_ weekTime: String,_ customWeek: [String]) -> Void)?
+    var resultBlock:((_ dayTime: String,_ weekTime: String,_ customWeek: [String],_ day: String) -> Void)?
     let titleArray = ["单次", "每天", "周末", "工作日", "自定义"]
     let weekDayArray = ["周日","周一", "周二", "周三", "周四", "周五", "周六"]
     
@@ -24,6 +24,10 @@ class HOOPWarnEditTimeVC: GYZBaseVC {
     var user_define_times: [String] = [String]()
     /// 用户想要播报的语句的时间
     var day_time: String = ""
+    /// 用户想要播报的语句的日期
+    var day: String = ""
+    /// 单次是否显示日期
+    var isShowDate:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +36,9 @@ class HOOPWarnEditTimeVC: GYZBaseVC {
         self.view.backgroundColor = kWhiteColor
         
         setupUI()
+        if week_time == "ONCE" && isShowDate {
+            datePicker.datePickerMode = .dateAndTime
+        }
         
         setDayTime()
     }
@@ -152,7 +159,7 @@ class HOOPWarnEditTimeVC: GYZBaseVC {
         }
         
         if resultBlock != nil {
-            resultBlock!(day_time,week_time,user_define_times)
+            resultBlock!(day_time,week_time,user_define_times,day)
         }
         clickedBackBtn()
     }
@@ -173,6 +180,11 @@ class HOOPWarnEditTimeVC: GYZBaseVC {
                             break
                         }
                     }
+                    if self?.week_time == "ONCE" && self?.isShowDate ?? false {
+                        self?.datePicker.datePickerMode = .dateAndTime
+                    }else{
+                        self?.datePicker.datePickerMode = .time
+                    }
                     
                 }
             }
@@ -190,6 +202,10 @@ class HOOPWarnEditTimeVC: GYZBaseVC {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         day_time = dateFormatter.string(from: datePicker.date)
+        if week_time == "ONCE" && isShowDate {
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            day = dateFormatter.string(from: datePicker.date)
+        }
     }
     /// 自定义
     func showCustomView(){
