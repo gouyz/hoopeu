@@ -141,7 +141,7 @@ class HOOPRegisterCodeVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "获取中...")
         
-        GYZNetWork.requestNetwork("sms/send",isToken:false, parameters: ["phone":phoneNum],  success: { (response) in
+        GYZNetWork.requestNetwork("sms/send",isToken:false, parameters: ["phone":phoneNum,"type":isModifyPwd ? 1 : 0],  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)

@@ -299,7 +299,7 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "获取中...")
         
-        GYZNetWork.requestNetwork("sms/send",isToken:false, parameters: ["phone":phoneTxtFiled.text!],  success: { (response) in
+        GYZNetWork.requestNetwork("sms/send",isToken:false, parameters: ["phone":phoneTxtFiled.text!,"type":2],  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
