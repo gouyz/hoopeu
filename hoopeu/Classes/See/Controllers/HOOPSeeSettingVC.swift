@@ -67,14 +67,10 @@ class HOOPSeeSettingVC: GYZBaseVC {
         switch row {
         case 1: /// 移动侦测开关
             zhenCeStatus = sender.isOn
-            if zhenCeStatus{
-                MBProgressHUD.showAutoDismissHUD(message: "使用移动侦测录像需要插入TF卡")
-            }
             sendMqttCmdStatus()
         case 2:/// 24小时录像开关
             luxiangStatus = sender.isOn
             if luxiangStatus{
-                MBProgressHUD.showAutoDismissHUD(message: "使用24小时录像需要插入TF卡")
                 startOrEndPlayer(order: "camera_start_record")
             }else{
                 startOrEndPlayer(order: "camera_stop_record")
@@ -143,7 +139,11 @@ class HOOPSeeSettingVC: GYZBaseVC {
             if type == "motion_detect_re" && phone == userDefaults.string(forKey: "phone"){
                 hud?.hide(animated: true)
                 if result["ret"].intValue == 1{
-                    MBProgressHUD.showAutoDismissHUD(message: "移动侦测修改成功")
+                    if zhenCeStatus{
+                        MBProgressHUD.showAutoDismissHUD(message: "使用移动侦测录像需要插入TF卡")
+                    }else{
+                        MBProgressHUD.showAutoDismissHUD(message: "移动侦测修改成功")
+                    }
                     userDefaults.set(zhenCeStatus, forKey: "zhenCeStatus")
                 }else {
                     MBProgressHUD.showAutoDismissHUD(message: "移动侦测修改失败")
@@ -164,7 +164,7 @@ class HOOPSeeSettingVC: GYZBaseVC {
                     }else if result["order"].stringValue == "camera_restart_push"{
                         msg = "重新连接成功"
                     }else if result["order"].stringValue == "camera_start_record"{
-                        msg = "24小时录像开启成功"
+                        msg = "使用24小时录像需要插入TF卡"
                         userDefaults.set(true, forKey: "luxiangStatus")
                     }else if result["order"].stringValue == "camera_stop_record"{
                         msg = "24小时录像关闭成功"

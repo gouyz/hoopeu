@@ -278,29 +278,29 @@
     //tail
     uint8_t a[] = {0x56,0x78};
     [muti appendBytes:a length:2];
-    NSLog(@"print message %@ !",[self convertDataToHexStr:data]);
-    NSLog(@"print %@ !",[self convertDataToHexStr:muti]);
+    NSLog(@"print ARC %@ !",muti);
     return [muti base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
 }
+
 // NSData转16进制 第一种
-- (NSString *)convertDataToHexStr:(NSData *)data
-{
-    if (!data || [data length] == 0) {
-        return @"";
-    }
-    NSMutableString *string = [[NSMutableString alloc] initWithCapacity:[data length]];
-    
-    [data enumerateByteRangesUsingBlock:^(const void *bytes, NSRange byteRange, BOOL *stop) {
-        unsigned char *dataBytes = (unsigned char*)bytes;
-        for (NSInteger i = 0; i < byteRange.length; i++) {
-            NSString *hexStr = [NSString stringWithFormat:@"%x", (dataBytes[i]) & 0xff];
-            if ([hexStr length] == 2) {
-                [string appendString:hexStr];
-            } else {
-                [string appendFormat:@"0%@", hexStr];
-            }
-        }
-    }];
-    return string;
-}
+//- (NSString *)convertDataToHexStr:(NSData *)data
+//{
+//    if (!data || [data length] == 0) {
+//        return @"";
+//    }
+//    NSMutableString *string = [[NSMutableString alloc] initWithCapacity:[data length]];
+//
+//    [data enumerateByteRangesUsingBlock:^(const void *bytes, NSRange byteRange, BOOL *stop) {
+//        unsigned char *dataBytes = (unsigned char*)bytes;
+//        for (NSInteger i = 0; i < byteRange.length; i++) {
+//            NSString *hexStr = [NSString stringWithFormat:@"%x", (dataBytes[i]) & 0xff];
+//            if ([hexStr length] == 2) {
+//                [string appendString:hexStr];
+//            } else {
+//                [string appendFormat:@"0%@", hexStr];
+//            }
+//        }
+//    }];
+//    return string;
+//}
 @end

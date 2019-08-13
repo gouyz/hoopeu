@@ -197,6 +197,46 @@ class HOOPWarnLogVC: GYZBaseVC {
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
+    /// 删除日志
+    func deleteLog(indexRow:Int){
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "是否删除该报警日志?", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
+            
+            if index != cancelIndex{
+                weakSelf?.requestDeleteLog(indexRow: indexRow)
+            }
+        }
+    }
+    ///删除日志
+    func requestDeleteLog(indexRow:Int){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("homeCtrl/alarmLog/del/log/\(dataList[indexRow].id!)",parameters: nil,method :.get,  success: { (response) in
+            
+            GYZLog(response)
+            MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.dataList.remove(at: indexRow)
+                weakSelf?.tableView.reloadData()
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content: "暂无报警日志信息")
+                }
+                
+            }
+            
+        }, failture: { (error) in
+            
+            GYZLog(error)
+        })
+    }
     
     /// 重载CocoaMQTTDelegate
     override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
@@ -291,6 +331,25 @@ extension HOOPWarnLogVC: UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.00001
+    }
+    
+    /// 实现左滑
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+    }
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        
+        let deleteAction = UITableViewRowAction(style: .normal, title: "删除") { [weak self] (action, index) in
+            self?.deleteLog(indexRow: index.row)
+        }
+        deleteAction.backgroundColor = kRedFontColor
+        
+        return [deleteAction]
     }
 }
 

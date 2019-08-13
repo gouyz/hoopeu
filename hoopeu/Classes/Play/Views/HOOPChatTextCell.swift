@@ -15,6 +15,7 @@ class HOOPChatTextCell: UITableViewCell {
         didSet{
             if let model = dataModel {
                 
+                dateLab.text = model.time?.getDateTime(format: "MM月dd日 HH:mm")
                 nameLab.text = model.content
                 let size = model.content!.sizeThatFits(fontSize: 15, width: 220)
                 let cellSize = CGSize.init(width: size.width + 50, height: size.height + kMargin * 2 + 5)
@@ -23,7 +24,7 @@ class HOOPChatTextCell: UITableViewCell {
                     nameLab.textColor = kWhiteColor
                     bgView.snp.remakeConstraints { (make) in
                         make.right.equalTo(-20)
-                        make.top.equalTo(kMargin)
+                        make.top.equalTo(dateLab.snp.bottom).offset(kMargin)
                         make.bottom.equalTo(-kMargin)
                         make.size.equalTo(cellSize)
                     }
@@ -32,7 +33,7 @@ class HOOPChatTextCell: UITableViewCell {
                     nameLab.textColor = kBlackFontColor
                     bgView.snp.remakeConstraints { (make) in
                         make.left.equalTo(20)
-                        make.top.equalTo(kMargin)
+                        make.top.equalTo(dateLab.snp.bottom).offset(kMargin)
                         make.bottom.equalTo(-kMargin)
                         make.size.equalTo(cellSize)
                     }
@@ -55,12 +56,18 @@ class HOOPChatTextCell: UITableViewCell {
     }
     
     func setupUI(){
+        contentView.addSubview(dateLab)
         contentView.addSubview(bgView)
         bgView.addSubview(nameLab)
         
+        dateLab.snp.makeConstraints { (make) in
+            make.top.equalTo(kMargin)
+            make.centerX.equalTo(contentView)
+            make.size.equalTo(CGSize.init(width: 120, height: 30))
+        }
         bgView.snp.makeConstraints { (make) in
             make.left.equalTo(20)
-            make.top.equalTo(kMargin)
+            make.top.equalTo(dateLab.snp.bottom).offset(kMargin)
             make.size.equalTo(CGSize.zero)
         }
         nameLab.snp.makeConstraints { (make) in
@@ -70,6 +77,17 @@ class HOOPChatTextCell: UITableViewCell {
             make.top.equalTo(kMargin)
         }
     }
+    /// cell date
+    lazy var dateLab : UILabel = {
+        let lab = UILabel()
+        lab.font = k13Font
+        lab.textColor = kWhiteColor
+        lab.backgroundColor = kBtnNoClickBGColor
+        lab.cornerRadius = kCornerRadius
+        lab.textAlignment = .center
+        
+        return lab
+    }()
     lazy var bgView: UIView = {
         let view = UIView()
         view.backgroundColor = kWhiteColor

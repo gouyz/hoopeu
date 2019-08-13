@@ -101,6 +101,48 @@ class HOOPLogDetailVC: GYZBaseVC {
             })
         })
     }
+    
+    /// 删除日志图片
+    func deleteLogImg(indexRow:Int,vc: SKPhotoBrowser, reload: @escaping (() -> Void)){
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "是否删除该图片?", cancleTitle: "取消", viewController: vc, buttonTitles: "确定") { (index) in
+            
+            if index != cancelIndex{
+                reload()
+                weakSelf?.requestDeleteLogImg(indexRow: indexRow)
+            }
+        }
+    }
+    ///删除日志图片
+    func requestDeleteLogImg(indexRow:Int){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("homeCtrl/alarmLog/del/img",parameters: ["id": (dataModel?.id)!,"url":dataModel?.urlList[indexRow] ?? ""],  success: { (response) in
+            
+            GYZLog(response)
+            MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.dataModel?.urlList.remove(at: indexRow)
+                weakSelf?.collectionView.reloadData()
+                if weakSelf?.dataModel?.urlList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content:"暂无日志")
+                }
+                
+            }
+            
+        }, failture: { (error) in
+            
+            GYZLog(error)
+        })
+    }
     /// 查看图片
     ///
     /// - Parameters:
@@ -140,6 +182,6 @@ extension HOOPLogDetailVC: UICollectionViewDataSource,UICollectionViewDelegate{
 }
 extension HOOPLogDetailVC: SKPhotoBrowserDelegate{
     func removePhoto(_ browser: SKPhotoBrowser, index: Int, reload: @escaping (() -> Void)) {
-        reload()
+        deleteLogImg(indexRow: index, vc: browser,reload: reload)
     }
 }

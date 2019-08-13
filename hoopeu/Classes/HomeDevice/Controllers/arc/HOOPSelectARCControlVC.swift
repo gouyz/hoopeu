@@ -196,7 +196,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
         }else{
             code = BLTAssist.nomarlCode(dataList[curMatchIndex].code, key: mKeyCodeTag)
         }
-//        sendCmdMqtt(code: code)
+        sendCmdMqtt(code: code)
         
         noResponseBtn.backgroundColor = kWhiteColor
         noResponseBtn.borderColor = kBtnClickBGColor

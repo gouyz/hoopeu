@@ -16,7 +16,7 @@ class HOOPEditSceneDoVC: GYZBaseVC {
     ///txtView 提示文字
     let placeHolder = "请输入您想让叮当宝贝做的事"
     //// 最大字数
-    let contentMaxCount: Int = 20
+    let contentMaxCount: Int = 500
     var isEdit: Bool = false
     var doTitle: String = ""
     var doType: String = ""
@@ -549,7 +549,7 @@ extension HOOPEditSceneDoVC : UITextViewDelegate{
             let textContent = textView.text
             let textNum = textContent?.count
             
-            //截取20个字
+            //截取500个字
             if textNum! > contentMaxCount {
                 let index = textContent?.index((textContent?.startIndex)!, offsetBy: contentMaxCount)
                 let str = textContent?.substring(to: index!)
