@@ -196,7 +196,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
         }else{
             code = BLTAssist.nomarlCode(dataList[curMatchIndex].code, key: mKeyCodeTag)
         }
-        sendCmdMqtt(code: code)
+//        sendCmdMqtt(code: code)
         
         noResponseBtn.backgroundColor = kWhiteColor
         noResponseBtn.borderColor = kBtnClickBGColor
@@ -426,7 +426,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 self.hud?.hide(animated: true)
                 if result["code"].intValue == kQuestSuccessTag{
                     
-                    MBProgressHUD.showAutoDismissHUD(message: "学习成功")
+//                    MBProgressHUD.showAutoDismissHUD(message: "学习成功")
                 }else{
                     MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 }

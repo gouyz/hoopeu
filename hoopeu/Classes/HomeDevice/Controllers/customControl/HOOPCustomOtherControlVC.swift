@@ -226,7 +226,7 @@ class HOOPCustomOtherControlVC: GYZBaseVC {
     /// 正在等待
     func showWaitAlert(index: Int){
         waitAlert = GYZCustomWaitAlert.init()
-        waitAlert?.titleLab.text = "单机遥控器按键\n请勿长按"
+        waitAlert?.titleLab.text = "单击遥控器按键\n请勿长按"
         waitAlert?.action = {[weak self]() in
             self?.showStudyFailedAlert(index: index)
             

@@ -107,9 +107,9 @@ class HOOPLogDetailVC: GYZBaseVC {
     ///   - index: 索引
     ///   - urls: 图片路径
     func goBigPhotos(index: Int, urls: [String]){
-        let browser = SKPhotoBrowser(photos: GYZTool.createWebPhotos(urls: urls))
+        let browser = SKPhotoBrowser(photos: GYZTool.createWebPhotos(urls: urls,isShowDel: true,isShowAction: true))
         browser.initializePageIndex(index)
-        //        browser.delegate = self
+        browser.delegate = self
         
         present(browser, animated: true, completion: nil)
     }
@@ -136,5 +136,10 @@ extension HOOPLogDetailVC: UICollectionViewDataSource,UICollectionViewDelegate{
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         goBigPhotos(index: indexPath.row, urls: (dataModel?.urlList)!)
+    }
+}
+extension HOOPLogDetailVC: SKPhotoBrowserDelegate{
+    func removePhoto(_ browser: SKPhotoBrowser, index: Int, reload: @escaping (() -> Void)) {
+        reload()
     }
 }
