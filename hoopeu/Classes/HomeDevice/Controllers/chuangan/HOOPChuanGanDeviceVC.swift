@@ -19,7 +19,7 @@ class HOOPChuanGanDeviceVC: GYZBaseVC {
     var ctrlDevType: Int = 1
     /// 记录学习时返回的code码
     var codesDic: [[String: Any]] = [[String: Any]]()
-    let titleArray = ["求助设备", "门磁设备", "防盗设备", "烟雾报警设备", "煤气报警设备"]
+    let titleArray = ["求助设备", "门磁设备", "防盗设备", "烟雾报警设备", "煤气报警设备","通用传感器"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +73,7 @@ class HOOPChuanGanDeviceVC: GYZBaseVC {
             if response["code"].intValue == kQuestSuccessTag{//请求成功
                 
                 weakSelf?.deviceId = response["data"].stringValue
-                weakSelf?.showStudyAlert(isOn: true)
+                weakSelf?.showStudyAlert()
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
             }
@@ -84,28 +84,23 @@ class HOOPChuanGanDeviceVC: GYZBaseVC {
         })
     }
     /// 开始学习
-    func showStudyAlert(isOn: Bool){
+    func showStudyAlert(){
         weak var weakSelf = self
         GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: titleArray[ctrlDevType - 1] + "安装好电池\n点击“开始学习”", cancleTitle: "取消", viewController: self, buttonTitles: "开始学习") { (index) in
             
             if index != cancelIndex{
-                weakSelf?.sendStudyMqttCmd(isOn: isOn)
-                weakSelf?.showWaitAlert(isOn: isOn)
+                weakSelf?.sendStudyMqttCmd()
+                weakSelf?.showWaitAlert()
             }else{
                 weakSelf?.clickedBackBtn()
             }
         }
     }
     /// 正在等待
-    func showWaitAlert(isOn: Bool){
+    func showWaitAlert(){
         var content: String = "打开" + titleArray[ctrlDevType - 1] + "开关"
         if ctrlDevType == 2{
-            content = "门窗磁传感器接触后分开"
-            if isOn{
-                content = "点击门磁设备\n”开“ 按钮"
-            }else{
-                content = "点击门磁设备\n”关“ 按钮"
-            }
+            content = "请将门磁设备分开或靠近，至红色指示灯亮起"
         }
         waitAlert = GYZCustomWaitAlert.init()
         waitAlert?.titleLab.text = content
@@ -122,20 +117,9 @@ class HOOPChuanGanDeviceVC: GYZBaseVC {
         GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "学习失败，请重新尝试", cancleTitle: "取消", viewController: self, buttonTitles: "重新配置") { (index) in
             
             if index != cancelIndex{
-                weakSelf?.showStudyAlert(isOn: true)
+                weakSelf?.showStudyAlert()
             }else{
                 weakSelf?.clickedBackBtn()
-            }
-        }
-    }
-    /// 门磁设备开按钮学习成功
-    func showStudyOnKeySuccessAlert(){
-        weak var weakSelf = self
-        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "门磁设备“开”功能学习成功", cancleTitle: nil, viewController: self, buttonTitles: "继续") { (index) in
-            
-            if index != cancelIndex{
-                weakSelf?.sendStudyMqttCmd(isOn: false)
-                weakSelf?.showWaitAlert(isOn: false)
             }
         }
     }
@@ -158,20 +142,9 @@ class HOOPChuanGanDeviceVC: GYZBaseVC {
         navigationController?.pushViewController(vc, animated: true)
     }
     /// mqtt发布主题 学习
-    func sendStudyMqttCmd(isOn: Bool){
+    func sendStudyMqttCmd(){
         
-        var paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceId,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_sensor_study","ctrl_dev_type":ctrlDevType,"app_interface_tag":""]
-        if ctrlDevType == 2 {//门磁设备
-            if isOn{
-                paramDic["func_id"] = 1
-            }else{
-                paramDic["func_id"] = 2
-            }
-            paramDic["func_num"] = 2
-        }else{
-            paramDic["func_num"] = 1
-            paramDic["func_id"] = 0
-        }
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceId,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_sensor_study","ctrl_dev_type":ctrlDevType,"func_num":1,"func_id":0,"app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -204,11 +177,7 @@ class HOOPChuanGanDeviceVC: GYZBaseVC {
                     let funcId = result["data"]["func_id"].intValue
                     let dic: [String: Any] = ["func_id":funcId,"code":result["data"]["code"].stringValue]
                     codesDic.append(dic)
-                    if funcId == 1{//门磁设备分为1：开,要继续学习：关
-                        showStudyOnKeySuccessAlert()
-                    }else{
-                        showStudySuccessAlert()
-                    }
+                    showStudySuccessAlert()
                 }else{// 学习失败
                     showStudyFailedAlert()
                 }

@@ -249,12 +249,7 @@ class HOOPSaveChuanGanDeviceVC: GYZBaseVC {
             return
         }
         
-        var paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","room_id":dataList[selectRoomIndex].roomId!,"ctrl_dev_id":chuanGanDeviceId,"ctrl_dev_name":arcNameTxtFiled.text!,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_sensor_add","ctrl_dev_type":ctrlDevType,"codes":codesDic,"app_interface_tag":""]
-        if ctrlDevType == 2 {//门磁设备
-            paramDic["func_num"] = 2
-        }else{
-            paramDic["func_num"] = 1
-        }
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","room_id":dataList[selectRoomIndex].roomId!,"ctrl_dev_id":chuanGanDeviceId,"ctrl_dev_name":arcNameTxtFiled.text!,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_sensor_add","ctrl_dev_type":ctrlDevType,"codes":codesDic,"func_num":1,"app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }

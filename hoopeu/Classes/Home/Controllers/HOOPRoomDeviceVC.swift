@@ -52,17 +52,18 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        settingMqtt()
+//        settingMqtt()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if mqtt == nil {
-            mqttSetting()
-        }else {
-            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
-                self.mqtt?.connect()
-            }
-        }
+//        if mqtt == nil {
+//            mqttSetting()
+//        }else {
+//            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
+//                self.mqtt?.connect()
+//            }
+//        }
+        settingMqtt()
     }
     
     func settingMqtt(){
@@ -376,7 +377,7 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     func sendOnOffMqttCmd(row: Int,state: String){
         //        createHUD(message: "加载中...")
         let model = dataModel?.switchList[row]
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","phone":userDefaults.string(forKey: "phone") ?? "","ctrl_dev_id":(model?.switch_id)!,"serial_id":(model?.serial_id)!,"status":state,"msg_type":"app_switch_ctrl","app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","phone":userDefaults.string(forKey: "phone") ?? "","ctrl_dev_id":Int.init((model?.switch_id)!)!,"serial_id":Int.init((model?.serial_id)!)!,"status":state,"msg_type":"app_switch_ctrl","app_interface_tag":""]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }

@@ -19,6 +19,8 @@ class HOOPPlayerDetailVC: GYZBaseVC {
     var player:ZFPlayerController?
     var callCenter : Any?//声明属性
     //(注意：这里必须是全局属性，不能定义局部变量，由于iOS10.0以后版本和之前的版本方法不同，所以我这里声明了一个任意类型的全局变量）
+    /// 判断是否有操作
+    var isHasOperator: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +31,7 @@ class HOOPPlayerDetailVC: GYZBaseVC {
         showVideo()
 //        requestDevicePlus()
         mqttSetting()
+        setTimer()
     }
     override var shouldAutorotate: Bool{
         
@@ -123,6 +126,7 @@ class HOOPPlayerDetailVC: GYZBaseVC {
     }()
     ///操作
     @objc func clickedOperateBtn(btn : UIButton){
+        isHasOperator = true
         let tag = btn.tag
         if tag == 101  {// 截图
             if (self.player?.currentPlayerManager.isPlaying)!{
@@ -196,6 +200,7 @@ class HOOPPlayerDetailVC: GYZBaseVC {
         super.viewWillAppear(animated)
         self.player?.isViewControllerDisappear = false
         
+        mqttSetting()
     }
     override func viewWillDisappear(_ animated: Bool) {
         
@@ -278,6 +283,33 @@ class HOOPPlayerDetailVC: GYZBaseVC {
         let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","msg_type":"camera_order","user_id":userDefaults.string(forKey: "phone") ?? "","msg":["order":order],"app_interface_tag":""]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    
+    func setTimer(){
+        Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(onClickTimer), userInfo: nil, repeats: true)
+    }
+    
+    @objc func onClickTimer(){
+        if (self.player?.currentPlayerManager.isPlaying)!{
+            if isHasOperator {// 1分钟
+                showAlert()
+            }else{
+                clickedBackBtn()
+            }
+        }
+    }
+    ///
+    func showAlert(){
+        isHasOperator = false
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "长时间观看是否继续观看？", cancleTitle: "退出", viewController: self, buttonTitles: "继续看护") { (index) in
+            
+            if index == cancelIndex{
+                 weakSelf?.clickedBackBtn()
+            }else{
+                weakSelf?.isHasOperator = true
+            }
+        }
     }
     
     /// 检测是否需要关闭推流
