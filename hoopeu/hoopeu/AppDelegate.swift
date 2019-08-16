@@ -56,6 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         setTimer()
         mqttSetting()
+        requestVersion()
         // 获取推送消息
         let remote = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [AnyHashable : Any]
         // 如果remote不为空，就代表应用在未打开的时候收到了推送消息
@@ -190,6 +191,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enableAutoToolbar = false
     }
     
+    /// 请求服务器版本
+    func requestVersion(){
+        weak var weakSelf = self
+        GYZNetWork.requestNetwork("appVersion/app/ios",isToken:false, parameters: nil,method:.get, success:{ (response) in
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                let data = response["data"]
+                let content = data["updateMessage"].stringValue
+                let version = data["versionName"].stringValue
+                weakSelf?.checkVersion(newVersion: version, content: content)
+            }
+        }, failture: { (error) in
+            GYZLog(error)
+        })
+    }
+    /// 检测APP更新
+    func checkVersion(newVersion: String,content: String){
+        
+        let type: UpdateVersionType = GYZUpdateVersionTool.compareVersion(newVersion: newVersion)
+        switch type {
+        case .update:
+            updateVersion(version: newVersion, content: content)
+        case .updateNeed:
+            updateNeedVersion(version: newVersion, content: content)
+        default:
+            break
+        }
+    }
+    /**
+     * //不强制更新
+     * @param version 版本名称
+     * @param content 更新内容
+     */
+    func updateVersion(version: String,content: String){
+        let alert = UIAlertView.init(title: "发现新版本\(version)", message: content, delegate: self, cancelButtonTitle: "残忍拒绝", otherButtonTitles: "立即更新")
+        alert.tag = 103
+        alert.show()
+    }
+    /**
+     * 强制更新
+     * @param version 版本名称
+     * @param content 更新内容
+     */
+    func updateNeedVersion(version: String,content: String){
+        
+        let alert = UIAlertView.init(title: "发现新版本\(version)", message: content, delegate: self, cancelButtonTitle: "立即更新")
+        alert.tag = 104
+        alert.show()
+    }
+    
 }
 
 // MARK: - JPUSHRegisterDelegate 极光推送代理
@@ -280,6 +330,14 @@ extension AppDelegate : UIAlertViewDelegate{
                     }
                     
                 }
+            }
+        }else if tag == 103{
+            if buttonIndex == 1{//立即更新
+                GYZUpdateVersionTool.goAppStore()
+            }
+        }else if tag == 104{
+            if buttonIndex == 0{//立即更新
+                GYZUpdateVersionTool.goAppStore()
             }
         }
         
