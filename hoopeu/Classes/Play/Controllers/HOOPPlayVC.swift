@@ -223,11 +223,11 @@ class HOOPPlayVC: GYZBaseVC {
                 bottomView.conmentField.text = ""
                 let chatData = result["msg"]
                 if !chatData["user_content"].stringValue.isEmpty{
-                    let meChatModel = HOOPChatModel.init(dict: ["role":"1","content":chatData["user_content"].stringValue])
+                    let meChatModel = HOOPChatModel.init(dict: ["role":"1","content":chatData["user_content"].stringValue,"time": "\(Date().timeIntervalSince1970)"])
                     dataList.append(meChatModel)
                 }
                 if !chatData["device_content"].stringValue.isEmpty{
-                    let chatModel = HOOPChatModel.init(dict: ["role":"0","content":chatData["device_content"].stringValue])
+                    let chatModel = HOOPChatModel.init(dict: ["role":"0","content":chatData["device_content"].stringValue,"time": "\(Date().timeIntervalSince1970)"])
                     dataList.append(chatModel)
                 }
                 tableView.reloadData()

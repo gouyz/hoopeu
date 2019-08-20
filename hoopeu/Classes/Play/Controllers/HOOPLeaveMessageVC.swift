@@ -16,7 +16,7 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     ///txtView 提示文字
     let placeHolder = "请输入您想让叮当宝贝说的话"
     //// 最大字数
-    let contentMaxCount: Int = 100
+    let contentMaxCount: Int = 500
     var isEdit: Bool = false
     /// 留言id
     var messageId: String = ""

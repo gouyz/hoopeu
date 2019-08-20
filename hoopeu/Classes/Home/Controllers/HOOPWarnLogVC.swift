@@ -42,10 +42,10 @@ class HOOPWarnLogVC: GYZBaseVC {
             make.edges.equalTo(0)
         }
         
-        mqttSetting()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        mqttSetting()
         requestLogsDatas()
     }
     
