@@ -126,10 +126,13 @@ class GYZBaseVC: UIViewController {
             } else{
                 DispatchQueue.main.async(execute: {
                     
+                    if self.hud != nil {
+                        self.hud?.hide(animated: true)
+                    }
                     if self.isDisConnect{
-                        if self.hud != nil {
-                            self.hud?.hide(animated: true)
-                        }
+//                        if self.hud != nil {
+//                            self.hud?.hide(animated: true)
+//                        }
                         MBProgressHUD.showAutoDismissHUD(message: "当前网络异常，操作可能失效！")
                     }
                     
@@ -149,6 +152,7 @@ class GYZBaseVC: UIViewController {
 }
 
 extension GYZBaseVC: CocoaMQTTDelegate {
+    
     // Optional ssl CocoaMQTTDelegate
     func mqtt(_ mqtt: CocoaMQTT, didReceive trust: SecTrust, completionHandler: @escaping (Bool) -> Void) {
         /// Validate the server certificate

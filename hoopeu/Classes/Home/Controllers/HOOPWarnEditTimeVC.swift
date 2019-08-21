@@ -96,7 +96,7 @@ class HOOPWarnEditTimeVC: GYZBaseVC {
         let picker = UIDatePicker()
         picker.backgroundColor = kWhiteColor
         picker.locale = Locale(identifier: "en_GB")
-        picker.datePickerMode = .time
+        picker.datePickerMode = .countDownTimer
         //响应事件
         picker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         

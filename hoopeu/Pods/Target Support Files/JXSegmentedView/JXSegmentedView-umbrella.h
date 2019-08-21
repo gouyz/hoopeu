@@ -10,8 +10,7 @@
 #endif
 #endif
 
-#import "SPPageMenu.h"
 
-FOUNDATION_EXPORT double SPPageMenuVersionNumber;
-FOUNDATION_EXPORT const unsigned char SPPageMenuVersionString[];
+FOUNDATION_EXPORT double JXSegmentedViewVersionNumber;
+FOUNDATION_EXPORT const unsigned char JXSegmentedViewVersionString[];
 

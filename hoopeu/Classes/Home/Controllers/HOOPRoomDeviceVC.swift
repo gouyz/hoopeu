@@ -52,10 +52,12 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        GYZLog("viewWillAppear")
 //        settingMqtt()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        GYZLog("viewDidAppear")
 //        if mqtt == nil {
 //            mqttSetting()
 //        }else {

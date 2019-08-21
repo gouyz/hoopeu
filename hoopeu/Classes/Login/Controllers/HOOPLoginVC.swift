@@ -284,7 +284,6 @@ class HOOPLoginVC: GYZBaseVC {
                 JPUSHService.setAlias(data["alias"].stringValue, completion: { (iResCode, iAlias, seq) in
                     
                 }, seq: 0)
-                
                 if !(data["devId"].string?.isEmpty)!{/// 设备不为空,检测网络
                     userDefaults.set(data["devId"].stringValue, forKey: "devId")
 //                    weakSelf?.sendMqttCmd()

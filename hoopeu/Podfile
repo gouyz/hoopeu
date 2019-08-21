@@ -18,7 +18,7 @@ pod 'DKImagePickerController' #图片选择器 https://github.com/zhangao0086/DK
 pod 'SKPhotoBrowser' #图片浏览器 https://github.com/suzuki-0000/SKPhotoBrowser
 pod 'PYSearch'  # 搜索框 https://github.com/ko1o/PYSearch
 #pod 'FWSideMenu'  # 侧滑控件 https://github.com/choiceyou/FWSideMenu
-pod 'SPPageMenu', '~> 3.5.0' # 分页菜单，功能非常齐全，满足绝大多数APP https://github.com/SPStore/SPPageMenu
+pod 'JXSegmentedView' #所有主流APP分类切换滚动视图 https://github.com/pujiaxin33/JXSegmentedView
 
 #pod 'BMPlayer', '~> 1.2.0'  # 基于AVPlayer封装的视频播放器  https://github.com/BrikerMan/BMPlayer
 
@@ -27,7 +27,7 @@ pod 'JPush'  #极光推送
 
 #pod 'JMessage' #极光IM
 pod 'FMDB'  #FMDB https://github.com/ccgus/fmdb
-pod 'CocoaMQTT' #MQTT https://github.com/emqtt/CocoaMQTT
+pod 'CocoaMQTT', '~> 1.1.3' #MQTT1.1.3 https://github.com/emqtt/CocoaMQTT
 
 ### 支持定制任何播放器SDK和控制层https://github.com/renzifeng/ZFPlayer
 pod 'FDFullscreenPopGesture'

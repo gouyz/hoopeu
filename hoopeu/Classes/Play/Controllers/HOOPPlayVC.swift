@@ -122,11 +122,11 @@ class HOOPPlayVC: GYZBaseVC {
                 
                 guard let data = response["data"].array else { return }
                 
-                for item in data{
+                for item in data.reversed(){
                     guard let itemInfo = item.dictionaryObject else { return }
                     let model = HOOPChatModel.init(dict: itemInfo)
                     
-                    weakSelf?.dataList.append(model)
+                    weakSelf?.dataList.insert(model, at: 0)
                 }
                 if weakSelf?.dataList.count > 0{
                     weakSelf?.hiddenEmptyView()
