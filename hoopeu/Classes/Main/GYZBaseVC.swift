@@ -183,7 +183,7 @@ extension GYZBaseVC: CocoaMQTTDelegate {
             if self.hud != nil {
                 self.hud?.hide(animated: true)
             }
-            MBProgressHUD.showAutoDismissHUD(message: "当前网络异常，操作可能失效！")
+//            MBProgressHUD.showAutoDismissHUD(message: "当前网络异常，操作可能失效！")
         }else if state == .disconnected && self.mqtt != nil{//   断线重连
             self.mqtt?.connect()
         }
