@@ -218,7 +218,7 @@ class HOOPPlayVC: GYZBaseVC {
                 }else{
                     MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 }
-            }else if type == "update_chat" && result["device_id"].stringValue == userDefaults.string(forKey: "devId"){
+            }else if type == "update_chat" && result["device_id"].stringValue == userDefaults.string(forKey: "devId") && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
                 
                 bottomView.conmentField.text = ""
                 let chatData = result["msg"]
