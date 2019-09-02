@@ -132,7 +132,7 @@ class HOOPAddVoiceSceneVC: GYZBaseVC {
             for item in (sceneDetailModel?.sceneDoList)!{
                 doArr.insert(item.cmd!, at: 0)
                 let dic:[String: Any] = ["cmd_type":item.type!,"cmd":item.cmd!,"time_len":item.time!]
-                doDicArr.append(dic)
+                doDicArr.insert(dic, at: 0)
             }
             tableView.reloadData()
         }

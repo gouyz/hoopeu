@@ -8,10 +8,13 @@
 
 import UIKit
 import MBProgressHUD
+import CocoaMQTT
+import SwiftyJSON
 
 class HOOPUnBindDeviceVC: GYZBaseVC {
     
     var deviceId: String = ""
+    var userToken: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +23,7 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
         self.view.backgroundColor = kWhiteColor
         
         setUpUI()
+        mqttSetting()
     }
     
     func setUpUI(){
@@ -329,9 +333,10 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
-                let userToken = userDefaults.string(forKey: "token")
+//                weakSelf?.userToken = userDefaults.string(forKey: "token")
                 userDefaults.set(response["data"].stringValue, forKey: "token")
-                weakSelf?.requestRemovePhone(token: userToken!)
+//                weakSelf?.requestRemovePhone(token: userToken!)
+                weakSelf?.sendMqttCmd()
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
             }
@@ -383,6 +388,44 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
                 
                 break
             }
+        }
+    }
+    
+    /// mqtt发布主题 查询设备在线状态
+    func sendMqttCmd(){
+        var paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","phone":phoneTxtFiled.text!,"msg_type":"app_user_change","app_interface_tag":"ok"]
+        if !toPhoneTxtFiled.text!.isEmpty {
+            paramDic["toPhone"] = toPhoneTxtFiled.text!
+        }
+        
+        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    /// 重载CocoaMQTTDelegate
+    override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+        super.mqtt(mqtt, didConnectAck: ack)
+        if ack == .accept {
+            mqtt.subscribe("api_receive", qos: CocoaMQTTQOS.qos1)
+            
+        }
+    }
+    override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
+        super.mqtt(mqtt, didReceiveMessage: message, id: id)
+        
+        if let data = message.string {
+            let result = JSON.init(parseJSON: data)
+            let phone = result["phone"].stringValue
+            let type = result["msg_type"].stringValue
+            if let tag = result["app_interface_tag"].string{
+                if tag.hasPrefix("system_"){
+                    return
+                }
+            }
+            
+            if type == "app_user_change_re" && phone == phoneTxtFiled.text!{
+                userDefaults.set(userToken, forKey: "token")
+                goBack()
+            }
+            
         }
     }
 }
