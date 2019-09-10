@@ -42,4 +42,6 @@ class HOOPCustomFuncModel: LHSBaseModel {
     var func_id : String?
     /// 按键名称
     var ctrl_name : String? = ""
+    /// 学习码
+    var study_code : String? = ""
 }

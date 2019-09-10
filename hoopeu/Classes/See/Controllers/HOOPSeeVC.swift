@@ -86,7 +86,7 @@ extension HOOPSeeVC: UITableViewDelegate,UITableViewDataSource{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: seeVideoCell) as! HOOPSeeVideoCell
         cell.settingBtn.tag = indexPath.row
-        cell.settingBtn.isEnabled = false
+        cell.settingBtn.isHidden = true
         cell.settingBtn.addTarget(self, action: #selector(onClickedSetting(btn:)), for: .touchUpInside)
         cell.iconBgView.isUserInteractionEnabled = true
         cell.iconPlayView.tag = indexPath.row

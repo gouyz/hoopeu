@@ -66,7 +66,7 @@ class HOOPShePinControlVC: GYZBaseVC {
         deviceControlId = (dataModel?.id)!
         for item in (dataModel?.funcList)! {
             let name: String = item.ctrl_name!
-            var keyDic: [String: String] = ["func_id":item.func_id!,"func_name":name]
+            var keyDic: [String: String] = ["func_id":item.func_id!,"func_name":name,"func_code":item.study_code!]
             
             if name.contains("开") {
                 keyDic["func_type"] = "switch_open"
@@ -157,14 +157,8 @@ class HOOPShePinControlVC: GYZBaseVC {
     func saveControlVC(){
         var studyFuncArr: [[String:String]] = [[String:String]]()
         for item in funcArr {// 筛选有效的按键
-            if dataModel == nil {
-                if item.count == 4{// 修改是不传code
-                    studyFuncArr.append(item)
-                }
-            }else{
-                if item.count == 3{// 修改是不传code
-                    studyFuncArr.append(item)
-                }
+            if item.count == 4{//
+                studyFuncArr.append(item)
             }
         }
         if studyFuncArr.count == 0 {
@@ -329,9 +323,7 @@ class HOOPShePinControlVC: GYZBaseVC {
                 
                 if result["code"].intValue == kQuestSuccessTag{
                     waitAlert?.hide()
-                    if self.dataModel == nil {
-                        self.funcArr[result["app_interface_tag"].intValue]["func_code"] = result["data"].stringValue
-                    }
+                    self.funcArr[result["app_interface_tag"].intValue]["func_code"] = result["data"].stringValue
                     showStudySuccessAlert(index: result["app_interface_tag"].intValue, code: result["data"].stringValue)
                 }else{// 学习失败
                     showStudyFailedAlert(index: result["app_interface_tag"].intValue)

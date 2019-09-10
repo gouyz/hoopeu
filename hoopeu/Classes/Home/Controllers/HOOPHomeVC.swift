@@ -45,6 +45,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
         // 本页面开启支持打开侧滑菜单
         self.menuContainerViewController.sideMenuPanMode = .defaults
         if userDefaults.bool(forKey: "isAddRoom") {
@@ -57,7 +58,6 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         }
         
     }
-    
     func moveToRoom(){
     
         if dataList.count > 0 {
