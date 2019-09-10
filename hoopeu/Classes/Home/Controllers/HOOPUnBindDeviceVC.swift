@@ -333,9 +333,7 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
-//                weakSelf?.userToken = userDefaults.string(forKey: "token")
-                userDefaults.set(response["data"].stringValue, forKey: "token")
-//                weakSelf?.requestRemovePhone(token: userToken!)
+                weakSelf?.userToken = response["data"].stringValue
                 weakSelf?.sendMqttCmd()
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
@@ -393,7 +391,7 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
     
     /// mqtt发布主题 查询设备在线状态
     func sendMqttCmd(){
-        var paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","phone":phoneTxtFiled.text!,"msg_type":"app_user_change","app_interface_tag":"ok"]
+        var paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","smsToken":self.userToken,"phone":phoneTxtFiled.text!,"msg_type":"app_user_change","app_interface_tag":"ok"]
         if !toPhoneTxtFiled.text!.isEmpty {
             paramDic["toPhone"] = toPhoneTxtFiled.text!
         }
@@ -422,7 +420,6 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
             }
             
             if type == "app_user_change_re" && phone == phoneTxtFiled.text!{
-                userDefaults.set(userToken, forKey: "token")
                 goBack()
             }
             
