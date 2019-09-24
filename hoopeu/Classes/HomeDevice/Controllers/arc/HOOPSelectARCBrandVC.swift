@@ -112,7 +112,6 @@ extension HOOPSelectARCBrandVC: UITableViewDelegate,UITableViewDataSource{
         cell.nameLab.text = brandTitleList[indexPath.section][indexPath.row]
         cell.rightIconView.isHidden = true
         
-        cell.selectionStyle = .none
         return cell
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

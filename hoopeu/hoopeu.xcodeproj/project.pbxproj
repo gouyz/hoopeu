@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0A00327822297C23007B9E98 /* HOOPProjectorControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A00327722297C23007B9E98 /* HOOPProjectorControlVC.swift */; };
 		0A00327A22297F02007B9E98 /* HOOPFanControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A00327922297F02007B9E98 /* HOOPFanControlVC.swift */; };
+		0A011E54233A0C1A0008F153 /* HOOPRepairVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A011E53233A0C1A0008F153 /* HOOPRepairVC.swift */; };
+		0A011E56233A14A60008F153 /* GYZCommonInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A011E55233A14A60008F153 /* GYZCommonInfoView.swift */; };
 		0A02339A221D8DFE00D4E9DA /* HOOPLeftMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A023399221D8DFE00D4E9DA /* HOOPLeftMenuVC.swift */; };
 		0A02339F221D918900D4E9DA /* FWSideMenuContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A02339C221D918900D4E9DA /* FWSideMenuContainerViewController.swift */; };
 		0A0233A0221D918900D4E9DA /* FWSideMenuShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A02339D221D918900D4E9DA /* FWSideMenuShadow.swift */; };
@@ -259,6 +261,8 @@
 /* Begin PBXFileReference section */
 		0A00327722297C23007B9E98 /* HOOPProjectorControlVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPProjectorControlVC.swift; sourceTree = "<group>"; };
 		0A00327922297F02007B9E98 /* HOOPFanControlVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPFanControlVC.swift; sourceTree = "<group>"; };
+		0A011E53233A0C1A0008F153 /* HOOPRepairVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPRepairVC.swift; sourceTree = "<group>"; };
+		0A011E55233A14A60008F153 /* GYZCommonInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GYZCommonInfoView.swift; sourceTree = "<group>"; };
 		0A023399221D8DFE00D4E9DA /* HOOPLeftMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLeftMenuVC.swift; sourceTree = "<group>"; };
 		0A02339C221D918900D4E9DA /* FWSideMenuContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FWSideMenuContainerViewController.swift; sourceTree = "<group>"; };
 		0A02339D221D918900D4E9DA /* FWSideMenuShadow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FWSideMenuShadow.swift; sourceTree = "<group>"; };
@@ -971,6 +975,7 @@
 				0A3ABA6E21DDE8DD0048F0F3 /* GYZSearchBtnView.swift */,
 				0A40AAE6222E5118006B3D93 /* GYZCustomWaitAlert.swift */,
 				0A0B6DA422B528A50030D254 /* HOOPLabAndLabCell.swift */,
+				0A011E55233A14A60008F153 /* GYZCommonInfoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1064,6 +1069,7 @@
 				0A0506D3221C58FB0053C7BC /* HOOPRegisterSuccessVC.swift */,
 				0A37E043221D42A9002EAA74 /* HOOPLinkPowerVC.swift */,
 				0A37E045221D4ADE002EAA74 /* HOOPReadyNetWorkVC.swift */,
+				0A011E53233A0C1A0008F153 /* HOOPRepairVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1679,6 +1685,7 @@
 				0A4FE1542223E89D00CCF442 /* HOOPSelectConditionVC.swift in Sources */,
 				0A0B7176224A7DA000AC8547 /* HOOPChatBottomView.swift in Sources */,
 				0A3ABACE21DDE8DE0048F0F3 /* GYZCommonInfoCell.swift in Sources */,
+				0A011E54233A0C1A0008F153 /* HOOPRepairVC.swift in Sources */,
 				0A40AAF6222E5987006B3D93 /* SYProgressView.m in Sources */,
 				0A0601E4221EF79D003F8CFE /* HOOPRoomManagerVC.swift in Sources */,
 				0A40AAE7222E5118006B3D93 /* GYZCustomWaitAlert.swift in Sources */,
@@ -1782,6 +1789,7 @@
 				0A05E4AF2243C50B00050F49 /* HOOPDeviceModel.swift in Sources */,
 				0A3ABB0C21DDE8DE0048F0F3 /* ScrollPageView.swift in Sources */,
 				0A37E044221D42A9002EAA74 /* HOOPLinkPowerVC.swift in Sources */,
+				0A011E56233A14A60008F153 /* GYZCommonInfoView.swift in Sources */,
 				0A3ABB1721DDE8DE0048F0F3 /* GYZCheckTool.m in Sources */,
 				0A3ABAED21DDE8DE0048F0F3 /* GYZUIColor+Extension.swift in Sources */,
 				0A0506CE221C52F90053C7BC /* HOOPRegisterCodeVC.swift in Sources */,

@@ -100,6 +100,11 @@ class HOOPMessageRecordVC: GYZBaseVC {
             let vc = HOOPLeaveMessageVC()
             vc.isEdit = true
             vc.messageId = msgId
+            vc.resultBlock = {[unowned self] (isRefresh) in
+                if isRefresh{
+                    self.requestDataList()
+                }
+            }
             navigationController?.pushViewController(vc, animated: true)
         }else{
             let vc = HOOPReceivedMessageDetailVC()

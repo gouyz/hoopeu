@@ -13,6 +13,8 @@ import SwiftyJSON
 
 class HOOPLeaveMessageVC: GYZBaseVC {
 
+    /// 选择结果回调
+    var resultBlock:((_ isRefresh: Bool) -> Void)?
     ///txtView 提示文字
     let placeHolder = "请输入您想让叮当宝贝说的话"
     //// 最大字数
@@ -395,6 +397,9 @@ class HOOPLeaveMessageVC: GYZBaseVC {
                 MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 if result["code"].intValue == kQuestSuccessTag{
                     
+                    if resultBlock != nil{
+                        resultBlock!(true)
+                    }
                     clickedBackBtn()
                 }
             }

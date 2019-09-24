@@ -13,7 +13,7 @@ private let leftMenuCell = "leftMenuCell"
 
 class HOOPLeftMenuVC: GYZBaseVC {
     
-    let titleArray = ["设备管理", "技能设置", "智能场景", "房间管理", "使用帮助", "联系我们", "软件版本"]
+    let titleArray = ["设备管理", "技能设置", "智能场景", "房间管理", "使用帮助", "联系我们", "软件版本", "注册保修"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -165,6 +165,8 @@ extension HOOPLeftMenuVC: UITableViewDelegate,UITableViewDataSource{
             goChildController(vc: HOOPAboutUsVC())
         case 6: /// 软件版本
             showSystemVersion()
+        case 7: /// 注册保修
+            goChildController(vc: HOOPRepairVC())
         default:
             break
         }

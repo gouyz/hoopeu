@@ -60,7 +60,6 @@ extension HOOPSelectControlVC: UITableViewDelegate,UITableViewDataSource{
         
         cell.nameLab.text = titleArray[indexPath.row]
         
-        cell.selectionStyle = .none
         return cell
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
