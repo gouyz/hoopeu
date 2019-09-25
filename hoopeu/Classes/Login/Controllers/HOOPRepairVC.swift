@@ -10,6 +10,10 @@ import UIKit
 import MBProgressHUD
 
 class HOOPRepairVC: GYZBaseVC {
+    
+    var ageList: [HOOPParamModel] = [HOOPParamModel]()
+    var workList: [HOOPParamModel] = [HOOPParamModel]()
+    var areaList: [HOOPParamModel] = [HOOPParamModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +57,7 @@ class HOOPRepairVC: GYZBaseVC {
             make.height.equalTo(kTitleHeight)
         }
         ageView.snp.makeConstraints { (make) in
-            make.top.equalTo(desLab.snp.bottom).offset(20)
+            make.top.equalTo(desLab.snp.bottom).offset(kTitleHeight)
             make.left.right.equalTo(contentView)
             make.height.equalTo(50)
         }
@@ -73,7 +77,7 @@ class HOOPRepairVC: GYZBaseVC {
             make.left.equalTo(30)
             make.right.equalTo(-30)
             make.height.equalTo(kTitleHeight)
-            make.top.equalTo(areaView.snp.bottom).offset(kTitleHeight)
+            make.top.equalTo(areaView.snp.bottom).offset(kTitleAndStateHeight)
         }
         
         tipsLabel.snp.makeConstraints { (make) in
@@ -162,6 +166,54 @@ class HOOPRepairVC: GYZBaseVC {
         
         return lab
     }()
+    ///获取年龄数据
+    func requestDataList(method: String){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork(method,parameters: nil,  success: { (response) in
+            
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["data"].array else { return }
+                
+                for item in data{
+                    guard let itemInfo = item.dictionaryObject else { return }
+                    let model = HOOPLeaveMessageModel.init(dict: itemInfo)
+                    
+                    weakSelf?.dataList.append(model)
+                }
+                
+                weakSelf?.tableView.reloadData()
+                if weakSelf?.dataList.count > 0{
+                    weakSelf?.hiddenEmptyView()
+                }else{
+                    ///显示空页面
+                    weakSelf?.showEmptyView(content:"暂无留言")
+                }
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hiddenLoadingView()
+            GYZLog(error)
+            
+            //第一次加载失败，显示加载错误页面
+            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                weakSelf?.hiddenEmptyView()
+                weakSelf?.requestDataList()
+            })
+        })
+    }
+    
     /// 确定
     @objc func clickedOkBtn(){
         

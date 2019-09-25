@@ -229,6 +229,7 @@
 		0A649F5C22A0D213001829A9 /* IRLibaray.db in Resources */ = {isa = PBXBuildFile; fileRef = 0A649F5622A0D213001829A9 /* IRLibaray.db */; };
 		0A649F5D22A0D213001829A9 /* ARCStateCtr.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A649F5722A0D213001829A9 /* ARCStateCtr.m */; };
 		0A723A2E2267039700A27051 /* HOOPCustomControlModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A723A2D2267039700A27051 /* HOOPCustomControlModel.swift */; };
+		0A9DAFF6233AF097003D1BC8 /* HOOPParamModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9DAFF5233AF097003D1BC8 /* HOOPParamModel.swift */; };
 		0AA23F2B2226729E0090F58B /* HOOPWarnSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA23F2A2226729E0090F58B /* HOOPWarnSettingVC.swift */; };
 		0AA23F2D222676C40090F58B /* HOOPWarnEditTimeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA23F2C222676C40090F58B /* HOOPWarnEditTimeVC.swift */; };
 		0AA23F32222683BA0090F58B /* GYZSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA23F2F222683BA0090F58B /* GYZSheetView.swift */; };
@@ -520,6 +521,7 @@
 		0A649F5722A0D213001829A9 /* ARCStateCtr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARCStateCtr.m; sourceTree = "<group>"; };
 		0A649F5822A0D213001829A9 /* IRDBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRDBManager.h; sourceTree = "<group>"; };
 		0A723A2D2267039700A27051 /* HOOPCustomControlModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPCustomControlModel.swift; sourceTree = "<group>"; };
+		0A9DAFF5233AF097003D1BC8 /* HOOPParamModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPParamModel.swift; sourceTree = "<group>"; };
 		0AA23F2A2226729E0090F58B /* HOOPWarnSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPWarnSettingVC.swift; sourceTree = "<group>"; };
 		0AA23F2C222676C40090F58B /* HOOPWarnEditTimeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPWarnEditTimeVC.swift; sourceTree = "<group>"; };
 		0AA23F2F222683BA0090F58B /* GYZSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GYZSheetView.swift; sourceTree = "<group>"; };
@@ -1053,6 +1055,7 @@
 			isa = PBXGroup;
 			children = (
 				0A3ABA7C21DDE8DD0048F0F3 /* LHSUserInfoModel.swift */,
+				0A9DAFF5233AF097003D1BC8 /* HOOPParamModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1745,6 +1748,7 @@
 				0A3ABB0E21DDE8DE0048F0F3 /* ContentView.swift in Sources */,
 				0A3ABAE021DDE8DE0048F0F3 /* GYZBaseNavigationVC.swift in Sources */,
 				0A11EFE72247C45D00756F24 /* HOOPWiFiListCell.swift in Sources */,
+				0A9DAFF6233AF097003D1BC8 /* HOOPParamModel.swift in Sources */,
 				0A0B57E3224E673A0085BEFA /* HOOPRoomDeviceModel.swift in Sources */,
 				0A07043C223158E500DD5C12 /* HOOPStudyTestView.swift in Sources */,
 				0A38805E221FD4A700E51EDA /* HOOPRobotProblemVC.swift in Sources */,
