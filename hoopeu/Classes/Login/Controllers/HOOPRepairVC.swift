@@ -14,6 +14,19 @@ class HOOPRepairVC: GYZBaseVC {
     var ageList: [HOOPParamModel] = [HOOPParamModel]()
     var workList: [HOOPParamModel] = [HOOPParamModel]()
     var areaList: [HOOPParamModel] = [HOOPParamModel]()
+    
+    var ageNameList: [String] = [String]()
+    var workNameList: [String] = [String]()
+    var areaNameList: [String] = [String]()
+    
+    var selectAgeIndex: Int = -1
+    var selectWorkIndex: Int = -1
+    var selectAreaIndex: Int = -1
+    var sexList: [String] = ["男","女"]
+    
+    var selectSexIndex: Int = 0
+    
+    var isGoHome: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +36,10 @@ class HOOPRepairVC: GYZBaseVC {
         self.view.backgroundColor = kWhiteColor
         
         setUpUI()
+        sexView.contentLab.text = sexList[selectSexIndex]
+        requestDataList(method: "user/ageList")
+        requestDataList(method: "user/industryList")
+        requestDataList(method: "user/areaList")
     }
     
     /// 创建UI
@@ -172,29 +189,45 @@ class HOOPRepairVC: GYZBaseVC {
             return
         }
         
+        createHUD(message: "加载中...")
         weak var weakSelf = self
         
         GYZNetWork.requestNetwork(method,parameters: nil,  success: { (response) in
             
             GYZLog(response)
+            weakSelf?.hud?.hide(animated: true)
             
             if response["code"].intValue == kQuestSuccessTag{//请求成功
                 
                 guard let data = response["data"].array else { return }
                 
+                var list: [HOOPParamModel] = [HOOPParamModel]()
+                var nameList: [String] = [String]()
                 for item in data{
                     guard let itemInfo = item.dictionaryObject else { return }
-                    let model = HOOPLeaveMessageModel.init(dict: itemInfo)
+                    let model = HOOPParamModel.init(dict: itemInfo)
                     
-                    weakSelf?.dataList.append(model)
+                    list.append(model)
+                    nameList.append(model.name!)
                 }
-                
-                weakSelf?.tableView.reloadData()
-                if weakSelf?.dataList.count > 0{
-                    weakSelf?.hiddenEmptyView()
-                }else{
-                    ///显示空页面
-                    weakSelf?.showEmptyView(content:"暂无留言")
+                if list.count > 0 {
+                    
+                    if method == "user/ageList" {
+                        weakSelf?.ageList = list
+                        weakSelf?.ageNameList = nameList
+                        weakSelf?.selectAgeIndex = 0
+                        weakSelf?.ageView.contentLab.text = list[0].name
+                    }else if method == "user/industryList" {
+                        weakSelf?.workList = list
+                        weakSelf?.workNameList = nameList
+                        weakSelf?.selectWorkIndex = 0
+                        weakSelf?.workView.contentLab.text = list[0].name
+                    }else if method == "user/areaList" {
+                        weakSelf?.areaList = list
+                        weakSelf?.areaNameList = nameList
+                        weakSelf?.selectAreaIndex = 0
+                        weakSelf?.areaView.contentLab.text = list[0].name
+                    }
                 }
                 
             }else{
@@ -203,27 +236,105 @@ class HOOPRepairVC: GYZBaseVC {
             
         }, failture: { (error) in
             
-            weakSelf?.hiddenLoadingView()
+            weakSelf?.hud?.hide(animated: true)
             GYZLog(error)
-            
-            //第一次加载失败，显示加载错误页面
-            weakSelf?.showEmptyView(content: "加载失败，请点击重新加载", reload: {
-                weakSelf?.hiddenEmptyView()
-                weakSelf?.requestDataList()
-            })
         })
     }
     
     /// 确定
     @objc func clickedOkBtn(){
+        requestFinshData()
+    }
+    
+    ///完善客户信息
+    func requestFinshData(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
         
+        createHUD(message: "加载中...")
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("user/perfect",parameters: ["ageId":ageList[selectAgeIndex].id!,"sex":selectSexIndex + 1,"industryId":workList[selectWorkIndex].id!,"areaId":areaList[selectAreaIndex].id!],  success: { (response) in
+            
+            GYZLog(response)
+            weakSelf?.hud?.hide(animated: true)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.goVc()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
     /// 跳过
     @objc func onClickedTips(){
-
+        goVc()
+    }
+    
+    func goVc(){
+        if isGoHome {
+            goHomeVC()
+        }else{
+            clickedBackBtn()
+        }
+    }
+    func goHomeVC(){
+        let menuContrainer = FWSideMenuContainerViewController.container(centerViewController: GYZMainTabBarVC(), centerLeftPanViewWidth: 20, centerRightPanViewWidth: 20, leftMenuViewController: HOOPLeftMenuVC(), rightMenuViewController: nil)
+        menuContrainer.leftMenuWidth = kLeftMenuWidth
+        
+        KeyWindow.rootViewController = menuContrainer
     }
     
     @objc func onClickedOperator(sender:UITapGestureRecognizer){
-        
+        let tag = sender.view?.tag
+        switch tag {
+        case 101:
+            selectAge()
+        case 102:
+            selectSex()
+        case 103:
+            selectWork()
+        case 104:
+            selectArea()
+        default:
+            break
+        }
+    }
+    
+    func selectAge(){
+        if ageList.count > 0 {
+            UsefulPickerView.showSingleColPicker("选择年龄段", data: ageNameList, defaultSelectedIndex: selectAgeIndex) {[unowned self] (index, value) in
+                self.selectAgeIndex = index
+                self.ageView.contentLab.text = value
+            }
+        }
+    }
+    func selectSex(){
+        UsefulPickerView.showSingleColPicker("选择性别", data: sexList, defaultSelectedIndex: selectSexIndex) {[unowned self] (index, value) in
+            self.selectSexIndex = index
+            self.sexView.contentLab.text = value
+        }
+    }
+    func selectWork(){
+        if workNameList.count > 0 {
+            UsefulPickerView.showSingleColPicker("选择行业", data: workNameList, defaultSelectedIndex: selectWorkIndex) {[unowned self] (index, value) in
+                self.selectWorkIndex = index
+                self.workView.contentLab.text = value
+            }
+        }
+    }
+    func selectArea(){
+        if areaNameList.count > 0 {
+            UsefulPickerView.showSingleColPicker("选择区域", data: areaNameList, defaultSelectedIndex: selectAreaIndex) {[unowned self] (index, value) in
+                self.selectAreaIndex = index
+                self.areaView.contentLab.text = value
+            }
+        }
     }
 }

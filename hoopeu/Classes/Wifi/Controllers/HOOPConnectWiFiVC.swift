@@ -325,7 +325,11 @@ class HOOPConnectWiFiVC: GYZBaseVC {
             GYZLog(error)
         })
     }
-    
+    ///完善资料
+    func goFinishedData(){
+        let vc = HOOPRepairVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
     
     func goHomeVC(){
         let menuContrainer = FWSideMenuContainerViewController.container(centerViewController: GYZMainTabBarVC(), centerLeftPanViewWidth: 20, centerRightPanViewWidth: 20, leftMenuViewController: HOOPLeftMenuVC(), rightMenuViewController: nil)

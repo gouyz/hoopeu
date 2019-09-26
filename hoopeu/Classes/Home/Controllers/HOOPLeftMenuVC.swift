@@ -166,7 +166,9 @@ extension HOOPLeftMenuVC: UITableViewDelegate,UITableViewDataSource{
         case 6: /// 软件版本
             showSystemVersion()
         case 7: /// 注册保修
-            goChildController(vc: HOOPRepairVC())
+            let vc = HOOPRepairVC()
+            vc.isGoHome = false
+            goChildController(vc: vc)
         default:
             break
         }
