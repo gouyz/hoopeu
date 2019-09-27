@@ -27,6 +27,7 @@ class HOOPRepairVC: GYZBaseVC {
     var selectSexIndex: Int = 0
     
     var isGoHome: Bool = true
+    var dataModel: HOOPParamDetailModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,11 @@ class HOOPRepairVC: GYZBaseVC {
         self.view.backgroundColor = kWhiteColor
         
         setUpUI()
+        if let model = dataModel {
+            if model.isPerfect == "1" {
+                selectSexIndex = Int(model.sex!)! - 1
+            }
+        }
         sexView.contentLab.text = sexList[selectSexIndex]
         requestDataList(method: "user/ageList")
         requestDataList(method: "user/industryList")
@@ -183,6 +189,7 @@ class HOOPRepairVC: GYZBaseVC {
         
         return lab
     }()
+    
     ///获取年龄数据
     func requestDataList(method: String){
         if !GYZTool.checkNetWork() {
@@ -215,18 +222,63 @@ class HOOPRepairVC: GYZBaseVC {
                     if method == "user/ageList" {
                         weakSelf?.ageList = list
                         weakSelf?.ageNameList = nameList
-                        weakSelf?.selectAgeIndex = 0
-                        weakSelf?.ageView.contentLab.text = list[0].name
+                        if let model = weakSelf?.dataModel {
+                            if model.isPerfect == "1" {
+                                for (index,item) in list.enumerated() {
+                                    if item.id == model.age {
+                                        weakSelf?.selectAgeIndex = index
+                                        weakSelf?.ageView.contentLab.text = model.ageName
+                                    }
+                                }
+                            }else{
+                                weakSelf?.selectAgeIndex = 0
+                                weakSelf?.ageView.contentLab.text = list[0].name
+                            }
+                        }else{
+                            weakSelf?.selectAgeIndex = 0
+                            weakSelf?.ageView.contentLab.text = list[0].name
+                        }
                     }else if method == "user/industryList" {
                         weakSelf?.workList = list
                         weakSelf?.workNameList = nameList
-                        weakSelf?.selectWorkIndex = 0
-                        weakSelf?.workView.contentLab.text = list[0].name
+                        if let model = weakSelf?.dataModel {
+                            if model.isPerfect == "1" {
+                                for (index,item) in list.enumerated() {
+                                    if item.id == model.industry {
+                                        weakSelf?.selectWorkIndex = index
+                                        weakSelf?.workView.contentLab.text = model.industryName
+                                        break
+                                    }
+                                }
+                            }else{
+                                weakSelf?.selectWorkIndex = 0
+                                weakSelf?.workView.contentLab.text = list[0].name
+                            }
+                        }else{
+                            weakSelf?.selectWorkIndex = 0
+                            weakSelf?.workView.contentLab.text = list[0].name
+                        }
                     }else if method == "user/areaList" {
                         weakSelf?.areaList = list
                         weakSelf?.areaNameList = nameList
-                        weakSelf?.selectAreaIndex = 0
-                        weakSelf?.areaView.contentLab.text = list[0].name
+                        if let model = weakSelf?.dataModel {
+                            if model.isPerfect == "1" {
+                                for (index,item) in list.enumerated() {
+                                    if item.id == model.area {
+                                        weakSelf?.selectAreaIndex = index
+                                        weakSelf?.areaView.contentLab.text = model.areaName
+                                        break
+                                    }
+                                }
+                            }else{
+                                weakSelf?.selectAreaIndex = 0
+                                weakSelf?.areaView.contentLab.text = list[0].name
+                            }
+                        }else{
+                            weakSelf?.selectAreaIndex = 0
+                            weakSelf?.areaView.contentLab.text = list[0].name
+                        }
+                        
                     }
                 }
                 
@@ -240,7 +292,6 @@ class HOOPRepairVC: GYZBaseVC {
             GYZLog(error)
         })
     }
-    
     /// 确定
     @objc func clickedOkBtn(){
         requestFinshData()

@@ -28,6 +28,8 @@ class HOOPConnectWiFiVC: GYZBaseVC {
     var readCharacteristic: CBCharacteristic?
     /// 蓝牙会返回2次
     var isRecevice:Bool = false
+    
+    var dataModel: HOOPParamDetailModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +39,7 @@ class HOOPConnectWiFiVC: GYZBaseVC {
         
         setUpUI()
         
+        requestIsPerfect()
         nameTxtFiled.text = getCurrentWifiName()
         self.peripheral?.delegate = self
         self.peripheral?.discoverServices(nil)
@@ -201,7 +204,32 @@ class HOOPConnectWiFiVC: GYZBaseVC {
         
         return btn
     }()
-    
+    /// 用户资料是否完善
+    func requestIsPerfect(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("user/isPerfect", parameters: nil,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let itemInfo = response["data"].dictionaryObject else { return }
+                weakSelf?.dataModel = HOOPParamDetailModel.init(dict: itemInfo)
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
     /// 连接出现问题
     @objc func clickedQuestionBtn(){
         goWebVC()
@@ -317,13 +345,24 @@ class HOOPConnectWiFiVC: GYZBaseVC {
             GYZLog(response)
             weakSelf?.hud?.hide(animated: true)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
-                weakSelf?.goHomeVC()
+                weakSelf?.dealGoVC()
                 
             }
             
         }, failture: { (error) in
             GYZLog(error)
         })
+    }
+    func dealGoVC(){
+        if let model = dataModel {
+            if model.isPerfect == "0" {
+                goFinishedData()
+            }else{
+                goHomeVC()
+            }
+        }else{
+            goHomeVC()
+        }
     }
     ///完善资料
     func goFinishedData(){

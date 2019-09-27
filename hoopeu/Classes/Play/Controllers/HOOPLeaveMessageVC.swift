@@ -22,6 +22,8 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     var isEdit: Bool = false
     /// 留言id
     var messageId: String = ""
+    /// 留言类型
+    var msgType: String = ""
     /// 用户想要播报的语句的日期
     var day: String = ""
     /// 用户想要播报的语句的时间
@@ -266,7 +268,7 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("leavemsg/listInfo", parameters: ["id":messageId],method : .get,  success: { (response) in
+        GYZNetWork.requestNetwork("leavemsg/listInfo", parameters: ["id":messageId,"deviceId":userDefaults.string(forKey: "devId") ?? ""],method : .get,  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
@@ -361,14 +363,14 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     /// mqtt发布主题 修改留言
     func sendSaveEditMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"day_time":day_time,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":contentTxtView.text!,"loop":isLoop ? 1 : 0,"day_of_year":day,"msg_type":"app_leavemsg_edit","app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"day_time":day_time,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":contentTxtView.text!,"loop":isLoop ? 1 : 0,"day_of_year":day,"msg_type":"app_leavemsg_edit","app_interface_tag":"","type": msgType]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
     /// mqtt发布主题 删除留言
     func sendSaveDeleteMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_leavemsg_del","app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_leavemsg_del","app_interface_tag":"","type": msgType]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }

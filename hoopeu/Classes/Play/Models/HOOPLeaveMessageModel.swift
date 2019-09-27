@@ -25,6 +25,8 @@ class HOOPLeaveMessageModel: LHSBaseModel {
     var user_define_times : [String] = [String]()
     /// 是否轮播消息,0:不轮播；1：轮播 ，默认为轮播
     var loop : String? = ""
+    /// 1：app 2语音
+    var type : String? = ""
     
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "user_define_times"{

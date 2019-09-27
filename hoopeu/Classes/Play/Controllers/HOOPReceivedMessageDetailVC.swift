@@ -117,7 +117,7 @@ class HOOPReceivedMessageDetailVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("leavemsg/listInfo", parameters: ["id":messageId],method : .get,  success: { (response) in
+        GYZNetWork.requestNetwork("leavemsg/listInfo", parameters: ["id":messageId,"deviceId":userDefaults.string(forKey: "devId") ?? ""],method : .get,  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)

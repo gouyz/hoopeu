@@ -14,7 +14,7 @@ private let messageRecordCell = "messageRecordCell"
 class HOOPMessageRecordVC: GYZBaseVC {
     
     var dataList: [HOOPLeaveMessageModel] = [HOOPLeaveMessageModel]()
-    /// 留言类型 1我的留言2收到留言
+    /// 留言类型 1：app留言 2：语音留言 3: 收到的留言
     var messageType: String = "1"
     
     override func viewDidLoad() {
@@ -51,8 +51,12 @@ class HOOPMessageRecordVC: GYZBaseVC {
         weak var weakSelf = self
         showLoadingView()
 
-        let url = messageType == "1" ? "leavemsg/liston" : "leavemsg/listoff"
-        GYZNetWork.requestNetwork(url,parameters: ["deviceId":userDefaults.string(forKey: "devId") ?? ""],method :.get,  success: { (response) in
+        let url = messageType == "3" ? "leavemsg/listoff" : "leavemsg/liston"
+        var paramDic:[String : Any] = ["deviceId":userDefaults.string(forKey: "devId") ?? ""]
+        if messageType != "3" {
+            paramDic["type"] = messageType
+        }
+        GYZNetWork.requestNetwork(url,parameters: paramDic,method :.get,  success: { (response) in
 
             weakSelf?.hiddenLoadingView()
             GYZLog(response)
@@ -96,7 +100,7 @@ class HOOPMessageRecordVC: GYZBaseVC {
     
     /// 详情
     func goDetailVC(msgId: String){
-        if messageType == "1" {
+        if messageType != "3" {
             let vc = HOOPLeaveMessageVC()
             vc.isEdit = true
             vc.messageId = msgId

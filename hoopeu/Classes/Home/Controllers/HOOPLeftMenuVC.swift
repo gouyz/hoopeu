@@ -14,6 +14,8 @@ private let leftMenuCell = "leftMenuCell"
 class HOOPLeftMenuVC: GYZBaseVC {
     
     let titleArray = ["设备管理", "技能设置", "智能场景", "房间管理", "使用帮助", "联系我们", "软件版本", "注册保修"]
+    
+    var dataModel: HOOPParamDetailModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +38,20 @@ class HOOPLeftMenuVC: GYZBaseVC {
         headerView.onClickedOperatorBlock = {[weak self] () in
             self?.goProfileVC()
         }
+        
+        //注册通知
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshView(noti:)), name: NSNotification.Name(rawValue: "FWSideMenuStateNotificationEvent"), object: nil)
+        
         requestUserInfo()
+    }
+    
+    @objc func refreshView(noti: NSNotification){
+        let userInfo = noti.userInfo!
+        if userInfo["eventType"] as! NSNumber == NSNumber(value: Int8(FWSideMenuStateEvent.willOpen.rawValue)) {
+            
+            dataModel = nil
+            requestIsPerfect()
+        }
     }
 
     lazy var headerView: HOOPMenuHeaderView = HOOPMenuHeaderView()
@@ -94,6 +109,33 @@ class HOOPLeftMenuVC: GYZBaseVC {
             GYZLog(error)
         })
     }
+    /// 用户资料是否完善
+    func requestIsPerfect(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("user/isPerfect", parameters: nil,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let itemInfo = response["data"].dictionaryObject else { return }
+                weakSelf?.dataModel = HOOPParamDetailModel.init(dict: itemInfo)
+                weakSelf?.tableView.reloadData()
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
+    }
     
     /// 跳转到子控制器
     func goChildController(vc: GYZBaseVC){
@@ -130,7 +172,18 @@ extension HOOPLeftMenuVC: UITableViewDelegate,UITableViewDataSource{
         
         cell.nameLab.text = titleArray[indexPath.row]
        
-        if indexPath.row == titleArray.count - 1 {
+        if indexPath.row == titleArray.count - 1 {//保修
+            if let model = dataModel {
+                if model.isPerfect == "1" {
+                    cell.nameLab.clearBadge(animated: false)
+                }else{
+                    cell.nameLab.badgeView.style = .normal
+                    cell.nameLab.showBadge(animated: false)
+                }
+            }else{
+               cell.nameLab.clearBadge(animated: false)
+            }
+        }else if indexPath.row == titleArray.count - 2{//软件版本
             cell.nameLab.badgeView.style = .normal
             cell.nameLab.showBadge(animated: false)
         }else{
@@ -168,6 +221,7 @@ extension HOOPLeftMenuVC: UITableViewDelegate,UITableViewDataSource{
         case 7: /// 注册保修
             let vc = HOOPRepairVC()
             vc.isGoHome = false
+            vc.dataModel = self.dataModel
             goChildController(vc: vc)
         default:
             break

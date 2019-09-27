@@ -9,7 +9,7 @@
 
 /** ************************************************
  
- github地址：https://github.com/choiceyou/FWSideMenu
+ github地址：https://github.com/choiceyou/FWCycleScrollView
  bug反馈、交流群：670698309
  
  ***************************************************

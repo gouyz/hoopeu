@@ -36,6 +36,7 @@ class GYZCommonInfoView: UIView {
         
         contentLab.snp.makeConstraints { (make) in
             make.left.equalTo(desLab.snp.right).offset(kMargin)
+            make.top.bottom.equalTo(self)
             make.right.equalTo(rightIconView.snp.left).offset(-kMargin)
         }
         rightIconView.snp.makeConstraints { (make) in
@@ -62,6 +63,7 @@ class GYZCommonInfoView: UIView {
         let lab = UILabel()
         lab.textColor = kHeightGaryFontColor
         lab.font = k13Font
+        lab.textAlignment = .right
         
         return lab
     }()

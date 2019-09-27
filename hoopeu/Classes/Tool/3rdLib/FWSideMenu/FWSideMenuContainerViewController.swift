@@ -1,7 +1,7 @@
 //
 //  FWSideMenuContainerViewController.swift
 //  FWSideMenu
-//  侧边栏
+//
 //  Created by xfg on 2018/4/8.
 //  Copyright © 2018年 xfg. All rights reserved.
 //
@@ -9,7 +9,7 @@
 
 /** ************************************************
  
- github地址：https://github.com/choiceyou/FWSideMenu
+ github地址：https://github.com/choiceyou/FWCycleScrollView
  bug反馈、交流群：670698309
  
  ***************************************************
