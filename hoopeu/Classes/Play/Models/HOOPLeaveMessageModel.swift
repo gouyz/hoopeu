@@ -34,6 +34,8 @@ class HOOPLeaveMessageModel: LHSBaseModel {
             for item in datas {
                 user_define_times.append(item)
             }
+        }else if key == "leavemsgId"{
+            id = value as? String
         }else {
             super.setValue(value, forKey: key)
         }
