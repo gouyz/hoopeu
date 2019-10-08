@@ -63,7 +63,7 @@ class GYZOpenCameraPhotosTool: NSObject {
             alertController.addAction(photographAction)
             alertController.addAction(photoAction)
             alertController.addAction(cannelAction)
-            
+            alertController.modalPresentationStyle = .fullScreen
             controller.present(alertController, animated: true, completion: nil)
             
         } else if options.contains(.photoLibrary){
@@ -98,7 +98,7 @@ class GYZOpenCameraPhotosTool: NSObject {
         photo.delegate = self
         photo.sourceType = .photoLibrary
         photo.allowsEditing = editor
-        
+        photo.modalPresentationStyle = .fullScreen
         controller.present(photo, animated: true, completion: nil)
     }
     
@@ -114,6 +114,7 @@ class GYZOpenCameraPhotosTool: NSObject {
                 photo.delegate = self
                 photo.sourceType = .camera
                 photo.allowsEditing = editor
+                photo.modalPresentationStyle = .fullScreen
                 controller.present(photo, animated: true, completion: nil)
             }else{
                 weakSelf?.showPermissionAlert(content: "请在iPhone的“设置-隐私”选项中，允许访问你的摄像头",controller : controller)

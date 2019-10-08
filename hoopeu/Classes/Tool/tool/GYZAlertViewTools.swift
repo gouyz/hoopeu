@@ -93,7 +93,7 @@ class GYZAlertViewTools: NSObject {
                 alertController.addAction(otherAction)
             }
         }
-        
+        alertController.modalPresentationStyle = .fullScreen
         viewController.present(alertController, animated: true, completion: nil)
     }
     /**
@@ -169,7 +169,7 @@ class GYZAlertViewTools: NSObject {
             })
             sheet.addAction(otherAction)
         }
-        
+        alertController.modalPresentationStyle = .fullScreen
         viewController.present(sheet, animated: true, completion: nil)
     }
 }

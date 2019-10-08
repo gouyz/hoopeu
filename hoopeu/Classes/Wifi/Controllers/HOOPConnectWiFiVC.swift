@@ -11,6 +11,7 @@ import SystemConfiguration.CaptiveNetwork
 import CoreBluetooth
 import MBProgressHUD
 import SwiftyJSON
+import CoreLocation
 
 class HOOPConnectWiFiVC: GYZBaseVC {
     
@@ -259,6 +260,20 @@ class HOOPConnectWiFiVC: GYZBaseVC {
     
     func getCurrentWifiName() -> String? {
         var wifiName : String = ""
+        
+        if #available(iOS 13.0, *){
+            //用户明确拒绝，可以弹窗提示用户到设置中手动打开权限
+            if CLLocationManager.authorizationStatus() == .denied {
+                
+                return wifiName
+            }
+            let cllocation = CLLocationManager.init()
+            if !CLLocationManager.locationServicesEnabled() || CLLocationManager.authorizationStatus() == .notDetermined {
+                
+                //弹框提示用户是否开启位置权限
+                cllocation.requestWhenInUseAuthorization()
+            }
+        }
         let wifiInterfaces = CNCopySupportedInterfaces()
         if wifiInterfaces == nil {
             return nil
@@ -266,13 +281,21 @@ class HOOPConnectWiFiVC: GYZBaseVC {
         
         let interfaceArr = CFBridgingRetain(wifiInterfaces!) as! Array<String>
         if interfaceArr.count > 0 {
-            let interfaceName = interfaceArr[0] as CFString
-            let ussafeInterfaceData = CNCopyCurrentNetworkInfo(interfaceName)
-            
-            if (ussafeInterfaceData != nil) {
-                let interfaceData = ussafeInterfaceData as! Dictionary<String, Any>
-                wifiName = interfaceData["SSID"]! as! String
+            for interfaceName in interfaceArr {
+                let ussafeInterfaceData = CNCopyCurrentNetworkInfo(interfaceName as CFString)
+                
+                if (ussafeInterfaceData != nil) {
+                    let interfaceData = ussafeInterfaceData as! Dictionary<String, Any>
+                    wifiName = interfaceData["SSID"]! as! String
+                }
             }
+//            let interfaceName = interfaceArr[0] as CFString
+//            let ussafeInterfaceData = CNCopyCurrentNetworkInfo(interfaceName)
+//
+//            if (ussafeInterfaceData != nil) {
+//                let interfaceData = ussafeInterfaceData as! Dictionary<String, Any>
+//                wifiName = interfaceData["SSID"]! as! String
+//            }
         }
         if !wifiName.isEmpty {
             requestGetWifiPwd(ssid: wifiName)

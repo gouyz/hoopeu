@@ -131,7 +131,11 @@ extension HOOPMessageRecordVC: UITableViewDelegate,UITableViewDataSource{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: messageRecordCell) as! GYZLabArrowCell
         
-        cell.nameLab.text = dataList[indexPath.row].msg
+        if messageType == 3 {// 收到的留言
+            cell.nameLab.text = dataList[indexPath.row].tts
+        }else{
+            cell.nameLab.text = dataList[indexPath.row].msg
+        }
         
         cell.selectionStyle = .none
         return cell
@@ -147,7 +151,11 @@ extension HOOPMessageRecordVC: UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        goDetailVC(msgId: dataList[indexPath.row].id!)
+        if messageType == 3 {// 收到的留言
+            goDetailVC(msgId: dataList[indexPath.row].leavemsgId!)
+        }else{
+            goDetailVC(msgId: dataList[indexPath.row].id!)
+        }
     }
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
