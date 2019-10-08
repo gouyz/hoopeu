@@ -36,7 +36,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.title = "选择遥控器"
+        self.navigationItem.title = brandName
         
         
         setUpUI()
