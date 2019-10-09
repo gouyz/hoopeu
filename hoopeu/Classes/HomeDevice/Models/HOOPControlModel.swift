@@ -39,7 +39,7 @@ class HOOPControlModel: LHSBaseModel {
 class HOOPCustomKeyModel: LHSBaseModel {
     
     /// 自定义按钮id
-    var sensor_id : String?
+    var sensor_id : String? = "0"
     /// 按键名称
     var ctrl_name : String? = ""
     /// 按钮位置

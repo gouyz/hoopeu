@@ -39,12 +39,12 @@ func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool
 }
 
 class GYZTool: NSObject {
-
+    
     
     ///1.单例
     static let shareTool = GYZTool()
     private override init() {}
-
+    
     
     /// 播放声音
     ///这个只能播放不超过30秒的声音，它支持的文件格式有限，具体的说只有CAF、AIF和使用PCM或IMA/ADPCM数据的WAV文件
@@ -74,14 +74,14 @@ class GYZTool: NSObject {
         if scorllView == nil || pullRefreshCallBack == nil {
             return
         }
-//        weak var weakScrollView = scorllView
+        //        weak var weakScrollView = scorllView
         let refreshHeader : MJRefreshNormalHeader = MJRefreshNormalHeader.init {
             
             pullRefreshCallBack!()
             
-//            if weakScrollView?.mj_footer.isHidden == false {
-//                weakScrollView?.mj_footer.resetNoMoreData()
-//            }
+            //            if weakScrollView?.mj_footer.isHidden == false {
+            //                weakScrollView?.mj_footer.resetNoMoreData()
+            //            }
         }
         
         scorllView?.mj_header = refreshHeader
@@ -103,7 +103,7 @@ class GYZTool: NSObject {
         loadMoreFooter?.setTitle("", for: .idle)
         loadMoreFooter?.setTitle("正在为您加载数据", for: .refreshing)
         loadMoreFooter?.setTitle("没有更多了~", for: .noMoreData)
-//        loadMoreFooter?.isAutomaticallyRefresh = false
+        //        loadMoreFooter?.isAutomaticallyRefresh = false
         scorllView?.mj_footer = loadMoreFooter
     }
     /// 停止下拉刷新
@@ -145,12 +145,12 @@ class GYZTool: NSObject {
     class func removeUserInfo(){
         userDefaults.removeObject(forKey: kIsLoginTagKey)
         userDefaults.removeObject(forKey: "token")//用户token
-//        userDefaults.removeObject(forKey: "phone")//用户电话
-//        userDefaults.removeObject(forKey: "head")//用户ID
-//        userDefaults.removeObject(forKey: "realName")//用户电话
-//        userDefaults.removeObject(forKey: "code")//用户ID
-//        userDefaults.removeObject(forKey: "sex")//用户电话
-//        userDefaults.removeObject(forKey: "birthday")//用户ID
+        //        userDefaults.removeObject(forKey: "phone")//用户电话
+        //        userDefaults.removeObject(forKey: "head")//用户ID
+        //        userDefaults.removeObject(forKey: "realName")//用户电话
+        //        userDefaults.removeObject(forKey: "code")//用户ID
+        //        userDefaults.removeObject(forKey: "sex")//用户电话
+        //        userDefaults.removeObject(forKey: "birthday")//用户ID
     }
     
     /// 字典或数组转json字符串
@@ -237,7 +237,7 @@ class GYZTool: NSObject {
         let days = Int(interval/86400) // 24*60*60
         let weekday = ((days + 4)%7+7)%7
         ///星期一到星期日分别表示为：1～7
-//        return weekday == 0 ? 7 : weekday
+        //        return weekday == 0 ? 7 : weekday
         /// 周日到周六分别表示为：0～6
         return weekday
     }
@@ -249,7 +249,7 @@ class GYZTool: NSObject {
     ///   - lineSpace: 行间距
     /// - Returns:
     static func getAttributeStringWithString(str: String,lineSpace:CGFloat
-        ) -> NSAttributedString{
+    ) -> NSAttributedString{
         
         let attributedString = NSMutableAttributedString(string: str)
         let paragraphStye = NSMutableParagraphStyle()
@@ -363,5 +363,16 @@ class GYZTool: NSObject {
         let JSONString = NSString(data:data as Data,encoding: String.Encoding.utf8.rawValue)
         return JSONString! as String
         
+    }
+    /// 保存图片至沙盒
+    /// - Parameter currentImage: 图片
+    /// - Parameter persent: 压缩比例
+    /// - Parameter imageName: 图片名称
+    static func saveImage(currentImage: UIImage, persent: CGFloat, imageName: String){
+        if let imageData = currentImage.jpegData(compressionQuality: persent) as NSData? {
+            let fullPath = NSHomeDirectory().appending("/Documents/").appending(imageName)
+            imageData.write(toFile: fullPath, atomically: true)
+            print("fullPath=\(fullPath)")
+        }
     }
 }

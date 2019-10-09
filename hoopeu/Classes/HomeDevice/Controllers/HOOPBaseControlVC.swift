@@ -26,6 +26,9 @@ class HOOPBaseControlVC: GYZBaseVC {
     /// 遥控器code
     var controlCode: Data?
     var waitAlert: GYZCustomWaitAlert?
+    
+    /// 记录最大id 开和关已经占据1和2，从3开始取
+    var keyMaxId: Int = 2
 
     override func viewDidLoad() {
         super.viewDidLoad()

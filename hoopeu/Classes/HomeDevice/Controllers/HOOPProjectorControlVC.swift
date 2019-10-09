@@ -543,6 +543,10 @@ class HOOPProjectorControlVC: HOOPBaseControlVC {
                                 btn.setTitle(item.ctrl_name, for: .normal)
                                 /// 记录自定义按键id
                                 btn.accessibilityIdentifier = item.sensor_id
+                                let keyId: Int = Int.init(item.sensor_id!)!
+                                if keyMaxId < keyId {
+                                    keyMaxId = keyId
+                                }
                                 break
                             }
                         }
@@ -564,7 +568,9 @@ class HOOPProjectorControlVC: HOOPBaseControlVC {
             if btn.accessibilityIdentifier != nil{// 自定义按键
                 showStudyAlert(funcId: Int.init(btn.accessibilityIdentifier!)!)
             }else{
-                requestDeviceId()
+//                requestDeviceId()
+                keyMaxId += 1
+                showStudyAlert(funcId: keyMaxId)
             }
         }else{
             if btn.accessibilityIdentifier != nil{// 自定义按键

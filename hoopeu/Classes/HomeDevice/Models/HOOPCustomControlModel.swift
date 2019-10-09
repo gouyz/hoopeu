@@ -39,7 +39,7 @@ class HOOPCustomControlModel: LHSBaseModel {
 class HOOPCustomFuncModel: LHSBaseModel {
     
     /// id
-    var func_id : String?
+    var func_id : String? = "0"
     /// 按键名称
     var ctrl_name : String? = ""
     /// 学习码

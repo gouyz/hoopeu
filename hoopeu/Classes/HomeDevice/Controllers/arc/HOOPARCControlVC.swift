@@ -335,6 +335,10 @@ class HOOPARCControlVC: HOOPBaseControlVC {
                                 btn.setTitle(item.ctrl_name, for: .normal)
                                 /// 记录自定义按键id
                                 btn.accessibilityIdentifier = item.sensor_id
+                                let keyId: Int = Int.init(item.sensor_id!)!
+                                if keyMaxId < keyId {
+                                    keyMaxId = keyId
+                                }
                                 break
                             }
                         }
@@ -355,7 +359,9 @@ class HOOPARCControlVC: HOOPBaseControlVC {
             if btn.accessibilityIdentifier != nil{// 自定义按键
                 showStudyAlert(funcId: Int.init(btn.accessibilityIdentifier!)!)
             }else{
-                requestDeviceId()
+                keyMaxId += 1
+                showStudyAlert(funcId: keyMaxId)
+//                requestDeviceId()
             }
         }else{
             if btn.accessibilityIdentifier != nil{// 自定义按键

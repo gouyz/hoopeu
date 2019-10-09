@@ -124,6 +124,14 @@ class HOOPPlayerDetailVC: GYZBaseVC {
         btn.addTarget(self, action: #selector(clickedOperateBtn(btn:)), for: .touchUpInside)
         return btn
     }()
+    /// 重写返回 ，保存最后一帧图片到沙盒
+    override func clickedBackBtn() {
+        if (self.player?.currentPlayerManager.isPlaying)!{
+            requestUpdateHeaderImg(img: (self.player?.currentPlayerManager.thumbnailImageAtCurrentTime!())!)
+            GYZTool.saveImage(currentImage: (self.player?.currentPlayerManager.thumbnailImageAtCurrentTime!())!, persent: 0.5, imageName: kDefaultSeeImgName)
+        }
+        super.clickedBackBtn()
+    }
     ///操作
     @objc func clickedOperateBtn(btn : UIButton){
         isHasOperator = true

@@ -18,6 +18,8 @@ class HOOPShePinControlVC: GYZBaseVC {
     
     var waitAlert: GYZCustomWaitAlert?
     var totalCount: Int = 1
+    /// 记录最大id
+    var keyMaxId: Int = 0
     /// 遥控器临时id
     var deviceControlId: String = ""
     /// 记录功能按键
@@ -64,19 +66,27 @@ class HOOPShePinControlVC: GYZBaseVC {
     func settingData(){
         self.navigationItem.title = (dataModel?.ctrl_name)!
         deviceControlId = (dataModel?.id)!
-        for item in (dataModel?.funcList)! {
-            let name: String = item.ctrl_name!
-            var keyDic: [String: String] = ["func_id":item.func_id!,"func_name":name,"func_code":item.study_code!]
-            
-            if name.contains("开") {
-                keyDic["func_type"] = "switch_open"
-            }else if name.contains("关") {
-                keyDic["func_type"] = "switch_close"
-            }else{
-                keyDic["func_type"] = ""
+        if dataModel?.funcList.count > 0 {
+            for item in (dataModel?.funcList)! {
+                let name: String = item.ctrl_name!
+                let keyId: Int = Int.init(item.func_id!)!
+                if keyMaxId < keyId {
+                    keyMaxId = keyId
+                }
+                
+                var keyDic: [String: String] = ["func_id":item.func_id!,"func_name":name,"func_code":item.study_code!]
+                
+                if name.contains("开") {
+                    keyDic["func_type"] = "switch_open"
+                }else if name.contains("关") {
+                    keyDic["func_type"] = "switch_close"
+                }else{
+                    keyDic["func_type"] = ""
+                }
+                funcArr.append(keyDic)
             }
-            funcArr.append(keyDic)
         }
+        
         totalCount = (dataModel?.funcList.count)! + 1
         collectionView.reloadData()
     }
@@ -188,7 +198,9 @@ class HOOPShePinControlVC: GYZBaseVC {
         if funcArr[tag].count > 0 {// 不是第一次学习
             showStudyAlert(index: tag)
         }else {
-            requestDeviceId(param: ["id":deviceControlId],row: tag)
+        
+            showStudyAlert(index: tag)
+//            requestDeviceId(param: ["id":deviceControlId],row: tag)
         }
     }
     /// 删除
@@ -197,6 +209,13 @@ class HOOPShePinControlVC: GYZBaseVC {
         GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "确定要删除此按键吗?", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (tag) in
             
             if tag != cancelIndex{
+                if Int.init((weakSelf?.funcArr[index]["func_id"])!) == (weakSelf?.keyMaxId)! {
+                    if weakSelf?.funcArr.count == 1 {//只剩一个键时置0
+                        weakSelf?.keyMaxId = 0
+                    }else{
+                        weakSelf?.keyMaxId -= 1
+                    }
+                }
                 weakSelf?.funcArr.remove(at: index)
                 weakSelf?.totalCount -= 1
                 weakSelf?.collectionView.reloadData()
@@ -378,7 +397,9 @@ extension HOOPShePinControlVC : UICollectionViewDataSource,UICollectionViewDeleg
         
         if indexPath.row == totalCount - 1 { //创建
             totalCount += 1
+            self.keyMaxId += 1
             funcArr.append([String:String]())
+            funcArr[indexPath.row]["func_id"] = "\(keyMaxId)"
             self.collectionView.reloadData()
         }
     }

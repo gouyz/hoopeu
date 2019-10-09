@@ -162,6 +162,9 @@ let kDefaultMQTTUserName = "hoopeu"
 /// mqtt 密码
 let kDefaultMQTTUserPwd = "hoopeu"
 
+/// 看 保存图片名称
+let kDefaultSeeImgName = "seeImgName"
+
 /// 根据版本号来确定是否进入新特性界面
 ///
 /// - returns: true/false
