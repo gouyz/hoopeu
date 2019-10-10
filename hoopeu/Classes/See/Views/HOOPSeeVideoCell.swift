@@ -65,6 +65,8 @@ class HOOPSeeVideoCell: UITableViewCell {
         let imgView = UIImageView.init()
         imgView.backgroundColor = kBackgroundColor
         imgView.cornerRadius = 10
+        imgView.contentMode = .scaleAspectFill
+        imgView.clipsToBounds = true
         imgView.image = UIImage.init(named: "icon_see_default")
         
         return imgView
