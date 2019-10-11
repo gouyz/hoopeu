@@ -40,7 +40,7 @@ class HOOPReadyNetWorkVC: GYZBaseVC {
         iconView.snp.makeConstraints { (make) in
             make.top.equalTo(desLab1.snp.bottom).offset(30)
             make.centerX.equalTo(view)
-            make.size.equalTo(CGSize.init(width: 200, height: 220))
+            make.size.equalTo(CGSize.init(width: 200, height: 280))
         }
         blueBtn.snp.makeConstraints { (make) in
             make.right.equalTo(-30)
@@ -73,7 +73,7 @@ class HOOPReadyNetWorkVC: GYZBaseVC {
         
         return lab
     }()
-    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_link_network"))
+    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_link_baby"))
     
     /// 出现蓝光闪烁
     lazy var blueBtn : UIButton = {

@@ -207,7 +207,11 @@ extension HOOPLeftMenuVC: UITableViewDelegate,UITableViewDataSource{
         case 0: /// 设备管理
             goChildController(vc: HOOPDeviceManagerVC())
         case 1: /// 技能设置
-            goChildController(vc: HOOPSkillVC())
+            let vc = JSMWebViewVC()
+            vc.url = "http://www.hoopeurobot.com/skill_details/index.html"
+            vc.webTitle = "技能设置"
+            goChildController(vc: vc)
+//            goChildController(vc: HOOPSkillVC())
         case 2: /// 智能场景
             goChildController(vc: HOOPSceneVC())
         case 3: /// 房间管理
