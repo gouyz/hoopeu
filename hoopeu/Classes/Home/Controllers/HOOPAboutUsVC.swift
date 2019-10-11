@@ -72,7 +72,7 @@ extension HOOPAboutUsVC: UITableViewDelegate,UITableViewDataSource{
             cell.rightIconView.isHidden = false
             cell.desLab.text = "www.hoopeu.com"
         }else if indexPath.row == 2{
-            cell.desLab.text = "785986987"
+            cell.desLab.text = "750493579"
         }else if indexPath.row == 3{
             cell.desLab.text = "400-138-8186"
         }
