@@ -58,8 +58,8 @@ class GYZUpdateVersionTool: NSObject {
     
     /// 去App Store下载APP
     class func goAppStore(){
-//        let url: URL = URL.init(string: "https://itunes.apple.com/us/app/id\(APPID)?ls=1&mt=8")!
-        let url: URL = URL.init(string: "https://fir.im/2e4y")!
+        let url: URL = URL.init(string: "https://itunes.apple.com/us/app/id\(APPID)?ls=1&mt=8")!
+//        let url: URL = URL.init(string: "https://fir.im/2e4y")!
         UIApplication.shared.openURL(url)
     }
 }

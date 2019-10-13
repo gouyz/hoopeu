@@ -92,7 +92,7 @@ let kJPushRefreshData = "kJPushRefreshData"
 let USERINFO = "userInfo"
 
 //APPID，应用提交时候替换
-let APPID = "1441962604"
+let APPID = "1483326368"
 /// 极光推送AppKey
 let kJPushAppKey = "62ef6e1984206705e1aca538"
 
