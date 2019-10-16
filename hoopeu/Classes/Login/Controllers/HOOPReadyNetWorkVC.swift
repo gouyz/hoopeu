@@ -69,11 +69,11 @@ class HOOPReadyNetWorkVC: GYZBaseVC {
         lab.textColor = kBlackFontColor
         lab.font = k13Font
         lab.textAlignment = .center
-        lab.text = "出现橙光闪烁"
+        lab.text = "出现橙光"
         
         return lab
     }()
-    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_link_baby"))
+    lazy var iconView: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_link_baby_orange"))
     
     /// 出现蓝光闪烁
     lazy var blueBtn : UIButton = {
