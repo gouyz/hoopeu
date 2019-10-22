@@ -174,10 +174,18 @@ class HOOPChuanGanDeviceVC: GYZBaseVC {
                 waitAlert?.hide()
                 
                 if result["code"].intValue == kQuestSuccessTag{
-                    let funcId = result["data"]["func_id"].intValue
-                    let dic: [String: Any] = ["func_id":funcId,"code":result["data"]["code"].stringValue]
-                    codesDic.append(dic)
-                    showStudySuccessAlert()
+                    
+                    //1：成功；0：失败 2：学习开始（为区分学习返回时的第二次携码返回）
+                    if result["data"]["ret"].intValue == 1{
+                        
+                        let funcId = result["data"]["func_id"].intValue
+                        let dic: [String: Any] = ["func_id":funcId,"code":result["data"]["code"].stringValue]
+                        codesDic.append(dic)
+                        showStudySuccessAlert()
+                    }else if result["data"]["ret"].intValue == 0{// 学习失败
+                        showStudyFailedAlert()
+                    }
+                    
                 }else{// 学习失败
                     showStudyFailedAlert()
                 }

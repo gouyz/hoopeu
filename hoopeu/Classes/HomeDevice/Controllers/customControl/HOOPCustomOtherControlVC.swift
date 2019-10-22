@@ -15,7 +15,7 @@ private let customOtherControlCell = "customOtherControlCell"
 private let customOtherControlAddCell = "customOtherControlAddCell"
 
 class HOOPCustomOtherControlVC: GYZBaseVC {
-
+    
     var waitAlert: GYZCustomWaitAlert?
     var totalCount: Int = 1
     /// 记录最大id
@@ -199,7 +199,7 @@ class HOOPCustomOtherControlVC: GYZBaseVC {
             showStudyAlert(index: tag)
         }else {
             showStudyAlert(index: tag)
-//            requestDeviceId(param: ["id":deviceControlId],row: tag)
+            //            requestDeviceId(param: ["id":deviceControlId],row: tag)
         }
     }
     /// 删除
@@ -292,12 +292,12 @@ class HOOPCustomOtherControlVC: GYZBaseVC {
     /// mqtt发布主题 学习
     func sendStudyMqttCmd(index: Int){
         
-//        var count: Int = 0
-//        for item in funcArr {
-//            if item.count > 0{
-//                count += 1
-//            }
-//        }
+        //        var count: Int = 0
+        //        for item in funcArr {
+        //            if item.count > 0{
+        //                count += 1
+        //            }
+        //        }
         
         let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_id":funcArr[index]["func_id"]!,"msg_type":"app_other_study","app_interface_tag":index]
         
@@ -306,12 +306,12 @@ class HOOPCustomOtherControlVC: GYZBaseVC {
     /// mqtt发布主题 发射指令
     func sendZhiLingMqttCmd(code: String,index: Int){
         
-//        var count: Int = 0
-//        for item in funcArr {
-//            if item.count > 0{
-//                count += 1
-//            }
-//        }
+        //        var count: Int = 0
+        //        for item in funcArr {
+        //            if item.count > 0{
+        //                count += 1
+        //            }
+        //        }
         
         let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_id":funcArr[index]["func_id"]!,"code":code,"ctrl_test":true,"msg_type":"app_other_ctrl","app_interface_tag":""]
         
@@ -342,8 +342,15 @@ class HOOPCustomOtherControlVC: GYZBaseVC {
                 
                 if result["code"].intValue == kQuestSuccessTag{
                     waitAlert?.hide()
-                    self.funcArr[result["app_interface_tag"].intValue]["func_code"] = result["data"]["code"].stringValue
-                    showStudySuccessAlert(index: result["app_interface_tag"].intValue, code: result["data"]["code"].stringValue)
+                    //1：成功；0：失败 2：学习开始（为区分学习返回时的第二次携码返回）
+                    if result["data"]["ret"].intValue == 1{
+                        
+                        self.funcArr[result["app_interface_tag"].intValue]["func_code"] = result["data"]["code"].stringValue
+                        showStudySuccessAlert(index: result["app_interface_tag"].intValue, code: result["data"]["code"].stringValue)
+                    }else if result["data"]["ret"].intValue == 0{// 学习失败
+                        showStudyFailedAlert(index: result["app_interface_tag"].intValue)
+                    }
+                    
                 }else{// 学习失败
                     showStudyFailedAlert(index: result["app_interface_tag"].intValue)
                 }
