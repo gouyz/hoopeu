@@ -100,10 +100,10 @@ class GYZOpenCameraPhotosTool: NSObject {
         photo.allowsEditing = editor
         photo.modalPresentationStyle = .fullScreen
         // 导航栏字体颜色
-        photo.navigationBar.tintColor = UIColor.black
-        let dict:NSDictionary = [NSAttributedString.Key.foregroundColor: UIColor.black,NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 18)]
+        photo.navigationBar.tintColor = kWhiteColor
         //标题设置颜色与字体大小
-        photo.navigationBar.titleTextAttributes = dict as? [NSAttributedString.Key : AnyObject]
+        photo.navigationBar.barTintColor = kBlueFontColor
+        photo.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: kWhiteColor, NSAttributedString.Key.font: k18Font]
         controller.present(photo, animated: true, completion: nil)
     }
     
