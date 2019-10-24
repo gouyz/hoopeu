@@ -183,6 +183,10 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     
     /// 更换top图片
     @objc func onClickedTopImg(){
+        if dataList[currIndex].roomId == "0" {
+            MBProgressHUD.showAutoDismissHUD(message: "默认房间不能更换图片")
+            return
+        }
         GYZOpenCameraPhotosTool.shareTool.choosePicture(self, editor: false, finished: { [weak self] (image) in
             
             self?.selectTopImage = image

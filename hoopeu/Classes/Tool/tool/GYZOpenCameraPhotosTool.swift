@@ -99,6 +99,11 @@ class GYZOpenCameraPhotosTool: NSObject {
         photo.sourceType = .photoLibrary
         photo.allowsEditing = editor
         photo.modalPresentationStyle = .fullScreen
+        // 导航栏字体颜色
+        photo.navigationBar.tintColor = UIColor.black
+        let dict:NSDictionary = [NSAttributedString.Key.foregroundColor: UIColor.black,NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 18)]
+        //标题设置颜色与字体大小
+        photo.navigationBar.titleTextAttributes = dict as? [NSAttributedString.Key : AnyObject]
         controller.present(photo, animated: true, completion: nil)
     }
     
@@ -205,4 +210,8 @@ extension GYZOpenCameraPhotosTool : UIImagePickerControllerDelegate,UINavigation
         picker.dismiss(animated: true, completion: nil)
         
     }
+//    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+//        viewController.navigationController?.navigationBar.tintColor = kBlackColor
+//        viewController.navigationController?.navigationBar.barTintColor = kNavBarColor
+//    }
 }
