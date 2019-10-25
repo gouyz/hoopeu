@@ -454,7 +454,7 @@ extension AppDelegate: CocoaMQTTDelegate {
     
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
         GYZLog("message: \(message.string!.description), id: \(id)")
-        startSMSWithDuration(duration: 120)
+        startSMSWithDuration(duration: 5)
     }
     
     func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
@@ -467,7 +467,7 @@ extension AppDelegate: CocoaMQTTDelegate {
         if let data = message.string {
             let result = JSON.init(parseJSON: data)
             let type = result["msg_type"].stringValue
-            if type == "query_online_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
+            if type == "query_online_re" && result["device_id"].stringValue == userDefaults.string(forKey: "devId"){
                 isNetWorkMqtt = true
             }
         }

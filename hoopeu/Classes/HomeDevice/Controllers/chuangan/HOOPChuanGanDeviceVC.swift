@@ -169,24 +169,25 @@ class HOOPChuanGanDeviceVC: GYZBaseVC {
                 }
             }
             if type == "app_sensor_study_re" && phone == userDefaults.string(forKey: "phone"){
-                //                hud?.hide(animated: true)
-                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
-                waitAlert?.hide()
                 
                 if result["code"].intValue == kQuestSuccessTag{
                     
                     //1：成功；0：失败 2：学习开始（为区分学习返回时的第二次携码返回）
                     if result["data"]["ret"].intValue == 1{
+                        waitAlert?.hide()
+                        MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                         
                         let funcId = result["data"]["func_id"].intValue
                         let dic: [String: Any] = ["func_id":funcId,"code":result["data"]["code"].stringValue]
                         codesDic.append(dic)
                         showStudySuccessAlert()
                     }else if result["data"]["ret"].intValue == 0{// 学习失败
+                        MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                         showStudyFailedAlert()
                     }
                     
                 }else{// 学习失败
+                    MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                     showStudyFailedAlert()
                 }
             }

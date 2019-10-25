@@ -313,7 +313,7 @@ class HOOPCustomOtherControlVC: GYZBaseVC {
         //            }
         //        }
         
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_id":funcArr[index]["func_id"]!,"code":code,"ctrl_test":true,"msg_type":"app_other_ctrl","app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":deviceControlId,"phone":userDefaults.string(forKey: "phone") ?? "","func_id":funcArr[index]["func_id"]!,"code":code,"ctrl_test":true,"msg_type":"app_other_ctrl","app_interface_tag":index]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -338,13 +338,12 @@ class HOOPCustomOtherControlVC: GYZBaseVC {
             }
             if type == "app_other_study_re" && phone == userDefaults.string(forKey: "phone"){
                 //                hud?.hide(animated: true)
-                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 
                 if result["code"].intValue == kQuestSuccessTag{
-                    waitAlert?.hide()
                     //1：成功；0：失败 2：学习开始（为区分学习返回时的第二次携码返回）
                     if result["data"]["ret"].intValue == 1{
-                        
+                        waitAlert?.hide()
+                        MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                         self.funcArr[result["app_interface_tag"].intValue]["func_code"] = result["data"]["code"].stringValue
                         showStudySuccessAlert(index: result["app_interface_tag"].intValue, code: result["data"]["code"].stringValue)
                     }else if result["data"]["ret"].intValue == 0{// 学习失败
@@ -352,6 +351,7 @@ class HOOPCustomOtherControlVC: GYZBaseVC {
                     }
                     
                 }else{// 学习失败
+                    MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                     showStudyFailedAlert(index: result["app_interface_tag"].intValue)
                 }
             }else if type == "app_pt2262_ctrl_re" && phone == userDefaults.string(forKey: "phone"){

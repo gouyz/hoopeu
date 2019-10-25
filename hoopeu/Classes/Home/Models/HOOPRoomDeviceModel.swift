@@ -33,6 +33,8 @@ class HOOPRoomDeviceModel: LHSBaseModel {
                     if model.mobile_type == "ios"{
                         intelligentDeviceList.append(model)
                     }
+                }else{
+                    intelligentDeviceList.append(model)
                 }
             }
         }else if key == "switchs"{

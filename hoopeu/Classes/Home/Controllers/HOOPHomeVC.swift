@@ -61,16 +61,26 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     func moveToRoom(){
     
         if dataList.count > 0 {
+            
+            var oldIndex: Int = currIndex
+            segmentView.reloadTitlesWithNewTitles(titleArr)
+            contentView?.reloadAllViewsWithNewChildVcs(setChildVcs())
+            
             if let roomId = userDefaults.string(forKey: "roomId"){
                 for (index,item) in roomIdValue.enumerated() {
                     if item == roomId{
                         currIndex = index
+                        oldIndex = index
                         break
                     }
                 }
-                scrollPageView?.selectedIndex(currIndex, animated: true)
+//                scrollPageView?.selectedIndex(currIndex, animated: true)
 //                userDefaults.removeObject(forKey: "roomId")
             }
+            if currIndex != oldIndex {
+                currIndex = oldIndex
+            }
+            scrollPageView?.selectedIndex(currIndex, animated: true)
         }
     }
     
