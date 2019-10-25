@@ -310,7 +310,7 @@ class HOOPConnectWiFiVC: GYZBaseVC {
         
         weak var weakSelf = self
         
-        GYZNetWork.requestNetwork("appWifi",parameters: ["mac": ssid],method :.get,  success: { (response) in
+        GYZNetWork.requestNetwork("appWifi",parameters: ["mac": ssid,"phone":userDefaults.string(forKey: "phone") ?? ""],method :.get,  success: { (response) in
             
             GYZLog(response)
             
@@ -332,7 +332,7 @@ class HOOPConnectWiFiVC: GYZBaseVC {
         }
 //        weak var weakSelf = self
         
-        GYZNetWork.requestNetwork("appWifi",parameters: ["mac": nameTxtFiled.text!,"password":pwdTxtFiled.text!], success: { (response) in
+        GYZNetWork.requestNetwork("appWifi",parameters: ["mac": nameTxtFiled.text!,"password":pwdTxtFiled.text!,"phone":userDefaults.string(forKey: "phone") ?? ""], success: { (response) in
             GYZLog(response)
             
             if response["code"].intValue == kQuestSuccessTag{//请求成功
