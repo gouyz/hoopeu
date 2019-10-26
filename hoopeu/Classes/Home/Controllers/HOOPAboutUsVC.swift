@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let aboutUsCell = "aboutUsCell"
 
 class HOOPAboutUsVC: GYZBaseVC {
     
     let titleArray = ["公众号", "网站", "QQ交流群", "服务热线"]
+    var infoArray = ["", "", "", ""]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +25,7 @@ class HOOPAboutUsVC: GYZBaseVC {
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(0)
         }
+        requestAboutUs()
     }
     
     lazy var tableView : UITableView = {
@@ -41,6 +44,40 @@ class HOOPAboutUsVC: GYZBaseVC {
     func goPwdVC(){
         let vc = HOOPModifyOldPwdVC()
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    ///获取关于我们信息
+    func requestAboutUs(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        
+        GYZNetWork.requestNetwork("file/aboutWe",parameters: nil,method:.get,  success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                let data = response["data"]
+                weakSelf?.infoArray[0] = data["subscription"].stringValue
+                weakSelf?.infoArray[1] = data["website"].stringValue
+                weakSelf?.infoArray[2] = data["qq"].stringValue
+                weakSelf?.infoArray[3] = data["phone"].stringValue
+                weakSelf?.tableView.reloadData()
+                
+            }else{
+                MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
+            }
+            
+        }, failture: { (error) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        })
     }
 }
 
@@ -67,14 +104,15 @@ extension HOOPAboutUsVC: UITableViewDelegate,UITableViewDataSource{
             cell.desLab.isHidden = true
             cell.userImgView.isHidden = false
             cell.userImgView.cornerRadius = 1
-            cell.userImgView.image = UIImage.init(named: "icon_qrcode_default")
+            cell.userImgView.kf.setImage(with: URL.init(string: infoArray[0]), placeholder: UIImage.init(named: "icon_qrcode_default"), options: nil, progressBlock: nil
+            , completionHandler: nil)
         }else if indexPath.row == 1{
             cell.rightIconView.isHidden = false
-            cell.desLab.text = "www.hoopeu.com"
+            cell.desLab.text = infoArray[indexPath.row]
         }else if indexPath.row == 2{
-            cell.desLab.text = "750493579"
+            cell.desLab.text = infoArray[indexPath.row]
         }else if indexPath.row == 3{
-            cell.desLab.text = "400-138-8186"
+            cell.desLab.text = infoArray[indexPath.row]
         }
         
         cell.selectionStyle = .none
