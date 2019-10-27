@@ -171,8 +171,7 @@ extension GYZBaseVC: CocoaMQTTDelegate {
        
         if ack == .accept {
             mqtt.subscribe("api_receive", qos: CocoaMQTTQOS.qos1)
-//            mqtt.subscribe("hoopeu_app", qos: CocoaMQTTQOS.qos1)
-            mqtt.subscribe("hoopeu_device", qos: CocoaMQTTQOS.qos1)
+            mqtt.subscribe("hoopeu_app", qos: CocoaMQTTQOS.qos1)
         }
     }
     
