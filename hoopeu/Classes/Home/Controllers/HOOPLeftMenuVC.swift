@@ -16,6 +16,12 @@ class HOOPLeftMenuVC: GYZBaseVC {
     let titleArray = ["设备管理", "技能设置", "智能场景", "房间管理", "使用帮助", "联系我们", "软件版本", "注册保修"]
     
     var dataModel: HOOPParamDetailModel?
+    // APP更新
+    var updateType: UpdateVersionType = .noUpdate
+    ///更新内容
+    var updateMessage: String = ""
+    ///新版本名称
+    var newVersionName: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +49,7 @@ class HOOPLeftMenuVC: GYZBaseVC {
         NotificationCenter.default.addObserver(self, selector: #selector(refreshView(noti:)), name: NSNotification.Name(rawValue: "FWSideMenuStateNotificationEvent"), object: nil)
         
         requestUserInfo()
+        requestVersion()
     }
     
     @objc func refreshView(noti: NSNotification){
@@ -72,13 +79,54 @@ class HOOPLeftMenuVC: GYZBaseVC {
         goChildController(vc: vc)
     }
     
+    /// 请求服务器版本
+    func requestVersion(){
+        weak var weakSelf = self
+        GYZNetWork.requestNetwork("appVersion/app/ios",isToken:false, parameters: nil,method:.get, success:{ (response) in
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                let data = response["data"]
+                weakSelf?.updateMessage = data["updateMessage"].stringValue
+                weakSelf?.newVersionName = data["versionName"].stringValue
+                weakSelf?.updateType = GYZUpdateVersionTool.compareVersion(newVersion: data["versionName"].stringValue)
+                
+                weakSelf?.tableView.reloadData()
+            }
+        }, failture: { (error) in
+            GYZLog(error)
+        })
+    }
+   
+    /**
+     * //不强制更新
+     * @param version 版本名称
+     * @param content 更新内容
+     */
+    func updateVersion(version: String,content: String){
+        let alert = UIAlertView.init(title: "发现新版本\(version)", message: content, delegate: self, cancelButtonTitle: "残忍拒绝", otherButtonTitles: "立即更新")
+        alert.tag = 103
+        alert.show()
+    }
+    /**
+     * 强制更新
+     * @param version 版本名称
+     * @param content 更新内容
+     */
+    func updateNeedVersion(version: String,content: String){
+        
+        let alert = UIAlertView.init(title: "发现新版本\(version)", message: content, delegate: self, cancelButtonTitle: "立即更新")
+        alert.tag = 104
+        alert.show()
+    }
+    
     // 系统升级
     func showSystemVersion(){
-        weak var weakSelf = self
-        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "软件将升级为V2.0.0", cancleTitle: "取消", viewController: self, buttonTitles: "确认") { (index) in
-            
-            if index != cancelIndex{
-            }
+        switch updateType {
+        case .update:
+            updateVersion(version: newVersionName, content: updateMessage)
+        case .updateNeed:
+            updateNeedVersion(version: newVersionName, content: updateMessage)
+        default:
+            break
         }
         
     }
@@ -184,8 +232,12 @@ extension HOOPLeftMenuVC: UITableViewDelegate,UITableViewDataSource{
                cell.nameLab.clearBadge(animated: false)
             }
         }else if indexPath.row == titleArray.count - 2{//软件版本
-            cell.nameLab.badgeView.style = .normal
-            cell.nameLab.showBadge(animated: false)
+            if updateType != .noUpdate {
+                cell.nameLab.badgeView.style = .normal
+                cell.nameLab.showBadge(animated: false)
+            }else{
+                cell.nameLab.clearBadge(animated: false)
+            }
         }else{
             cell.nameLab.clearBadge(animated: false)
         }
@@ -241,5 +293,20 @@ extension HOOPLeftMenuVC: UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.00001
+    }
+}
+extension HOOPLeftMenuVC : UIAlertViewDelegate{
+    func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
+        let tag = alertView.tag
+        if tag == 103{
+            if buttonIndex == 1{//立即更新
+                GYZUpdateVersionTool.goAppStore()
+            }
+        }else if tag == 104{
+            if buttonIndex == 0{//立即更新
+                GYZUpdateVersionTool.goAppStore()
+            }
+        }
+        
     }
 }

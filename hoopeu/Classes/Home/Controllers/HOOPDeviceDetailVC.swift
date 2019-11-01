@@ -191,7 +191,8 @@ class HOOPDeviceDetailVC: GYZBaseVC {
                     weakSelf?.sendMqttCmdUpdateVerison()
                 }
             }
-        }else{ GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "当前已是最新版本", cancleTitle: nil, viewController: self, buttonTitles: "我知道了") { (index) in
+        }else{
+            GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "当前已是最新版本", cancleTitle: nil, viewController: self, buttonTitles: "我知道了") { (index) in
                 
             }
         }
