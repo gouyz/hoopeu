@@ -208,7 +208,7 @@ extension HOOPDeviceManagerVC: UITableViewDelegate,UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: deviceManagerCell) as! HOOPDeviceManagerCell
         let model = dataList[indexPath.row]
         var name = model.deviceName
-        if model.status == "1" {/// 正在使用
+        if model.onLine == "1" {/// 正在使用
             name = model.deviceName! + "(使用中)"
             
             cell.nameLab.textColor = kBlueFontColor

@@ -128,7 +128,7 @@ class HOOPPlayerDetailVC: GYZBaseVC {
     override func clickedBackBtn() {
         if (self.player?.currentPlayerManager.isPlaying)!{
             
-            GYZTool.saveImage(currentImage: (self.player?.currentPlayerManager.thumbnailImageAtCurrentTime!())!, persent: 0.5, imageName: kDefaultSeeImgName)
+            GYZTool.saveImage(currentImage: (self.player?.currentPlayerManager.thumbnailImageAtCurrentTime!())!, persent: 0.5, imageName: userDefaults.string(forKey: "devId") ?? "")
         }
         super.clickedBackBtn()
     }

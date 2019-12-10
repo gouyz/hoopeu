@@ -32,6 +32,8 @@ class HOOPSelectARCControlVC: GYZBaseVC {
     var mDeviceTypeName: String = ""
     /// 临时id
     var deviceId: String = ""
+    // 选择的码库值
+    var irCode: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -190,13 +192,13 @@ class HOOPSelectARCControlVC: GYZBaseVC {
     }()
     /// 发射
     @objc func clickedSendBtn(){
-        var code: String = ""
+        irCode = ""
         if deviceType == .ARC {
-            code = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: mKeyCodeTag,withControlId: deviceId))!
+            irCode = (ARCStateCtr.shareInstance()?.getARCKeyCode(dataList[curMatchIndex].code, withTag: mKeyCodeTag,withControlId: deviceId))!
         }else{
-            code = BLTAssist.nomarlCode(dataList[curMatchIndex].code, key: mKeyCodeTag)
+            irCode = BLTAssist.nomarlCode(dataList[curMatchIndex].code, key: mKeyCodeTag)
         }
-        sendCmdMqtt(code: code)
+        sendCmdMqtt()
         
         noResponseBtn.backgroundColor = kWhiteColor
         noResponseBtn.borderColor = kBtnClickBGColor
@@ -394,14 +396,23 @@ class HOOPSelectARCControlVC: GYZBaseVC {
         })
     }
     /// 按键学习
-    func sendCmdMqtt(code: String){
+    func sendCmdMqtt(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_study","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":deviceId,"ir_type":ir_type,"study_code":code,"app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_study","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":deviceId,"ir_type":ir_type,"study_code":irCode,"app_interface_tag":""]
 
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+        irCode = ""
     }
     
     /// 重载CocoaMQTTDelegate
+//    override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
+//            if state == .connected {
+//                if irCode != "" {
+//                    sendCmdMqtt()
+//                }
+//
+//            }
+//        }
     override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
         super.mqtt(mqtt, didConnectAck: ack)
         if ack == .accept {

@@ -85,6 +85,7 @@ class GYZBaseVC: UIViewController {
         mqtt = CocoaMQTT(clientID: clientID, host: kDefaultMQTTHost, port: kDefaultMQTTPort)
         mqtt!.username = kDefaultMQTTUserName
         mqtt!.password = kDefaultMQTTUserPwd
+        mqtt?.autoReconnect = true
         //        mqtt!.willMessage = CocoaMQTTWill(topic: "hoopeu_app", message: "dieout")
         mqtt!.keepAlive = 60
         mqtt!.delegate = self

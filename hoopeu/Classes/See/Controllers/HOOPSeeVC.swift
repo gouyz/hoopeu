@@ -31,7 +31,7 @@ class HOOPSeeVC: GYZBaseVC {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let savedImage = UIImage(contentsOfFile: NSHomeDirectory().appending("/Documents/").appending(kDefaultSeeImgName)) {
+        if let savedImage = UIImage(contentsOfFile: NSHomeDirectory().appending("/Documents/").appending(userDefaults.string(forKey: "devId") ?? "")) {
             self.seeImg = savedImage
             
             tableView.reloadData()
