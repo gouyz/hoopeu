@@ -20,18 +20,18 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     
     var selectTopImage: UIImage?
     var currIndex: Int = 0
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.view.backgroundColor = kWhiteColor
         self.navigationController?.delegate = self
         
-//        userDefaults.set("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMzMqKioqMjE0NiIsInVzZXJJZCI6NTQsImlhdCI6MTU2NDU4MzcxNSwiZXhwIjoxNTY1MTg4NTE1fQ.VLhChXpc3k4rMau4zKLyah-URk2SzVrQZI5ZmNaZbp0", forKey: "token")
-//        var y: CGFloat = kStateHeight
-//        if #available(iOS 11.0, *) {
-//            y = kTitleAndStateHeight + kStateHeight
-//        }
+        //        userDefaults.set("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMzMqKioqMjE0NiIsInVzZXJJZCI6NTQsImlhdCI6MTU2NDU4MzcxNSwiZXhwIjoxNTY1MTg4NTE1fQ.VLhChXpc3k4rMau4zKLyah-URk2SzVrQZI5ZmNaZbp0", forKey: "token")
+        //        var y: CGFloat = kStateHeight
+        //        if #available(iOS 11.0, *) {
+        //            y = kTitleAndStateHeight + kStateHeight
+        //        }
         topImgView.frame = CGRect.init(x: kMargin, y: kStateHeight, width: kScreenWidth - kMargin * 2, height: kScreenWidth * 0.34)
         menuImgView.frame = CGRect.init(x: kMargin, y: kMargin, width: 40, height: 20)
         
@@ -59,7 +59,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         
     }
     func moveToRoom(){
-    
+        
         if dataList.count > 0 {
             
             var oldIndex: Int = currIndex
@@ -74,8 +74,8 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
                         break
                     }
                 }
-//                scrollPageView?.selectedIndex(currIndex, animated: true)
-//                userDefaults.removeObject(forKey: "roomId")
+                //                scrollPageView?.selectedIndex(currIndex, animated: true)
+                //                userDefaults.removeObject(forKey: "roomId")
             }
             if currIndex != oldIndex {
                 currIndex = oldIndex
@@ -135,27 +135,27 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         contentView?.delegate = self // 必须实现代理方法
         
         scrollPageView?.titleBtnOnClick = {[unowned self] (label: UILabel, index: Int) in
-           
+            
             self.currIndex = index
             if let _ = userDefaults.string(forKey: "roomId"){
                 (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).settingMqtt()
                 userDefaults.removeObject(forKey: "roomId")
             }
             
-//            if self.currIndex != index {
-//                if (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt != nil {//类似viewWillDisappear
-//                    self.isUserDisConnect = true
-//                    /// 关闭mqtt
-//                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt?.disconnect()
-//                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt = nil
-//                }
-//                self.currIndex = index
-//                if (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt == nil {//类似viewWillAppear
-//                    self.isUserDisConnect = false
-//                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).roomId = self.roomIdValue[self.currIndex]
-//                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqttSetting()
-//                }
-//            }
+            //            if self.currIndex != index {
+            //                if (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt != nil {//类似viewWillDisappear
+            //                    self.isUserDisConnect = true
+            //                    /// 关闭mqtt
+            //                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt?.disconnect()
+            //                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt = nil
+            //                }
+            //                self.currIndex = index
+            //                if (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqtt == nil {//类似viewWillAppear
+            //                    self.isUserDisConnect = false
+            //                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).roomId = self.roomIdValue[self.currIndex]
+            //                    (self.contentView?.childVcs[self.currIndex] as! HOOPRoomDeviceVC).mqttSetting()
+            //                }
+            //            }
             self.setScrollIndex()
         }
         
@@ -244,9 +244,9 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
             for (index,model) in dataList.enumerated(){
                 titleArr.append(model.roomName!)
                 roomIdValue.append(model.roomId!)
-//                if model.roomId == "0"{
-//                    currIndex = 0
-//                }else
+                //                if model.roomId == "0"{
+                //                    currIndex = 0
+                //                }else
                 if model.isDefault == "1"{
                     currIndex = index
                 }
@@ -272,7 +272,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         
         GYZNetWork.uploadImageRequest("qiniu/upload",baseUrl:"http://www.hoopeurobot.com/", parameters: nil, uploadParam: [imgParam], success: { (response) in
             
-//            weakSelf?.hud?.hide(animated: true)
+            //            weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
                 
@@ -320,18 +320,51 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     @objc func refreshJPushView(noti:NSNotification){
         
         GYZLog(noti.userInfo)
-        goWarnLogVC()
+        let userInfo = noti.userInfo!
+        
+        let deviceName = userInfo["deviceName"] as! String
+        let deviceId = userInfo["deviceId"] as! String
+        if deviceId == userDefaults.string(forKey: "devId") {
+            goWarnLogVC()
+        }else{// 提示切换设备
+            weak var weakSelf = self
+            GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "确定要切换小叮当吗", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
+                
+                if index != cancelIndex{
+                    weakSelf?.requestUserDevice(devId: deviceId)
+                }
+            }
+        }
+    }
+    
+    /// 切换小叮当
+    func requestUserDevice(devId: String){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        weak var weakSelf = self
+        GYZNetWork.requestNetwork("userDevice", parameters: ["devId":devId],  success: { (response) in
+            
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                weakSelf?.goWarnLogVC()
+            }
+            
+        }, failture: { (error) in
+            GYZLog(error)
+        })
     }
     /// 显示是否处理报警
-//    func showWarnAlert(){
-//        weak var weakSelf = self
-//        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "有新的报警信息，请先去处理!", cancleTitle: nil, viewController: self, buttonTitles: "去处理") { (index) in
-//
-//            if index != cancelIndex{
-//                weakSelf?.goWarnLogVC()
-//            }
-//        }
-//    }
+    //    func showWarnAlert(){
+    //        weak var weakSelf = self
+    //        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "有新的报警信息，请先去处理!", cancleTitle: nil, viewController: self, buttonTitles: "去处理") { (index) in
+    //
+    //            if index != cancelIndex{
+    //                weakSelf?.goWarnLogVC()
+    //            }
+    //        }
+    //    }
     func goWarnLogVC(){
         let vc = HOOPWarnLogVC()
         navigationController?.pushViewController(vc, animated: true)
