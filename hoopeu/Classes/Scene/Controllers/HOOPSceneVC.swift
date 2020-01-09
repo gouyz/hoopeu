@@ -88,7 +88,7 @@ class HOOPSceneVC: GYZBaseVC {
     /// 新建场景
     @objc func clickedAddBtn(){
         
-        GYZAlertViewTools.alertViewTools.showSheet(title: nil, message: nil, cancleTitle: "取消", titleArray: ["条件场景","语音场景"], viewController: self) { [weak self](index) in
+        GYZAlertViewTools.alertViewTools.showSheet(title: nil, message: nil, cancleTitle: "取消", titleArray: ["条件场景","语音场景","定时场景"], viewController: self) { [weak self](index) in
             
             if index == 0{//条件场景
                 self?.goConditionSceneVC(sceneId:"")

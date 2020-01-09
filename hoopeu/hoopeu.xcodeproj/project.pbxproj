@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -44,8 +44,6 @@
 		0A0B6DA522B528A50030D254 /* HOOPLabAndLabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B6DA422B528A50030D254 /* HOOPLabAndLabCell.swift */; };
 		0A0B7174224A76B200AC8547 /* HOOPChatTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B7173224A76B200AC8547 /* HOOPChatTextCell.swift */; };
 		0A0B7176224A7DA000AC8547 /* HOOPChatBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0B7175224A7DA000AC8547 /* HOOPChatBottomView.swift */; };
-		0A0B7190224A859E00AC8547 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B718F224A859E00AC8547 /* MobileCoreServices.framework */; };
-		0A0B7192224A85AF00AC8547 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B7191224A85AF00AC8547 /* UIKit.framework */; };
 		0A0BEF97224B9EF9009983AE /* HOOPArticlesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0BEF96224B9EF9009983AE /* HOOPArticlesModel.swift */; };
 		0A0BEF99224BAE9D009983AE /* HOOPMessageRecordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0BEF98224BAE9D009983AE /* HOOPMessageRecordVC.swift */; };
 		0A0BEF9B224BAF05009983AE /* HOOPMessageRecordManagerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0BEF9A224BAF05009983AE /* HOOPMessageRecordManagerVC.swift */; };
@@ -208,9 +206,13 @@
 		0A48036422A7ABFE00335419 /* HOOPLinkPersonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036322A7ABFE00335419 /* HOOPLinkPersonCell.swift */; };
 		0A48036622A7B0BC00335419 /* HOOPAddLinkPersonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036522A7B0BC00335419 /* HOOPAddLinkPersonVC.swift */; };
 		0A4A27C122BCD9040070605A /* ZFIJKPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4A27BF22BCD9040070605A /* ZFIJKPlayerManager.m */; };
-		0A4A27C222BCD9040070605A /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4A27C022BCD9040070605A /* IJKMediaFramework.framework */; };
 		0A4AF262223F7F8000E2E891 /* HOOPSeeVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4AF261223F7F8000E2E891 /* HOOPSeeVideoCell.swift */; };
 		0A4D229B22B9BD0D000A56ED /* HOOPPlayerDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4D229A22B9BD0D000A56ED /* HOOPPlayerDetailVC.swift */; };
+		0A4ECC0F23C6CC2D009EB1D1 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A649F4822A0B5EC001829A9 /* FMDB.framework */; };
+		0A4ECC1223C6CC30009EB1D1 /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A4A27C022BCD9040070605A /* IJKMediaFramework.framework */; };
+		0A4ECC1423C6CC33009EB1D1 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B718F224A859E00AC8547 /* MobileCoreServices.framework */; };
+		0A4ECC1623C6CC35009EB1D1 /* Pods_hoopeu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ABD06B5661B0C6042DD9E60 /* Pods_hoopeu.framework */; };
+		0A4ECC1823C6CC36009EB1D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0B7191224A85AF00AC8547 /* UIKit.framework */; };
 		0A4F901422C4974B00E3337F /* HOOPControlModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4F901322C4974B00E3337F /* HOOPControlModel.swift */; };
 		0A4FE14E2223C7AE00CCF442 /* HOOPEditSayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4FE14D2223C7AE00CCF442 /* HOOPEditSayVC.swift */; };
 		0A4FE1502223D1C600CCF442 /* HOOPEditSceneDoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4FE14F2223D1C600CCF442 /* HOOPEditSceneDoVC.swift */; };
@@ -221,7 +223,6 @@
 		0A5D745B223217B8005048EB /* HOOPCustomControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5D745A223217B8005048EB /* HOOPCustomControlVC.swift */; };
 		0A5D745D223250BE005048EB /* HOOPCustomControlKeyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5D745C223250BE005048EB /* HOOPCustomControlKeyCell.swift */; };
 		0A62BABA22E9817900EC85A3 /* HOOPVersionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A62BAB922E9817900EC85A3 /* HOOPVersionModel.swift */; };
-		0A649F4922A0B5EC001829A9 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A649F4822A0B5EC001829A9 /* FMDB.framework */; };
 		0A649F4B22A0B605001829A9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A649F4A22A0B605001829A9 /* libsqlite3.tbd */; };
 		0A649F5922A0D213001829A9 /* DeviceM.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A649F4F22A0D213001829A9 /* DeviceM.m */; };
 		0A649F5A22A0D213001829A9 /* IRDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A649F5122A0D213001829A9 /* IRDBManager.m */; };
@@ -239,7 +240,6 @@
 		0AB627E42225835B00E60856 /* HOOPWarnLogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB627E32225835B00E60856 /* HOOPWarnLogVC.swift */; };
 		0AB627E62225847F00E60856 /* HOOPLogDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB627E52225847F00E60856 /* HOOPLogDetailVC.swift */; };
 		0AB627E8222585A000E60856 /* HOOPLogDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB627E7222585A000E60856 /* HOOPLogDetailCell.swift */; };
-		D35465E51AD55A4D1DD727F0 /* Pods_hoopeu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ABD06B5661B0C6042DD9E60 /* Pods_hoopeu.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -542,13 +542,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A0BEFE022BD2735003A1FC7 /* libiconv.tbd in Frameworks */,
+				0A4ECC1823C6CC36009EB1D1 /* UIKit.framework in Frameworks */,
 				0A0BEFDF22BD2726003A1FC7 /* libbz2.tbd in Frameworks */,
 				0A649F4B22A0B605001829A9 /* libsqlite3.tbd in Frameworks */,
-				0A649F4922A0B5EC001829A9 /* FMDB.framework in Frameworks */,
-				0A0B7192224A85AF00AC8547 /* UIKit.framework in Frameworks */,
-				0A4A27C222BCD9040070605A /* IJKMediaFramework.framework in Frameworks */,
-				0A0B7190224A859E00AC8547 /* MobileCoreServices.framework in Frameworks */,
-				D35465E51AD55A4D1DD727F0 /* Pods_hoopeu.framework in Frameworks */,
+				0A4ECC1223C6CC30009EB1D1 /* IJKMediaFramework.framework in Frameworks */,
+				0A4ECC0F23C6CC2D009EB1D1 /* FMDB.framework in Frameworks */,
+				0A4ECC1423C6CC33009EB1D1 /* MobileCoreServices.framework in Frameworks */,
+				0A4ECC1623C6CC35009EB1D1 /* Pods_hoopeu.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1567,62 +1567,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-hoopeu/Pods-hoopeu-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/CLImageEditor/CLImageEditor.framework",
-				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
-				"${BUILT_PRODUCTS_DIR}/CocoaMQTT/CocoaMQTT.framework",
-				"${BUILT_PRODUCTS_DIR}/Cosmos/Cosmos.framework",
-				"${BUILT_PRODUCTS_DIR}/DKCamera/DKCamera.framework",
-				"${BUILT_PRODUCTS_DIR}/DKImagePickerController/DKImagePickerController.framework",
-				"${BUILT_PRODUCTS_DIR}/DKPhotoGallery/DKPhotoGallery.framework",
-				"${BUILT_PRODUCTS_DIR}/FDFullscreenPopGesture/FDFullscreenPopGesture.framework",
-				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
-				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
-				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/JXSegmentedView/JXSegmentedView.framework",
-				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
-				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
-				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
-				"${BUILT_PRODUCTS_DIR}/PYSearch/PYSearch.framework",
-				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
-				"${BUILT_PRODUCTS_DIR}/SKPhotoBrowser/SKPhotoBrowser.framework",
-				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/ZFPlayer/ZFPlayer.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-hoopeu/Pods-hoopeu-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CLImageEditor.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaMQTT.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cosmos.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKCamera.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKImagePickerController.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DKPhotoGallery.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FDFullscreenPopGesture.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JXSegmentedView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PYSearch.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SKPhotoBrowser.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZFPlayer.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-hoopeu/Pods-hoopeu-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hoopeu/Pods-hoopeu-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoopeu/Pods-hoopeu-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

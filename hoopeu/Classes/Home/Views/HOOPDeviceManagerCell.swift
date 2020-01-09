@@ -24,6 +24,7 @@ class HOOPDeviceManagerCell: UITableViewCell {
     func setupUI(){
         contentView.addSubview(bgView)
         bgView.addSubview(nameLab)
+        bgView.addSubview(devIdLab)
         
         bgView.snp.makeConstraints { (make) in
             make.left.right.bottom.equalTo(contentView)
@@ -32,7 +33,13 @@ class HOOPDeviceManagerCell: UITableViewCell {
         nameLab.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
             make.right.equalTo(-kMargin)
-            make.top.bottom.equalTo(bgView)
+            make.top.equalTo(bgView)
+            make.bottom.equalTo(devIdLab.snp.top)
+        }
+        devIdLab.snp.makeConstraints { (make) in
+            make.left.right.equalTo(nameLab)
+            make.height.equalTo(20)
+            make.bottom.equalTo(bgView)
         }
     }
     lazy var bgView: UIView = {
@@ -46,6 +53,14 @@ class HOOPDeviceManagerCell: UITableViewCell {
         let lab = UILabel()
         lab.font = k15Font
         lab.textColor = kBlackFontColor
+        lab.textAlignment = .center
+        
+        return lab
+    }()
+    lazy var devIdLab : UILabel = {
+        let lab = UILabel()
+        lab.font = k12Font
+        lab.textColor = kHeightGaryFontColor
         lab.textAlignment = .center
         
         return lab
