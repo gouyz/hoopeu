@@ -46,6 +46,8 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        settingMqtt()
         // 本页面开启支持打开侧滑菜单
         self.menuContainerViewController.sideMenuPanMode = .defaults
         if userDefaults.bool(forKey: "isAddRoom") {
@@ -83,7 +85,17 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
             scrollPageView?.selectedIndex(currIndex, animated: true)
         }
     }
-    
+    func settingMqtt(){
+        if mqtt == nil {
+            mqttSetting()
+        }else {
+            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
+                self.mqtt?.connect()
+            }else{
+                sendMqttCmd()
+            }
+        }
+    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // 本页面开启支持关闭侧滑菜单
@@ -370,6 +382,47 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    /// mqtt发布主题 查询设备当前电量
+    func sendMqttCmd(){
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_power","app_interface_tag":"ok"]
+        
+        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    
+    /// 重载CocoaMQTTDelegate
+    override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
+        GYZLog("new state\(roomId): \(state)")
+        if state == .connected {
+            sendMqttCmd()
+            
+        }
+    }
+    override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+        super.mqtt(mqtt, didConnectAck: ack)
+        GYZLog("new ack: \(ack)")
+        if ack == .accept {
+            mqtt.subscribe("hoopeu_app", qos: CocoaMQTTQOS.qos1)
+        }
+    }
+    override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
+        super.mqtt(mqtt, didReceiveMessage: message, id: id)
+        
+        if let data = message.string {
+            let result = JSON.init(parseJSON: data)
+            //            let phone = result["phone"].stringValue
+            let type = result["msg_type"].stringValue
+            if let tag = result["app_interface_tag"].string{
+                if tag.hasPrefix("system_"){
+                    return
+                }
+            }
+            
+            if type == "query_power_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
+                
+                let power = result["msg"]["power"].stringValue
+            }
+        }
+    }
 }
 
 /// mark - UINavigationControllerDelegate
