@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -4090,7 +4090,7 @@
 				LastUpgradeCheck = 1100;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -5093,6 +5093,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		016AE357514AF1BBEB73B8E9B1046371 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BD9EAAB11B552E1C55CA74D8C44C4F41 /* DKImagePickerController.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DKImagePickerController";
+				INFOPLIST_FILE = "Target Support Files/DKImagePickerController/ResourceBundle-DKImagePickerController-DKImagePickerController-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PRODUCT_NAME = DKImagePickerController;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 		05C26BA5C7A6A871A7775EEED25A8B28 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DCF343166EB4F2A8323DA23F863E4BC7 /* FDFullscreenPopGesture.xcconfig */;
@@ -5305,23 +5321,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
-		};
-		1A121955C01878FDFCC3E1F1072FC948 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = BD9EAAB11B552E1C55CA74D8C44C4F41 /* DKImagePickerController.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DKImagePickerController";
-				IBSC_MODULE = DKImagePickerController;
-				INFOPLIST_FILE = "Target Support Files/DKImagePickerController/ResourceBundle-DKImagePickerController-DKImagePickerController-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				PRODUCT_NAME = DKImagePickerController;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
 		};
 		235FCAD9C0C99E79255A97877E10BD65 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -5785,23 +5784,6 @@
 			};
 			name = Release;
 		};
-		68F5EAA09D0E36228777DA544EAAB3A1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1E81D04BDE9C0E7A6D95EE281F58B0F1 /* DKPhotoGallery.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DKPhotoGallery";
-				IBSC_MODULE = DKPhotoGallery;
-				INFOPLIST_FILE = "Target Support Files/DKPhotoGallery/ResourceBundle-DKPhotoGallery-DKPhotoGallery-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				PRODUCT_NAME = DKPhotoGallery;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
 		69B61EE29A519925D390AF7F5ED06DC8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E331DD0660E49751F45781050EF5959C /* CLImageEditor.xcconfig */;
@@ -5872,40 +5854,6 @@
 			};
 			name = Release;
 		};
-		6B986A64457213B7D6B42704231140D3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1E81D04BDE9C0E7A6D95EE281F58B0F1 /* DKPhotoGallery.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DKPhotoGallery";
-				IBSC_MODULE = DKPhotoGallery;
-				INFOPLIST_FILE = "Target Support Files/DKPhotoGallery/ResourceBundle-DKPhotoGallery-DKPhotoGallery-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				PRODUCT_NAME = DKPhotoGallery;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
-		};
-		6D1975AD4F1BF43DCD1F6C212892A478 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = BD9EAAB11B552E1C55CA74D8C44C4F41 /* DKImagePickerController.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DKImagePickerController";
-				IBSC_MODULE = DKImagePickerController;
-				INFOPLIST_FILE = "Target Support Files/DKImagePickerController/ResourceBundle-DKImagePickerController-DKImagePickerController-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				PRODUCT_NAME = DKImagePickerController;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
-		};
 		70760A8D40A16D6267460DAF442EBBB1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3D3613C997ED97E1FD2776D4599BE91E /* JCore.xcconfig */;
@@ -5956,6 +5904,22 @@
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7934C5496AE20537BDC08A023AAC798A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E81D04BDE9C0E7A6D95EE281F58B0F1 /* DKPhotoGallery.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DKPhotoGallery";
+				INFOPLIST_FILE = "Target Support Files/DKPhotoGallery/ResourceBundle-DKPhotoGallery-DKPhotoGallery-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PRODUCT_NAME = DKPhotoGallery;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
 		};
@@ -6126,6 +6090,22 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		89BA555B0F2D7C7DF7E3405AC6D9F4C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BD9EAAB11B552E1C55CA74D8C44C4F41 /* DKImagePickerController.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DKImagePickerController";
+				INFOPLIST_FILE = "Target Support Files/DKImagePickerController/ResourceBundle-DKImagePickerController-DKImagePickerController-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PRODUCT_NAME = DKImagePickerController;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
 		};
@@ -6519,6 +6499,22 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		C7EC3B74B8DF32F573C6F5D24A9609C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E81D04BDE9C0E7A6D95EE281F58B0F1 /* DKPhotoGallery.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DKPhotoGallery";
+				INFOPLIST_FILE = "Target Support Files/DKPhotoGallery/ResourceBundle-DKPhotoGallery-DKPhotoGallery-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PRODUCT_NAME = DKPhotoGallery;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
 		};
@@ -7172,8 +7168,8 @@
 		CBCE5785D97F3C97843EEB69ACD93521 /* Build configuration list for PBXNativeTarget "DKImagePickerController-DKImagePickerController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1A121955C01878FDFCC3E1F1072FC948 /* Debug */,
-				6D1975AD4F1BF43DCD1F6C212892A478 /* Release */,
+				89BA555B0F2D7C7DF7E3405AC6D9F4C9 /* Debug */,
+				016AE357514AF1BBEB73B8E9B1046371 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -7217,8 +7213,8 @@
 		EF0F2E523C44A10CEC6919FDB28069B2 /* Build configuration list for PBXNativeTarget "DKPhotoGallery-DKPhotoGallery" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				68F5EAA09D0E36228777DA544EAAB3A1 /* Debug */,
-				6B986A64457213B7D6B42704231140D3 /* Release */,
+				C7EC3B74B8DF32F573C6F5D24A9609C9 /* Debug */,
+				7934C5496AE20537BDC08A023AAC798A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
