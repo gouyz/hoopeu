@@ -216,6 +216,7 @@ extension HOOPDeviceManagerVC: UITableViewDelegate,UITableViewDataSource{
             cell.nameLab.textColor = kGaryFontColor
         }
         cell.nameLab.text = name
+        cell.devIdLab.text = model.deviceId
         
         
         cell.selectionStyle = .none

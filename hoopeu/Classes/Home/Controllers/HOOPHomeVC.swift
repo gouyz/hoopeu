@@ -8,6 +8,8 @@
 
 import UIKit
 import MBProgressHUD
+import CocoaMQTT
+import SwiftyJSON
 
 class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     
@@ -37,6 +39,13 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         
         view.addSubview(topImgView)
         topImgView.addSubview(menuImgView)
+        topImgView.addSubview(powerBtn)
+        powerBtn.snp.makeConstraints { (make) in
+            make.top.equalTo(menuImgView)
+            make.right.equalTo(-kMargin)
+            make.width.equalTo(kTitleHeight)
+            make.height.equalTo(menuImgView)
+        }
         
         requestRoomInfo()
         
@@ -202,7 +211,16 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         
         return imgView
     }()
-    
+    /// 电量按钮
+    lazy var powerBtn : UIButton = {
+        let btn = UIButton.init(type: .custom)
+        btn.backgroundColor = UIColor.clear
+        btn.setTitleColor(kRedFontColor, for: .selected)
+        btn.setTitleColor(kBlueFontColor, for: .normal)
+        btn.titleLabel?.font = k15Font
+        
+        return btn
+    }()
     /// 更换top图片
     @objc func onClickedTopImg(){
         if dataList[currIndex].roomId == "0" {
@@ -391,7 +409,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     
     /// 重载CocoaMQTTDelegate
     override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
-        GYZLog("new state\(roomId): \(state)")
+        GYZLog("new state: \(state)")
         if state == .connected {
             sendMqttCmd()
             
@@ -419,7 +437,13 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
             
             if type == "query_power_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
                 
-                let power = result["msg"]["power"].stringValue
+                let power = result["msg"]["power"].intValue
+                powerBtn.set(image: UIImage.init(named: "battery_\(power)"), title: "\(power)%", titlePosition: .right, additionalSpacing: 5, state: .normal)
+                if power > 30 {
+                    powerBtn.isSelected = false
+                }else{
+                    powerBtn.isSelected = true
+                }
             }
         }
     }

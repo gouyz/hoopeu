@@ -33,13 +33,13 @@ class HOOPDeviceManagerCell: UITableViewCell {
         nameLab.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
             make.right.equalTo(-kMargin)
-            make.top.equalTo(bgView)
+            make.top.equalTo(kMargin)
             make.bottom.equalTo(devIdLab.snp.top)
         }
         devIdLab.snp.makeConstraints { (make) in
             make.left.right.equalTo(nameLab)
             make.height.equalTo(20)
-            make.bottom.equalTo(bgView)
+            make.bottom.equalTo(-kMargin)
         }
     }
     lazy var bgView: UIView = {

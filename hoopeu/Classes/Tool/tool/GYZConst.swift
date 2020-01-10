@@ -154,7 +154,7 @@ let kBlackColor : UIColor = UIColor.black
 let networkManager = NetworkReachabilityManager.init(host: "www.apple.com")
 
 /// mqtt host
-let kDefaultMQTTHost = "119.29.107.14"
+//let kDefaultMQTTHost = "119.29.107.14"
 /// mqtt port
 let kDefaultMQTTPort: UInt16 = 61613
 /// mqtt 用户名
