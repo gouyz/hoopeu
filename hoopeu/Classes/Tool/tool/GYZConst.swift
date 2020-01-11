@@ -87,6 +87,8 @@ let ERROR_MESSAGE = "ERROR_MESSAGE"
 let kUMessageBadageRefreshData = "messageBadageRefreshData"
 /// 极光推送 跳转指定页面通知名称
 let kJPushRefreshData = "kJPushRefreshData"
+/// 电量通知名称
+let kPowerRefreshData = "kPowerRefreshData"
 
 /// 存储用户信息的key
 let USERINFO = "userInfo"

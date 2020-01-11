@@ -56,7 +56,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-        settingMqtt()
+//        settingMqtt()
         // 本页面开启支持打开侧滑菜单
         self.menuContainerViewController.sideMenuPanMode = .defaults
         if userDefaults.bool(forKey: "isAddRoom") {

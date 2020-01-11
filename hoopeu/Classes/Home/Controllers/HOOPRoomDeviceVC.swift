@@ -353,6 +353,12 @@ class HOOPRoomDeviceVC: GYZBaseVC {
             GYZTool.endRefresh(scorllView: tableView)
         }
     }
+    /// mqtt发布主题 查询设备当前电量
+    func sendPowerMqttCmd(){
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_power","app_interface_tag":"ok"]
+        
+        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
     /// mqtt发布主题
     func sendMqttCmd(){
         createHUD(message: "加载中...")
@@ -418,7 +424,7 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         GYZLog("new state\(roomId): \(state)")
         if state == .connected {
             sendMqttCmd()
-            
+            sendPowerMqttCmd()
         }
 //        else if state == .disconnected && self.mqtt != nil && !self.isUserDisConnect{//   断线重连
 //            self.mqtt = nil
@@ -551,6 +557,15 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                 hud?.hide(animated: true)
                 closeRefresh()
                 self.refresh()
+            }else if type == "query_power_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
+                
+                let power = result["msg"]["power"].intValue
+//                powerBtn.set(image: UIImage.init(named: "battery_\(power)"), title: "\(power)%", titlePosition: .right, additionalSpacing: 5, state: .normal)
+//                if power > 30 {
+//                    powerBtn.isSelected = false
+//                }else{
+//                    powerBtn.isSelected = true
+//                }
             }
             
         }
