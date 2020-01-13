@@ -76,6 +76,7 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                 self.mqtt?.connect()
             }else{
                 sendMqttCmd()
+                sendPowerMqttCmd()
             }
         }
     }
@@ -345,6 +346,7 @@ class HOOPRoomDeviceVC: GYZBaseVC {
             self.mqtt?.connect()
         }else{
             sendMqttCmd()
+            sendPowerMqttCmd()
         }
     }
     /// 关闭上拉/下拉刷新
@@ -560,12 +562,8 @@ class HOOPRoomDeviceVC: GYZBaseVC {
             }else if type == "query_power_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
                 
                 let power = result["msg"]["power"].intValue
-//                powerBtn.set(image: UIImage.init(named: "battery_\(power)"), title: "\(power)%", titlePosition: .right, additionalSpacing: 5, state: .normal)
-//                if power > 30 {
-//                    powerBtn.isSelected = false
-//                }else{
-//                    powerBtn.isSelected = true
-//                }
+                /// 消息推送通知
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: kPowerRefreshData), object: nil,userInfo:["power":power])
             }
             
         }

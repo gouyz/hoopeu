@@ -38,6 +38,7 @@ class HOOPAddVoiceSceneCell: UITableViewCell {
         lab.textColor = kWhiteColor
         lab.backgroundColor = kBtnClickBGColor
         lab.textAlignment = .center
+        lab.numberOfLines = 0
         lab.cornerRadius = 8
         lab.borderColor = kBtnClickBGColor
         lab.borderWidth = klineWidth

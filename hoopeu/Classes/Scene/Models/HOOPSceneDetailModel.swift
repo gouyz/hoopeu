@@ -18,6 +18,8 @@ class HOOPSceneDetailModel: LHSBaseModel {
     var sceneConditionList: [HOOPSceneConditionModel] = [HOOPSceneConditionModel]()
     /// 场景info
     var sceneModel: HOOPSceneModel?
+    /// 定时场景 用户自定义时间选择，可多选。EVERY_MONDAY:每周一,EVERY_TUESDAY:每周二,EVERY_WEDNESDAY:每周三,EVERY_THURSDAY:每周四,EVERY_FRIDAY:每周五,EVERY_SATURDAY:每周六,EVERY_SUNDAY:每周日
+    var userDefineTimesArray: [String] = [String]()
     
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "scene_do"{
@@ -41,9 +43,15 @@ class HOOPSceneDetailModel: LHSBaseModel {
         }else if key == "scene"{
             guard let datas = value as? [String : Any] else { return }
             sceneModel = HOOPSceneModel(dict: datas)
+        }else if key == "userDefineTimesArray"{
+            guard let itemInfo = value as? [String] else { return }
+            for item in itemInfo{
+                userDefineTimesArray.append(item)
+            }
         }else {
             super.setValue(value, forKey: key)
         }
+        
     }
 }
 

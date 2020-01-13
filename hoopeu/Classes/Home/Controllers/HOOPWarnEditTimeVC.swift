@@ -150,11 +150,11 @@ class HOOPWarnEditTimeVC: GYZBaseVC {
     /// 保存
     @objc func clickedSaveBtn(){
         if day_time.isEmpty {
-            MBProgressHUD.showAutoDismissHUD(message: "请选择布防时间")
+            MBProgressHUD.showAutoDismissHUD(message: "请选择时间")
             return
         }
         if week_time.isEmpty {
-            MBProgressHUD.showAutoDismissHUD(message: "请选择布防执行周期")
+            MBProgressHUD.showAutoDismissHUD(message: "请选择执行周期")
             return
         }
         

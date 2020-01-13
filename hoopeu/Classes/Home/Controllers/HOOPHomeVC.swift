@@ -39,18 +39,27 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         
         view.addSubview(topImgView)
         topImgView.addSubview(menuImgView)
-        topImgView.addSubview(powerBtn)
-        powerBtn.snp.makeConstraints { (make) in
+        topImgView.addSubview(powerLab)
+        topImgView.addSubview(powerImgView)
+        powerLab.snp.makeConstraints { (make) in
             make.top.equalTo(menuImgView)
-            make.right.equalTo(-kMargin)
-            make.width.equalTo(kTitleHeight)
+            make.right.equalTo(-5)
+            make.width.equalTo(40)
             make.height.equalTo(menuImgView)
+        }
+        powerImgView.snp.makeConstraints { (make) in
+            make.centerY.equalTo(powerLab)
+            make.right.equalTo(powerLab.snp.left)
+            make.size.equalTo(CGSize.init(width: 18, height: 18))
         }
         
         requestRoomInfo()
         
         /// 极光推送跳转指定页面
         NotificationCenter.default.addObserver(self, selector: #selector(refreshJPushView(noti:)), name: NSNotification.Name(rawValue: kJPushRefreshData), object: nil)
+        
+        /// 电量通知
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshPowerView(noti:)), name: NSNotification.Name(rawValue: kPowerRefreshData), object: nil)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -94,17 +103,17 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
             scrollPageView?.selectedIndex(currIndex, animated: true)
         }
     }
-    func settingMqtt(){
-        if mqtt == nil {
-            mqttSetting()
-        }else {
-            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
-                self.mqtt?.connect()
-            }else{
-                sendMqttCmd()
-            }
-        }
-    }
+//    func settingMqtt(){
+//        if mqtt == nil {
+//            mqttSetting()
+//        }else {
+//            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
+//                self.mqtt?.connect()
+//            }else{
+//                sendMqttCmd()
+//            }
+//        }
+//    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // 本页面开启支持关闭侧滑菜单
@@ -211,13 +220,15 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         
         return imgView
     }()
+    lazy var powerImgView: UIImageView = {
+        let imgView = UIImageView.init()
+        return imgView
+    }()
     /// 电量按钮
-    lazy var powerBtn : UIButton = {
-        let btn = UIButton.init(type: .custom)
-        btn.backgroundColor = UIColor.clear
-        btn.setTitleColor(kRedFontColor, for: .selected)
-        btn.setTitleColor(kBlueFontColor, for: .normal)
-        btn.titleLabel?.font = k15Font
+    lazy var powerLab : UILabel = {
+        let btn = UILabel()
+        btn.font = k13Font
+        btn.textColor = kBlueFontColor
         
         return btn
     }()
@@ -366,7 +377,46 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
             }
         }
     }
-    
+    /// 电量通知
+    ///
+    /// - Parameter noti:
+    @objc func refreshPowerView(noti:NSNotification){
+        
+        GYZLog(noti.userInfo)
+        let userInfo = noti.userInfo!
+        
+        let power = userInfo["power"] as! Int
+        var name: String = "battery_100"
+        switch power {
+        case 0..<10:
+            name = "battery_10"
+        case 10..<20:
+            name = "battery_20"
+        case 20..<30:
+            name = "battery_30"
+        case 30..<40:
+            name = "battery_40"
+        case 40..<50:
+            name = "battery_50"
+        case 50..<60:
+            name = "battery_60"
+        case 60..<70:
+            name = "battery_70"
+        case 70..<80:
+            name = "battery_80"
+        case 80..<90:
+            name = "battery_90"
+        default:
+            name = "battery_100"
+        }
+        powerImgView.image = UIImage.init(named: name)
+        powerLab.text = "\(power)%"
+        if power > 30 {
+            powerLab.textColor = kBlueFontColor
+        }else{
+            powerLab.textColor = kRedFontColor
+        }
+    }
     /// 切换小叮当
     func requestUserDevice(devId: String){
         if !GYZTool.checkNetWork() {
@@ -401,52 +451,52 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     }
     
     /// mqtt发布主题 查询设备当前电量
-    func sendMqttCmd(){
-        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_power","app_interface_tag":"ok"]
-        
-        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
-    }
-    
-    /// 重载CocoaMQTTDelegate
-    override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
-        GYZLog("new state: \(state)")
-        if state == .connected {
-            sendMqttCmd()
-            
-        }
-    }
-    override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        super.mqtt(mqtt, didConnectAck: ack)
-        GYZLog("new ack: \(ack)")
-        if ack == .accept {
-            mqtt.subscribe("hoopeu_app", qos: CocoaMQTTQOS.qos1)
-        }
-    }
-    override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
-        super.mqtt(mqtt, didReceiveMessage: message, id: id)
-        
-        if let data = message.string {
-            let result = JSON.init(parseJSON: data)
-            //            let phone = result["phone"].stringValue
-            let type = result["msg_type"].stringValue
-            if let tag = result["app_interface_tag"].string{
-                if tag.hasPrefix("system_"){
-                    return
-                }
-            }
-            
-            if type == "query_power_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
-                
-                let power = result["msg"]["power"].intValue
-                powerBtn.set(image: UIImage.init(named: "battery_\(power)"), title: "\(power)%", titlePosition: .right, additionalSpacing: 5, state: .normal)
-                if power > 30 {
-                    powerBtn.isSelected = false
-                }else{
-                    powerBtn.isSelected = true
-                }
-            }
-        }
-    }
+//    func sendMqttCmd(){
+//        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_power","app_interface_tag":"ok"]
+//
+//        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+//    }
+//
+//    /// 重载CocoaMQTTDelegate
+//    override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
+//        GYZLog("new state: \(state)")
+//        if state == .connected {
+//            sendMqttCmd()
+//
+//        }
+//    }
+//    override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+//        super.mqtt(mqtt, didConnectAck: ack)
+//        GYZLog("new ack: \(ack)")
+//        if ack == .accept {
+//            mqtt.subscribe("hoopeu_app", qos: CocoaMQTTQOS.qos1)
+//        }
+//    }
+//    override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
+//        super.mqtt(mqtt, didReceiveMessage: message, id: id)
+//
+//        if let data = message.string {
+//            let result = JSON.init(parseJSON: data)
+//            //            let phone = result["phone"].stringValue
+//            let type = result["msg_type"].stringValue
+//            if let tag = result["app_interface_tag"].string{
+//                if tag.hasPrefix("system_"){
+//                    return
+//                }
+//            }
+//
+//            if type == "query_power_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
+//
+//                let power = result["msg"]["power"].intValue
+//                powerBtn.set(image: UIImage.init(named: "battery_\(power)"), title: "\(power)%", titlePosition: .right, additionalSpacing: 5, state: .normal)
+//                if power > 30 {
+//                    powerBtn.isSelected = false
+//                }else{
+//                    powerBtn.isSelected = true
+//                }
+//            }
+//        }
+//    }
 }
 
 /// mark - UINavigationControllerDelegate

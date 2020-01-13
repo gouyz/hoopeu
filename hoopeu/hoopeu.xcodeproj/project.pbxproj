@@ -202,6 +202,7 @@
 		0A40E439222930AE00E49689 /* HOOPSoundControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A40E438222930AE00E49689 /* HOOPSoundControlVC.swift */; };
 		0A41DE4522251161000FFFEA /* HOOPRoomDeviceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A41DE4422251161000FFFEA /* HOOPRoomDeviceVC.swift */; };
 		0A41DE4722253B25000FFFEA /* HOOPRoomDeviceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A41DE4622253B25000FFFEA /* HOOPRoomDeviceCell.swift */; };
+		0A47D0D923CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A47D0D823CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift */; };
 		0A48036222A7AAD700335419 /* HOOPLinkPersonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036122A7AAD700335419 /* HOOPLinkPersonVC.swift */; };
 		0A48036422A7ABFE00335419 /* HOOPLinkPersonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036322A7ABFE00335419 /* HOOPLinkPersonCell.swift */; };
 		0A48036622A7B0BC00335419 /* HOOPAddLinkPersonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036522A7B0BC00335419 /* HOOPAddLinkPersonVC.swift */; };
@@ -487,6 +488,7 @@
 		0A40F8032251EB05002680F7 /* hoopeu.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = hoopeu.entitlements; sourceTree = "<group>"; };
 		0A41DE4422251161000FFFEA /* HOOPRoomDeviceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPRoomDeviceVC.swift; sourceTree = "<group>"; };
 		0A41DE4622253B25000FFFEA /* HOOPRoomDeviceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPRoomDeviceCell.swift; sourceTree = "<group>"; };
+		0A47D0D823CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPAddTimeSceneVC.swift; sourceTree = "<group>"; };
 		0A48036122A7AAD700335419 /* HOOPLinkPersonVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLinkPersonVC.swift; sourceTree = "<group>"; };
 		0A48036322A7ABFE00335419 /* HOOPLinkPersonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLinkPersonCell.swift; sourceTree = "<group>"; };
 		0A48036522A7B0BC00335419 /* HOOPAddLinkPersonVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPAddLinkPersonVC.swift; sourceTree = "<group>"; };
@@ -600,6 +602,7 @@
 				0A4FE1512223E77000CCF442 /* HOOPAddConditionSceneVC.swift */,
 				0A4FE1532223E89D00CCF442 /* HOOPSelectConditionVC.swift */,
 				0A0C9D57224D1B2A0055F7DF /* HOOPConditionSceneDoVC.swift */,
+				0A47D0D823CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1695,6 +1698,7 @@
 				0A3B8478221E7EFF007ADEAE /* HOOPModifyOldPwdVC.swift in Sources */,
 				0A0B324D22CCF3C200679E58 /* HOOPCustomOtherControlVC.swift in Sources */,
 				0A388062221FD95000E51EDA /* HOOPOnOffProblemVC.swift in Sources */,
+				0A47D0D923CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift in Sources */,
 				0A3C851F224B65AD002C794E /* HOOPLeaveMessageVC.swift in Sources */,
 				0A3ABB0F21DDE8DE0048F0F3 /* GYZNetWork.swift in Sources */,
 				0A4A27C122BCD9040070605A /* ZFIJKPlayerManager.m in Sources */,

@@ -94,6 +94,8 @@ class HOOPSceneVC: GYZBaseVC {
                 self?.goConditionSceneVC(sceneId:"")
             }else if index == 1{//语音场景
                 self?.goVoiceSceneVC(sceneId:"")
+            }else if index == 2{//定时场景
+                self?.goTimeSceneVC(sceneId:"")
             }
         }
     }
@@ -160,6 +162,18 @@ class HOOPSceneVC: GYZBaseVC {
         }
         navigationController?.pushViewController(vc, animated: true)
     }
+    /// 定时场景
+    func goTimeSceneVC(sceneId: String){
+        let vc = HOOPAddTimeSceneVC()
+        if sceneId != "" {// 编辑
+            vc.resultBlock = {[weak self]() in
+                self?.requestSceneList()
+            }
+            vc.isEdit = true
+            vc.sceneId = sceneId
+        }
+        navigationController?.pushViewController(vc, animated: true)
+    }
     /// 条件场景
     func goConditionSceneVC(sceneId: String){
         let vc = HOOPAddConditionSceneVC()
@@ -196,6 +210,8 @@ extension HOOPSceneVC: UICollectionViewDataSource,UICollectionViewDelegate{
         let model = dataList[indexPath.row]
         if model.type == "2" {//语音场景
             goVoiceSceneVC(sceneId: model.id!)
+        }else if model.type == "3" {//定时场景
+            goTimeSceneVC(sceneId: model.id!)
         }else{//条件场景
             goConditionSceneVC(sceneId: model.id!)
         }

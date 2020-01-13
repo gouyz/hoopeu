@@ -12,10 +12,17 @@ import UIKit
 class HOOPSceneModel: LHSBaseModel {
     /// id
     var id : String?
-    /// 1条件场景  2语音场景
+    /// 1条件场景  2语音场景 3定时场景
     var type : String? = ""
     /// 场景名称
     var name : String? = ""
     /// 设备序列号
     var deviceId : String? = ""
+    
+    /// 2019-01-01
+    var dayOfYear : String? = ""
+    /// 17:00
+    var dayTime : String? = ""
+    /// USER_DEFINE
+    var weekTime : String? = ""
 }
