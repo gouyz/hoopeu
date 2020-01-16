@@ -29,6 +29,10 @@
 
 #import "ZFIJKPlayerManager.h"
 
+///  音频转换
+#import "ConvertMp3.h"
+#import "AmrCodec.h"
+
 /// 极光推送相关头文件
 // 引入JPush功能所需头文件
 #import "JPUSHService.h"

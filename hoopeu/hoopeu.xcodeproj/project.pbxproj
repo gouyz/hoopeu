@@ -202,6 +202,13 @@
 		0A40E439222930AE00E49689 /* HOOPSoundControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A40E438222930AE00E49689 /* HOOPSoundControlVC.swift */; };
 		0A41DE4522251161000FFFEA /* HOOPRoomDeviceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A41DE4422251161000FFFEA /* HOOPRoomDeviceVC.swift */; };
 		0A41DE4722253B25000FFFEA /* HOOPRoomDeviceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A41DE4622253B25000FFFEA /* HOOPRoomDeviceCell.swift */; };
+		0A44485823D05DE3002BAC4F /* libvo-amrwbenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A44484723D05DE3002BAC4F /* libvo-amrwbenc.a */; };
+		0A44485923D05DE3002BAC4F /* ConvertMp3.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A44484823D05DE3002BAC4F /* ConvertMp3.m */; };
+		0A44485A23D05DE3002BAC4F /* ConvertAmr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A44484923D05DE3002BAC4F /* ConvertAmr.swift */; };
+		0A44485B23D05DE3002BAC4F /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A44484A23D05DE3002BAC4F /* libmp3lame.a */; };
+		0A44485C23D05DE3002BAC4F /* libopencore-amrwb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A44485123D05DE3002BAC4F /* libopencore-amrwb.a */; };
+		0A44485D23D05DE3002BAC4F /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A44485223D05DE3002BAC4F /* libopencore-amrnb.a */; };
+		0A44485E23D05DE3002BAC4F /* RecorderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A44485623D05DE3002BAC4F /* RecorderManager.swift */; };
 		0A47D0D923CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A47D0D823CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift */; };
 		0A48036222A7AAD700335419 /* HOOPLinkPersonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036122A7AAD700335419 /* HOOPLinkPersonVC.swift */; };
 		0A48036422A7ABFE00335419 /* HOOPLinkPersonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036322A7ABFE00335419 /* HOOPLinkPersonCell.swift */; };
@@ -488,6 +495,21 @@
 		0A40F8032251EB05002680F7 /* hoopeu.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = hoopeu.entitlements; sourceTree = "<group>"; };
 		0A41DE4422251161000FFFEA /* HOOPRoomDeviceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPRoomDeviceVC.swift; sourceTree = "<group>"; };
 		0A41DE4622253B25000FFFEA /* HOOPRoomDeviceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPRoomDeviceCell.swift; sourceTree = "<group>"; };
+		0A44484223D05DE3002BAC4F /* AmrCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmrCodec.h; sourceTree = "<group>"; };
+		0A44484523D05DE3002BAC4F /* enc_if.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enc_if.h; sourceTree = "<group>"; };
+		0A44484723D05DE3002BAC4F /* libvo-amrwbenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libvo-amrwbenc.a"; sourceTree = "<group>"; };
+		0A44484823D05DE3002BAC4F /* ConvertMp3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConvertMp3.m; sourceTree = "<group>"; };
+		0A44484923D05DE3002BAC4F /* ConvertAmr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvertAmr.swift; sourceTree = "<group>"; };
+		0A44484A23D05DE3002BAC4F /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmp3lame.a; sourceTree = "<group>"; };
+		0A44484B23D05DE3002BAC4F /* ConvertMp3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConvertMp3.h; sourceTree = "<group>"; };
+		0A44484E23D05DE3002BAC4F /* if_rom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = if_rom.h; sourceTree = "<group>"; };
+		0A44484F23D05DE3002BAC4F /* dec_if.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dec_if.h; sourceTree = "<group>"; };
+		0A44485123D05DE3002BAC4F /* libopencore-amrwb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopencore-amrwb.a"; sourceTree = "<group>"; };
+		0A44485223D05DE3002BAC4F /* libopencore-amrnb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopencore-amrnb.a"; sourceTree = "<group>"; };
+		0A44485423D05DE3002BAC4F /* interf_dec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_dec.h; sourceTree = "<group>"; };
+		0A44485523D05DE3002BAC4F /* interf_enc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_enc.h; sourceTree = "<group>"; };
+		0A44485623D05DE3002BAC4F /* RecorderManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecorderManager.swift; sourceTree = "<group>"; };
+		0A44485723D05DE3002BAC4F /* lame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lame.h; sourceTree = "<group>"; };
 		0A47D0D823CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPAddTimeSceneVC.swift; sourceTree = "<group>"; };
 		0A48036122A7AAD700335419 /* HOOPLinkPersonVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLinkPersonVC.swift; sourceTree = "<group>"; };
 		0A48036322A7ABFE00335419 /* HOOPLinkPersonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLinkPersonCell.swift; sourceTree = "<group>"; };
@@ -544,12 +566,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A0BEFE022BD2735003A1FC7 /* libiconv.tbd in Frameworks */,
+				0A44485D23D05DE3002BAC4F /* libopencore-amrnb.a in Frameworks */,
 				0A4ECC1823C6CC36009EB1D1 /* UIKit.framework in Frameworks */,
 				0A0BEFDF22BD2726003A1FC7 /* libbz2.tbd in Frameworks */,
 				0A649F4B22A0B605001829A9 /* libsqlite3.tbd in Frameworks */,
 				0A4ECC1223C6CC30009EB1D1 /* IJKMediaFramework.framework in Frameworks */,
+				0A44485B23D05DE3002BAC4F /* libmp3lame.a in Frameworks */,
+				0A44485C23D05DE3002BAC4F /* libopencore-amrwb.a in Frameworks */,
 				0A4ECC0F23C6CC2D009EB1D1 /* FMDB.framework in Frameworks */,
 				0A4ECC1423C6CC33009EB1D1 /* MobileCoreServices.framework in Frameworks */,
+				0A44485823D05DE3002BAC4F /* libvo-amrwbenc.a in Frameworks */,
 				0A4ECC1623C6CC35009EB1D1 /* Pods_hoopeu.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1132,6 +1158,7 @@
 		0A3ABA9421DDE8DD0048F0F3 /* 3rdLib */ = {
 			isa = PBXGroup;
 			children = (
+				0A44484123D05DE3002BAC4F /* AudioRecordThird */,
 				0A4A27BC22BCD9040070605A /* ZFPlayer */,
 				0A649F4C22A0D213001829A9 /* IRLibaray */,
 				0A40AAE8222E5987006B3D93 /* SYProgressView */,
@@ -1304,6 +1331,84 @@
 				0A40AAF4222E5987006B3D93 /* SYWaveProgressView.m */,
 			);
 			path = SYProgressView;
+			sourceTree = "<group>";
+		};
+		0A44484123D05DE3002BAC4F /* AudioRecordThird */ = {
+			isa = PBXGroup;
+			children = (
+				0A44484223D05DE3002BAC4F /* AmrCodec.h */,
+				0A44484323D05DE3002BAC4F /* vo-amrwbenc */,
+				0A44484823D05DE3002BAC4F /* ConvertMp3.m */,
+				0A44484923D05DE3002BAC4F /* ConvertAmr.swift */,
+				0A44484A23D05DE3002BAC4F /* libmp3lame.a */,
+				0A44484B23D05DE3002BAC4F /* ConvertMp3.h */,
+				0A44484C23D05DE3002BAC4F /* opencore-amr */,
+				0A44485623D05DE3002BAC4F /* RecorderManager.swift */,
+				0A44485723D05DE3002BAC4F /* lame.h */,
+			);
+			path = AudioRecordThird;
+			sourceTree = "<group>";
+		};
+		0A44484323D05DE3002BAC4F /* vo-amrwbenc */ = {
+			isa = PBXGroup;
+			children = (
+				0A44484423D05DE3002BAC4F /* vo-amrwbenc */,
+				0A44484623D05DE3002BAC4F /* lib */,
+			);
+			path = "vo-amrwbenc";
+			sourceTree = "<group>";
+		};
+		0A44484423D05DE3002BAC4F /* vo-amrwbenc */ = {
+			isa = PBXGroup;
+			children = (
+				0A44484523D05DE3002BAC4F /* enc_if.h */,
+			);
+			path = "vo-amrwbenc";
+			sourceTree = "<group>";
+		};
+		0A44484623D05DE3002BAC4F /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				0A44484723D05DE3002BAC4F /* libvo-amrwbenc.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		0A44484C23D05DE3002BAC4F /* opencore-amr */ = {
+			isa = PBXGroup;
+			children = (
+				0A44484D23D05DE3002BAC4F /* opencore-amrwb */,
+				0A44485023D05DE3002BAC4F /* lib */,
+				0A44485323D05DE3002BAC4F /* opencore-amrnb */,
+			);
+			path = "opencore-amr";
+			sourceTree = "<group>";
+		};
+		0A44484D23D05DE3002BAC4F /* opencore-amrwb */ = {
+			isa = PBXGroup;
+			children = (
+				0A44484E23D05DE3002BAC4F /* if_rom.h */,
+				0A44484F23D05DE3002BAC4F /* dec_if.h */,
+			);
+			path = "opencore-amrwb";
+			sourceTree = "<group>";
+		};
+		0A44485023D05DE3002BAC4F /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				0A44485123D05DE3002BAC4F /* libopencore-amrwb.a */,
+				0A44485223D05DE3002BAC4F /* libopencore-amrnb.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		0A44485323D05DE3002BAC4F /* opencore-amrnb */ = {
+			isa = PBXGroup;
+			children = (
+				0A44485423D05DE3002BAC4F /* interf_dec.h */,
+				0A44485523D05DE3002BAC4F /* interf_enc.h */,
+			);
+			path = "opencore-amrnb";
 			sourceTree = "<group>";
 		};
 		0A4A27BC22BCD9040070605A /* ZFPlayer */ = {
@@ -1608,6 +1713,7 @@
 				0A3DA2C8222FBD3000A03350 /* HOOPShePinControlVC.swift in Sources */,
 				0A0B6D93223FDFFB00CBF406 /* HOOPSwitchVC.swift in Sources */,
 				0A0601DE221ED197003F8CFE /* HOOPUnBindDeviceVC.swift in Sources */,
+				0A44485923D05DE3002BAC4F /* ConvertMp3.m in Sources */,
 				0A3ABB1B21DDEA560048F0F3 /* HOOPHomeVC.swift in Sources */,
 				0A06D90622242B3000D68CAA /* HOOPSelectConditionCell.swift in Sources */,
 				0A3ABAF821DDE8DE0048F0F3 /* HXTagAttribute.m in Sources */,
@@ -1695,6 +1801,7 @@
 				0A3ABACC21DDE8DE0048F0F3 /* GYZFuncModelView.swift in Sources */,
 				0A3ABB0621DDE8DE0048F0F3 /* MMShareSheet.swift in Sources */,
 				0A40AAF7222E5987006B3D93 /* SYLineProgressView.m in Sources */,
+				0A44485E23D05DE3002BAC4F /* RecorderManager.swift in Sources */,
 				0A3B8478221E7EFF007ADEAE /* HOOPModifyOldPwdVC.swift in Sources */,
 				0A0B324D22CCF3C200679E58 /* HOOPCustomOtherControlVC.swift in Sources */,
 				0A388062221FD95000E51EDA /* HOOPOnOffProblemVC.swift in Sources */,
@@ -1751,6 +1858,7 @@
 				0A3ABB0C21DDE8DE0048F0F3 /* ScrollPageView.swift in Sources */,
 				0A37E044221D42A9002EAA74 /* HOOPLinkPowerVC.swift in Sources */,
 				0A011E56233A14A60008F153 /* GYZCommonInfoView.swift in Sources */,
+				0A44485A23D05DE3002BAC4F /* ConvertAmr.swift in Sources */,
 				0A3ABB1721DDE8DE0048F0F3 /* GYZCheckTool.m in Sources */,
 				0A3ABAED21DDE8DE0048F0F3 /* GYZUIColor+Extension.swift in Sources */,
 				0A0506CE221C52F90053C7BC /* HOOPRegisterCodeVC.swift in Sources */,
@@ -2009,6 +2117,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/ZFPlayer",
+					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird/vo-amrwbenc/lib",
+					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird",
+					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird/opencore-amr/lib",
 				);
 				MARKETING_VERSION = 1.0.0;
 				ONLY_ACTIVE_ARCH = YES;
@@ -2108,6 +2219,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/ZFPlayer",
+					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird/vo-amrwbenc/lib",
+					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird",
+					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird/opencore-amr/lib",
 				);
 				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
