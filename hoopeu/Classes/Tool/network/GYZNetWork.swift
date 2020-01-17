@@ -161,6 +161,53 @@ class GYZNetWork: NSObject {
         })
     }
     
+    /// 音频文件上传
+    ///
+    /// - Parameters:
+    ///   - url: 服务器地址
+    ///   - parameters: 参数
+    ///   - uploadParam: 上传图片的信息
+    ///   - success: 上传成功的回调
+    ///   - failture: 上传失败的回调
+    static func uploadVideoRequest(_ url : String,
+                                   baseUrl: String = BaseRequestURL,
+                                   parameters : [String:Any]? = nil,
+                                   fileUrl : URL,
+                                   keyName: String,
+                                   fileName: String,
+                                   success : @escaping (_ response : JSON)->Void,
+                                   failture : @escaping (_ error : Error?)-> Void){
+        
+        let requestUrl = baseUrl + url
+        
+        let headers = ["content-type":"multipart/form-data"]
+        
+        
+        Alamofire.upload(multipartFormData: { (multipartFormData) in
+            
+            if parameters != nil{
+                for param in parameters!{
+                    multipartFormData.append( ((param.value as AnyObject).data(using: String.Encoding.utf8.rawValue)!), withName: param.key)
+                }
+            }
+            multipartFormData.append(fileUrl, withName: keyName, fileName: fileName, mimeType: "audio/AMR")
+        }, to: requestUrl,
+           headers: headers,
+           encodingCompletion: {
+            encodingResult in
+            switch encodingResult {
+            case .success(let upload, _, _):
+                upload.responseJSON(completionHandler: { (response) in
+                    if let value = response.result.value {
+                        success(JSON(value))
+                    }
+                })
+            case .failure(let encodingError):
+                failture(encodingError)
+            }
+        })
+    }
+    
     /// 下载文件网络请求
     ///
     /// - Parameters:
@@ -189,18 +236,18 @@ class GYZNetWork: NSObject {
             }
         }
         
-            
-//            .responseJSON { (response) in
-//            if response.result.isSuccess{
-//                if let value = response.result.value {
-//
-//                    success(JSON(value))
-//                }
-//            }else{
-//                failture(response.result.error)
-//            }
-//        }
-       
+        
+        //            .responseJSON { (response) in
+        //            if response.result.isSuccess{
+        //                if let value = response.result.value {
+        //
+        //                    success(JSON(value))
+        //                }
+        //            }else{
+        //                failture(response.result.error)
+        //            }
+        //        }
+        
     }
     
 }

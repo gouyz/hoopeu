@@ -19,8 +19,11 @@ class RecordManager: NSObject {
     var recorder: AVAudioRecorder?
     var player: AVAudioPlayer?
     var recordName:String?
+    var timer: Timer!
+    var recordSeconds: NSInteger = 0
     
     func beginRcord(recordType:RecordType){
+        recordSeconds = 0
         let session = AVAudioSession.sharedInstance()
         //设置session类型
         do {
@@ -48,21 +51,29 @@ class RecordManager: NSObject {
             let now = Date()
             let timeInterval:TimeInterval = now.timeIntervalSince1970
             let timeStamp = Int(timeInterval)
-            recordName = "\(timeStamp)"
+            recordName = now.dateToStringWithFormat(format: "yyyyMMdd") + "\(timeStamp)"
             let fileType = (recordType == RecordType.Caf) ? "caf" : "wav"
             let filePath = NSHomeDirectory() + "/Documents/\(recordName!).\(fileType)"
             let url = URL(fileURLWithPath: filePath)
             recorder = try AVAudioRecorder(url: url, settings: recordSetting)
             recorder!.prepareToRecord()
             recorder!.record()
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onClickTimer), userInfo: nil, repeats: true)
             print("开始录音----")
         } catch let err {
+            if timer != nil {
+                timer.invalidate()
+            }
+            self.recordSeconds = 0
             print("录音失败:\(err.localizedDescription)")
         }
     }
     
     //结束录音
     func stopRecord() {
+        if timer != nil {
+            timer.invalidate()
+        }
         if let recorder = self.recorder {
             recorder.stop()
             print("停止录音----")
@@ -70,6 +81,11 @@ class RecordManager: NSObject {
         }else {
             print("停止失败")
         }
+    }
+    
+    @objc func onClickTimer(){
+        self.recordSeconds += 1
+        print("正在录音：\(self.recordSeconds)s")
     }
     
     //播放

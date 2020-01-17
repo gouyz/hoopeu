@@ -47,7 +47,7 @@ class LHSAddPhotoView: UIView {
                     imgView.frame = CGRect.init(x: CGFloat.init(columnIndex) * (imgWidth + margin), y: CGFloat.init(rowIndex) * (imgWidth + margin), width: imgWidth, height: imgWidth)
                     
                     //删除按钮的实现
-                    let delImg: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_group_delete"))
+                    let delImg: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_cancel"))
                     delImg.tag = 100 + index
                     imgView.addSubview(delImg)
                     
