@@ -217,24 +217,49 @@ class GYZNetWork: NSObject {
     /// - success: 上传成功的回调
     /// - failture: 上传失败的回调
     static func downLoadRequest(_ url : String,
-                                parameters : Parameters? = nil,
+                                parameters : [String:Any]? = nil,
                                 method : HTTPMethod = .get,
                                 success : @escaping (_ response : JSON)->Void,
                                 failture : @escaping (_ error : Error?)-> Void){
         
         ///下载到用户文档目录下
-        let destination = DownloadRequest.suggestedDownloadDestination(
-            for: .cachesDirectory,
-            in: .userDomainMask
-        )
-        
-        Alamofire.download(url, method: method, parameters: parameters, to: destination).response { (response) in
+//        let destination = DownloadRequest.suggestedDownloadDestination(
+//            for: .cachesDirectory,
+//            in: .userDomainMask
+//        )
+        Alamofire.download(url, method: method, parameters: parameters) { (temporaryURL, response) -> (destinationURL: URL, options: DownloadRequest.DownloadOptions) in
+            
+            // 下载到Documents中的哪个文件夹folioName这里是文件夹
+                    let documentURL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/voiceMsg")
+                    // 在路径追加文件名称
+                    let fileUrl = documentURL.appendingPathComponent(response.suggestedFilename! + ".amr")
+                    // .createIntermediateDirectories：如果指定了目标URL，将会创建中间目录。
+                    // .removePreviousFile：如果指定了目标URL，将会移除之前的文件
+                    return (fileUrl , [.removePreviousFile, .createIntermediateDirectories])
+        }.response { (response) in
             if response.error == nil{
                 success(JSON(""))
             }else{
                 failture(response.error)
             }
         }
+//        .responseJSON { (response) in
+//            if response.result.isSuccess{
+//                if let value = response.result.value {
+//
+//                    success(JSON(value))
+//                }
+//            }else{
+//                failture(response.result.error)
+//            }
+//        }
+//        Alamofire.download(url, method: method, parameters: parameters, to: destination).response { (response) in
+//            if response.error == nil{
+//                success(JSON(""))
+//            }else{
+//                failture(response.error)
+//            }
+//        }
         
         
         //            .responseJSON { (response) in

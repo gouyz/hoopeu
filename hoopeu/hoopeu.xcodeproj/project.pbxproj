@@ -209,6 +209,7 @@
 		0A44485C23D05DE3002BAC4F /* libopencore-amrwb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A44485123D05DE3002BAC4F /* libopencore-amrwb.a */; };
 		0A44485D23D05DE3002BAC4F /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A44485223D05DE3002BAC4F /* libopencore-amrnb.a */; };
 		0A44485E23D05DE3002BAC4F /* RecorderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A44485623D05DE3002BAC4F /* RecorderManager.swift */; };
+		0A446B8123D2A12E00C538C7 /* HOOPLeaveMessageRecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A446B8023D2A12E00C538C7 /* HOOPLeaveMessageRecordCell.swift */; };
 		0A47D0D923CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A47D0D823CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift */; };
 		0A48036222A7AAD700335419 /* HOOPLinkPersonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036122A7AAD700335419 /* HOOPLinkPersonVC.swift */; };
 		0A48036422A7ABFE00335419 /* HOOPLinkPersonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036322A7ABFE00335419 /* HOOPLinkPersonCell.swift */; };
@@ -510,6 +511,7 @@
 		0A44485523D05DE3002BAC4F /* interf_enc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_enc.h; sourceTree = "<group>"; };
 		0A44485623D05DE3002BAC4F /* RecorderManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecorderManager.swift; sourceTree = "<group>"; };
 		0A44485723D05DE3002BAC4F /* lame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lame.h; sourceTree = "<group>"; };
+		0A446B8023D2A12E00C538C7 /* HOOPLeaveMessageRecordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLeaveMessageRecordCell.swift; sourceTree = "<group>"; };
 		0A47D0D823CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPAddTimeSceneVC.swift; sourceTree = "<group>"; };
 		0A48036122A7AAD700335419 /* HOOPLinkPersonVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLinkPersonVC.swift; sourceTree = "<group>"; };
 		0A48036322A7ABFE00335419 /* HOOPLinkPersonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLinkPersonCell.swift; sourceTree = "<group>"; };
@@ -1056,6 +1058,7 @@
 			children = (
 				0A0B7173224A76B200AC8547 /* HOOPChatTextCell.swift */,
 				0A0B7175224A7DA000AC8547 /* HOOPChatBottomView.swift */,
+				0A446B8023D2A12E00C538C7 /* HOOPLeaveMessageRecordCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1889,6 +1892,7 @@
 				0A0B6D95223FE42700CBF406 /* HOOPSelectedSwitchNameView.swift in Sources */,
 				0A3ABAF421DDE8DE0048F0F3 /* GYZLoadingView.swift in Sources */,
 				0A3ABAF221DDE8DE0048F0F3 /* AXBadgeView.swift in Sources */,
+				0A446B8123D2A12E00C538C7 /* HOOPLeaveMessageRecordCell.swift in Sources */,
 				0A11EFE32247BE5E00756F24 /* HOOPConnectWiFiVC.swift in Sources */,
 				0A0E566022BBB52C001B6556 /* HOOPShotPhotosVC.swift in Sources */,
 				0A3B847E221E812D007ADEAE /* HOOPDeviceManagerVC.swift in Sources */,

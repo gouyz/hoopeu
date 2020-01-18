@@ -40,6 +40,9 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     var isVoiceUpload: Bool = false
     let recorderManager = RecordManager()
     
+    /// 1:app端留言 2:设备端语音
+    var sourceType: String = "1"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -367,11 +370,21 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     }
     /// 播放录音
     @objc func playRecordVoice(){
-        recorderManager.play(recordType: .Wav)
+        if isVoiceUpload {
+            recorderManager.play(recordType: .Wav)
+        }else{
+            downLoadVoice()
+        }
     }
     
     /// 删除本地录音
     @objc func onClickedDelVoice(){
+        if isEdit {
+            voiceBtn.isHidden = false
+            playBtn.isHidden = true
+            delImg.isHidden = true
+            return
+        }
         if recorderManager.recordName == nil {
             return
         }
@@ -416,9 +429,27 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         })
     }
     func setMessageInfo(dataModel: HOOPLeaveMessageModel){
-        contentTxtView.text = dataModel.msg
-        contentTxtView.textColor = kBlackFontColor
-        fontCountLab.text =  "\(contentTxtView.text.count)/\(contentMaxCount)"
+        if dataModel.leavemsgType == "AUDIO" {// 语音留言
+            isVoice = true
+            voiceCheckView.tagImgView.isHighlighted = true
+            bgView.isHidden = isVoice
+            delImg.isHidden = false
+            voiceBtn.isHidden = true
+            playBtn.isHidden = false
+            recorderManager.recordName = dataModel.leavemsgName
+        }else{
+            isVoice = false
+            bgView.isHidden = false
+            voiceCheckView.tagImgView.isHighlighted = false
+            delImg.isHidden = true
+            voiceBtn.isHidden = !isVoice
+            playBtn.isHidden = true
+            
+            contentTxtView.text = dataModel.msg
+            contentTxtView.textColor = kBlackFontColor
+            fontCountLab.text =  "\(contentTxtView.text.count)/\(contentMaxCount)"
+        }
+        sourceType = dataModel.type!
         self.week_time = dataModel.weak_time!
         self.day_time = dataModel.day_time!
         self.day = dataModel.yml!
@@ -503,7 +534,7 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     /// mqtt发布主题 修改留言
     func sendSaveEditMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"day_time":day_time,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":contentTxtView.text!,"loop":isLoop ? 1 : 0,"day_of_year":day,"msg_type":"app_leavemsg_edit","app_interface_tag":"","type": msgType]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"day_time":day_time,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":(isVoice ? "":contentTxtView.text!),"loop":isLoop ? 1 : 0,"day_of_year":day,"msg_type":"app_leavemsg_edit","app_interface_tag":"","type": msgType,"leavemsg_type":(isVoice ? "AUDIO":"TEXT"),"leavemsg_name":(isVoice ? recorderManager.recordName!:""),"type":sourceType]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -532,6 +563,23 @@ class HOOPLeaveMessageVC: GYZBaseVC {
             GYZLog(error)
         }
         
+    }
+    func downLoadVoice(){
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        GYZNetWork.downLoadRequest("http://119.29.107.14:8080/robot_filter-web/voiceMessage/download.html", parameters: ["boardId":userDefaults.string(forKey: "devId") ?? "","fileName":recorderManager.recordName!], method: .post, success: { (response) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            weakSelf?.playDownLoadVoice()
+        }) { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        }
+    }
+    
+    func playDownLoadVoice(){
+        recorderManager.convertAmrToWav()
+        recorderManager.playWav()
     }
     
     /// 重载CocoaMQTTDelegate

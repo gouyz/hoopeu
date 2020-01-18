@@ -14,7 +14,7 @@ private let messageRecordCell = "messageRecordCell"
 class HOOPMessageRecordVC: GYZBaseVC {
     
     var dataList: [HOOPLeaveMessageModel] = [HOOPLeaveMessageModel]()
-    /// 留言类型 1：app留言 2：语音留言 3: 收到的留言
+    /// 留言类型 1：app留言 2：设备留言 3: 收到的留言
     var messageType: String = "1"
     
     override func viewDidLoad() {
@@ -38,7 +38,7 @@ class HOOPMessageRecordVC: GYZBaseVC {
         table.separatorStyle = .none
         table.backgroundColor = kWhiteColor
         
-        table.register(GYZLabArrowCell.self, forCellReuseIdentifier: messageRecordCell)
+        table.register(HOOPLeaveMessageRecordCell.self, forCellReuseIdentifier: messageRecordCell)
         
         return table
     }()
@@ -129,12 +129,25 @@ extension HOOPMessageRecordVC: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: messageRecordCell) as! GYZLabArrowCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: messageRecordCell) as! HOOPLeaveMessageRecordCell
         
+        let model = dataList[indexPath.row]
         if messageType == "3" {// 收到的留言
-            cell.nameLab.text = dataList[indexPath.row].tts
+            if model.msgName!.isEmpty {
+                cell.playBtn.isHidden = true
+                cell.nameLab.text = model.tts
+            }else{
+                cell.nameLab.text = model.createTime
+                cell.playBtn.isHidden = false
+            }
         }else{
-            cell.nameLab.text = dataList[indexPath.row].msg
+            if model.leavemsgName!.isEmpty {
+                cell.playBtn.isHidden = true
+                cell.nameLab.text = model.msg
+            }else{
+                cell.nameLab.text = model.createTime
+                cell.playBtn.isHidden = false
+            }
         }
         
         cell.selectionStyle = .none

@@ -125,7 +125,7 @@ class RecordManager: NSObject {
     }
     
     func convertAmrToWav(){
-        let amrPath = NSHomeDirectory() + "/Documents/\(recordName!).amr"
+        let amrPath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).amr"
         do {
             let amrData = try Data(contentsOf: URL(fileURLWithPath: amrPath))
             let wavData = convertAmrWBToWave(data: amrData)
