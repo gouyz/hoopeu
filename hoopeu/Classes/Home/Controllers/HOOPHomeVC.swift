@@ -362,20 +362,25 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         
         GYZLog(noti.userInfo)
         let userInfo = noti.userInfo!
-        
-        let deviceName = userInfo["deviceName"] as! String
-        let deviceId = userInfo["deviceId"] as! String
-        if deviceId == userDefaults.string(forKey: "devId") {
-            goWarnLogVC()
-        }else{// 提示切换设备
-            weak var weakSelf = self
-            GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "确定要切换小叮当吗", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
-                
-                if index != cancelIndex{
-                    weakSelf?.requestUserDevice(devId: deviceId)
+        let type = userInfo["type"] as! String
+        if type == "leavemsg" {
+            goLeaveMsgVC()
+        }else{
+//            let deviceName = userInfo["deviceName"] as! String
+            let deviceId = userInfo["deviceId"] as! String
+            if deviceId == userDefaults.string(forKey: "devId") {
+                goWarnLogVC()
+            }else{// 提示切换设备
+                weak var weakSelf = self
+                GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "确定要切换小叮当吗", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
+                    
+                    if index != cancelIndex{
+                        weakSelf?.requestUserDevice(devId: deviceId)
+                    }
                 }
             }
         }
+        
     }
     /// 电量通知
     ///
@@ -447,6 +452,11 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     //    }
     func goWarnLogVC(){
         let vc = HOOPWarnLogVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    func goLeaveMsgVC(){
+        let vc = HOOPMessageRecordManagerVC()
+        vc.currIndex = 2
         navigationController?.pushViewController(vc, animated: true)
     }
     

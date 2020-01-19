@@ -370,6 +370,9 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     }
     /// 播放录音
     @objc func playRecordVoice(){
+//        recorderManager.convertWavToAmr()
+//        recorderManager.convertAmrToWav()
+//        recorderManager.playWav()
         if isVoiceUpload {
             recorderManager.play(recordType: .Wav)
         }else{
@@ -391,7 +394,7 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         
         let fileManager = FileManager.default
         do{
-            try fileManager.removeItem(atPath: NSHomeDirectory() + "/Documents/\(recorderManager.recordName!).wav")
+            try fileManager.removeItem(atPath: NSHomeDirectory() + "/Documents/voiceMsg/\(recorderManager.recordName!).wav")
             voiceBtn.isHidden = false
             playBtn.isHidden = true
             delImg.isHidden = true
@@ -459,12 +462,12 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     }
     /// 保存
     @objc func clickedSaveBtn(){
-        if isVoice {
+        if isVoiceUpload {
             if recorderManager.recordSeconds < 2 {
                 MBProgressHUD.showAutoDismissHUD(message: "语音留言要大于2秒，请删除后重新录制")
                 return
             }
-        }else{
+        }else if !isVoice{
             if contentTxtView.text == placeHolder {
                 MBProgressHUD.showAutoDismissHUD(message: placeHolder)
                 return
@@ -550,7 +553,7 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         recorderManager.convertWavToAmr()
-        GYZNetWork.uploadVideoRequest("voiceMessage/upload.html",baseUrl:"http://119.29.107.14:8080/robot_filter-web/", parameters: ["boardId":userDefaults.string(forKey: "devId") ?? ""], fileUrl: URL.init(fileURLWithPath: NSHomeDirectory() + "/Documents/\(recorderManager.recordName!).amr"), keyName: "uploadFiles", fileName: recorderManager.recordName!, success: { (response) in
+        GYZNetWork.uploadVideoRequest("voiceMessage/upload.html",baseUrl:"http://119.29.107.14:8080/robot_filter-web/", parameters: ["boardId":userDefaults.string(forKey: "devId") ?? ""], fileUrl: URL.init(fileURLWithPath: NSHomeDirectory() + "/Documents/voiceMsg/\(recorderManager.recordName!).amr"), keyName: "uploadFiles", fileName: recorderManager.recordName! + ".amr", success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
@@ -568,6 +571,7 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         GYZNetWork.downLoadRequest("http://119.29.107.14:8080/robot_filter-web/voiceMessage/download.html", parameters: ["boardId":userDefaults.string(forKey: "devId") ?? "","fileName":recorderManager.recordName!], method: .post, success: { (response) in
+//            sleep(1)
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             weakSelf?.playDownLoadVoice()

@@ -12,15 +12,17 @@ import MBProgressHUD
 import SwiftyJSON
 
 class HOOPReceivedMessageDetailVC: GYZBaseVC {
-
+    /// 选择结果回调
+    var resultBlock:((_ isRefresh: Bool) -> Void)?
     /// 留言id
     var messageId: String = ""
     
     var dataModel: HOOPLeaveMessageModel?
+    let recorderManager = RecordManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.navigationItem.title = "收到留言"
         self.view.backgroundColor = kWhiteColor
         
@@ -33,37 +35,22 @@ class HOOPReceivedMessageDetailVC: GYZBaseVC {
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightBtn)
         
         setUpUI()
-        requestMessageInfo()
-        mqttSetting()
     }
     
     func setUpUI(){
         view.addSubview(desLab)
-        view.addSubview(contentLab)
-        view.addSubview(lineView)
-        view.addSubview(dateLab)
+        view.addSubview(playBtn)
         
         desLab.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
             make.top.equalTo(kTitleAndStateHeight + 20)
             make.size.equalTo(CGSize.init(width: kTitleHeight, height: 20))
         }
-        contentLab.snp.makeConstraints { (make) in
+        playBtn.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
             make.right.equalTo(-kMargin)
             make.top.equalTo(desLab.snp.bottom).offset(kMargin)
-            make.height.equalTo(0)
-        }
-        lineView.snp.makeConstraints { (make) in
-            make.left.equalTo(kMargin)
-            make.right.equalTo(-kMargin)
-            make.height.equalTo(klineWidth)
-            make.top.equalTo(contentLab.snp.bottom).offset(kMargin)
-        }
-        dateLab.snp.makeConstraints { (make) in
-            make.left.right.equalTo(lineView)
-            make.top.equalTo(lineView.snp.bottom)
-            make.height.equalTo(kTitleHeight)
+            make.height.equalTo(kUIButtonHeight)
         }
     }
     
@@ -81,35 +68,22 @@ class HOOPReceivedMessageDetailVC: GYZBaseVC {
         return lab
     }()
     
-    /// 留言
-    lazy var contentLab : UILabel = {
-        let lab = UILabel()
-        lab.font = k15Font
-        lab.textColor = kBlackFontColor
-        lab.numberOfLines = 0
-        lab.text = "如：单次 09：25"
+    /// 播放
+    lazy var playBtn : UIButton = {
+        let btn = UIButton.init(type: .custom)
+        btn.backgroundColor = kBtnClickBGColor
+        btn.setTitleColor(kWhiteColor, for: .normal)
+        btn.setTitle("点击播放", for: .normal)
+        btn.titleLabel?.font = k15Font
+        btn.cornerRadius = kCornerRadius
         
-        return lab
-    }()
-    /// 分割线
-    var lineView : UIView = {
-        let line = UIView()
-        line.backgroundColor = kGrayLineColor
-        return line
-    }()
-    ///
-    lazy var dateLab : UILabel = {
-        let lab = UILabel()
-        lab.font = k13Font
-        lab.textColor = kGaryFontColor
-        lab.textAlignment = .right
-        lab.text = "2019-03-27 09:30:00"
+        btn.addTarget(self, action: #selector(playRecordVoice) , for: .touchUpInside)
         
-        return lab
+        
+        return btn
     }()
-    
-    /// 留言信息
-    func requestMessageInfo(){
+    /// 删除留言信息
+    func requestDelMessageInfo(){
         if !GYZTool.checkNetWork() {
             return
         }
@@ -117,15 +91,16 @@ class HOOPReceivedMessageDetailVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("leavemsg/listInfo", parameters: ["id":messageId,"deviceId":userDefaults.string(forKey: "devId") ?? ""],method : .get,  success: { (response) in
+        GYZNetWork.requestNetwork("leavemsg/delLeavemsgReceiveId", parameters: ["id":messageId],method : .get,  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
                 
-                guard let data = response["data"].dictionaryObject else { return }
-                weakSelf?.dataModel = HOOPLeaveMessageModel.init(dict: data)
-                weakSelf?.setMessageInfo()
+                if weakSelf?.resultBlock != nil{
+                    weakSelf?.resultBlock!(true)
+                }
+                weakSelf?.clickedBackBtn()
             }else{
                 MBProgressHUD.showAutoDismissHUD(message: response["msg"].stringValue)
             }
@@ -135,58 +110,37 @@ class HOOPReceivedMessageDetailVC: GYZBaseVC {
             GYZLog(error)
         })
     }
-    func setMessageInfo(){
-        if dataModel != nil {
-            contentLab.text = dataModel?.msg
-            dateLab.text = (dataModel?.yml)! + " " + (dataModel?.day_time)!
+    /// 播放录音
+    @objc func playRecordVoice(){
+        recorderManager.recordName = dataModel?.msgName
+        downLoadVoice()
+    }
+    func downLoadVoice(){
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        GYZNetWork.downLoadRequest("http://119.29.107.14:8080/robot_filter-web/voiceMessage/download.html", parameters: ["boardId":userDefaults.string(forKey: "devId") ?? "","fileName":recorderManager.recordName!], method: .post, success: { (response) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            weakSelf?.playDownLoadVoice()
+        }) { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
         }
-        
     }
     
+    func playDownLoadVoice(){
+        recorderManager.convertAmrToWav()
+        recorderManager.playWav()
+    }
     /// 删除
     @objc func onClickRightBtn(){
         weak var weakSelf = self
         GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "确定要删除此留言吗?", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
             
             if index != cancelIndex{
-                weakSelf?.sendSaveDeleteMqttCmd()
+                weakSelf?.requestDelMessageInfo()
             }
         }
     }
     
-    /// mqtt发布主题 删除留言
-    func sendSaveDeleteMqttCmd(){
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_leavemsg_del","app_interface_tag":""]
-        
-        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
-    }
-    
-    /// 重载CocoaMQTTDelegate
-    override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        super.mqtt(mqtt, didConnectAck: ack)
-        if ack == .accept {
-            mqtt.subscribe("api_receive", qos: CocoaMQTTQOS.qos1)
-        }
-    }
-    override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
-        super.mqtt(mqtt, didReceiveMessage: message, id: id)
-        
-        if let data = message.string {
-            let result = JSON.init(parseJSON: data)
-            let phone = result["phone"].stringValue
-            let type = result["msg_type"].stringValue
-            if let tag = result["app_interface_tag"].string{
-                if tag.hasPrefix("system_"){
-                    return
-                }
-            }
-            if type == "app_leavemsg_del_re" && phone == userDefaults.string(forKey: "phone"){
-                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
-                if result["code"].intValue == kQuestSuccessTag{
-                    
-                    clickedBackBtn()
-                }
-            }
-        }
-    }
 }

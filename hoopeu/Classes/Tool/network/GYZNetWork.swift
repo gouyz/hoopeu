@@ -19,8 +19,11 @@ let kDefaultMQTTHost = "121.43.122.86"
 //let BaseRequestURL = "http://www.hoopeurobot.com/app/"
 #else
 /// mqtt host
-let kDefaultMQTTHost = "119.29.107.14"
-let BaseRequestURL = "http://www.hoopeurobot.com/app/"
+let BaseRequestURL = "http://121.43.122.86/app/"
+/// mqtt host
+let kDefaultMQTTHost = "121.43.122.86"
+//let kDefaultMQTTHost = "119.29.107.14"
+//let BaseRequestURL = "http://www.hoopeurobot.com/app/"
 #endif
 
 class GYZNetWork: NSObject {
@@ -190,7 +193,7 @@ class GYZNetWork: NSObject {
                     multipartFormData.append( ((param.value as AnyObject).data(using: String.Encoding.utf8.rawValue)!), withName: param.key)
                 }
             }
-            multipartFormData.append(fileUrl, withName: keyName, fileName: fileName, mimeType: "audio/AMR")
+            multipartFormData.append(fileUrl, withName: keyName, fileName: fileName, mimeType: "audio/amr")
         }, to: requestUrl,
            headers: headers,
            encodingCompletion: {

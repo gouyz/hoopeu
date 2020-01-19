@@ -39,11 +39,11 @@ class RecordManager: NSObject {
         }
        
         let recordSetting: [String: Any] = [
-            AVSampleRateKey: NSNumber(value: 16000),//采样率
-            AVEncoderBitRateKey:NSNumber(value: 16000),
+            AVSampleRateKey: NSNumber(value: 8000),//采样率
+//            AVEncoderBitRateKey:NSNumber(value: 16000),
             AVFormatIDKey: NSNumber(value: kAudioFormatLinearPCM),//音频格式
             AVNumberOfChannelsKey: NSNumber(value: 1),//通道数
-            AVLinearPCMBitDepthKey:NSNumber(value: 16),
+//            AVLinearPCMBitDepthKey:NSNumber(value: 16),
             AVEncoderAudioQualityKey: NSNumber(value: AVAudioQuality.max.rawValue)//录音质量
         ];
         //开始录音
@@ -53,7 +53,7 @@ class RecordManager: NSObject {
             let timeStamp = Int(timeInterval)
             recordName = now.dateToStringWithFormat(format: "yyyyMMdd") + "\(timeStamp)"
             let fileType = (recordType == RecordType.Caf) ? "caf" : "wav"
-            let filePath = NSHomeDirectory() + "/Documents/\(recordName!).\(fileType)"
+            let filePath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).\(fileType)"
             let url = URL(fileURLWithPath: filePath)
             recorder = try AVAudioRecorder(url: url, settings: recordSetting)
             recorder!.prepareToRecord()
@@ -92,7 +92,7 @@ class RecordManager: NSObject {
     func play(recordType:RecordType) {
         do {
             let fileType = (recordType == RecordType.Caf) ? "caf" : "wav"
-            let filePath = NSHomeDirectory() + "/Documents/\(recordName!).\(fileType)"
+            let filePath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).\(fileType)"
             player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: filePath))
             print("播放录音长度：\(player!.duration)")
             player!.play()
@@ -110,11 +110,11 @@ class RecordManager: NSObject {
     }
     
     func convertWavToAmr(){
-        let wavPath = NSHomeDirectory() + "/Documents/\(recordName!).wav"
+        let wavPath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).wav"
         do {
             let wavData = try Data(contentsOf: URL(fileURLWithPath: wavPath))
-            let amrData = convert16khzWaveToAmr(waveData: wavData)
-            let amrPath = NSHomeDirectory() + "/Documents/\(recordName!).amr"
+            let amrData = convert8khzWaveToAmr(waveData: wavData)//convert16khzWaveToAmr(waveData: wavData)
+            let amrPath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).amr"
             try amrData?.write(to: URL(fileURLWithPath: amrPath))
             print("wav源文件：\(wavPath)")
             print("amr文件：\(amrPath)")
@@ -128,8 +128,8 @@ class RecordManager: NSObject {
         let amrPath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).amr"
         do {
             let amrData = try Data(contentsOf: URL(fileURLWithPath: amrPath))
-            let wavData = convertAmrWBToWave(data: amrData)
-            let wavPath = NSHomeDirectory() + "/Documents/\(recordName!)_fromAmr.wav"
+            let wavData = convertAmrNBToWave(data: amrData)//convertAmrWBToWave(data: amrData)
+            let wavPath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!)_fromAmr.wav"
             try wavData?.write(to: URL(fileURLWithPath: wavPath))
             print("amr源文件：\(amrPath)")
             print("wav文件：\(wavPath)")
@@ -140,7 +140,7 @@ class RecordManager: NSObject {
     
     func playWav(){
         do {
-            let filePath = NSHomeDirectory() + "/Documents/\(recordName!)_fromAmr.wav"
+            let filePath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!)_fromAmr.wav"
             player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: filePath))
             print("播放录音长度：\(player!.duration)")
             player!.play()
