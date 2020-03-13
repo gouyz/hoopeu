@@ -184,6 +184,10 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                         
                         if model?.type == "pt2262"{/// 射频遥控删除
                             weakSelf?.sendSDelShePinMqttCmd(sId: (model?.id)!)
+                        }else if model?.type == "ir"{/// 红外设备遥控删除
+                            weakSelf?.sendDelMqttCmd(sId: (model?.id)!)
+                        }else if model?.type == "other"{/// 自定义遥控删除
+                            weakSelf?.sendDeleteCustomMqttCmd(sId: (model?.id)!)
                         }
                     }else if section == 3{
                         let model = weakSelf?.dataModel?.sensorList[indexRow]
@@ -198,6 +202,10 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                         let model = weakSelf?.dataModel?.intelligentDeviceList[indexRow]
                         if model?.type == "pt2262"{/// 射频遥控删除
                             weakSelf?.sendSDelShePinMqttCmd(sId: (model?.id)!)
+                        }else if model?.type == "ir"{/// 红外设备遥控删除
+                            weakSelf?.sendDelMqttCmd(sId: (model?.id)!)
+                        }else if model?.type == "other"{/// 自定义遥控删除
+                            weakSelf?.sendDeleteCustomMqttCmd(sId: (model?.id)!)
                         }
                     }else if section == 2{
                         let model = weakSelf?.dataModel?.sensorList[indexRow]
@@ -420,6 +428,20 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
+    /// 红外遥控器删除
+    func sendDelMqttCmd(sId: String){
+        createHUD(message: "加载中...")
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","msg_type":"app_ir_del","phone":userDefaults.string(forKey: "phone") ?? "","ir_id":sId,"app_interface_tag":""]
+        
+        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    /// mqtt发布主题 删除自定义遥控器
+    func sendDeleteCustomMqttCmd(sId: String){
+        
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","ctrl_dev_id":sId,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_other_del","app_interface_tag":""]
+        
+        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
     
     /// 重载CocoaMQTTDelegate
     override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
@@ -531,6 +553,19 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                     sendMqttCmd()
                 }else{
                     MBProgressHUD.showAutoDismissHUD(message: "删除失败")
+                }
+            }else if type == "app_other_del_re" && result["phone"].stringValue == userDefaults.string(forKey: "phone"){
+                if result["code"].intValue == kQuestSuccessTag{
+                    MBProgressHUD.showAutoDismissHUD(message: "删除成功")
+                    sendMqttCmd()
+                }else{
+                    MBProgressHUD.showAutoDismissHUD(message: "删除失败")
+                }
+            }else if type == "app_ir_del_re" && result["phone"].stringValue == userDefaults.string(forKey: "phone"){
+                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
+//                self.hud?.hide(animated: true)
+                if result["code"].intValue == kQuestSuccessTag{
+                    sendMqttCmd()
                 }
             }else if type == "device_state_report" && result["device_id"].stringValue == userDefaults.string(forKey: "devId") && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
                 let msg = result["msg"]
@@ -773,7 +808,8 @@ extension HOOPRoomDeviceVC: UITableViewDelegate,UITableViewDataSource{
                 if model?.type == "pt2262"{
                     return [deleteAction]
                 }else {
-                    return nil
+//                    return nil
+                    return [deleteAction]
                 }
             }else if indexPath.section == 3{// 传感器
                 return [deleteAction]
@@ -787,7 +823,8 @@ extension HOOPRoomDeviceVC: UITableViewDelegate,UITableViewDataSource{
                 if model?.type == "pt2262"{
                     return [deleteAction]
                 }else {
-                    return nil
+//                    return nil
+                    return [deleteAction]
                 }
             }else if indexPath.section == 2{// 传感器
                 return [deleteAction]

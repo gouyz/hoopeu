@@ -365,7 +365,7 @@
 		0A3ABA3F21DDE0E30048F0F3 /* hoopeuUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hoopeuUITests.swift; sourceTree = "<group>"; };
 		0A3ABA4121DDE0E30048F0F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A3ABA5821DDE8DD0048F0F3 /* LHSBaseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LHSBaseModel.swift; sourceTree = "<group>"; };
-		0A3ABA5A21DDE8DD0048F0F3 /* JSMWebViewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSMWebViewVC.swift; sourceTree = "<group>"; };
+		0A3ABA5A21DDE8DD0048F0F3 /* JSMWebViewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSMWebViewVC.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		0A3ABA5C21DDE8DD0048F0F3 /* GYZCommonArrowCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GYZCommonArrowCell.swift; sourceTree = "<group>"; };
 		0A3ABA5D21DDE8DD0048F0F3 /* LHSAddPhotoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LHSAddPhotoView.swift; sourceTree = "<group>"; };
 		0A3ABA5E21DDE8DD0048F0F3 /* GYZFuncModelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GYZFuncModelView.swift; sourceTree = "<group>"; };

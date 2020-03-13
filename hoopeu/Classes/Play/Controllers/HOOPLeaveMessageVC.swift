@@ -537,14 +537,14 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     /// mqtt发布主题 修改留言
     func sendSaveEditMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"day_time":day_time,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":(isVoice ? "":contentTxtView.text!),"loop":isLoop ? 1 : 0,"day_of_year":day,"msg_type":"app_leavemsg_edit","app_interface_tag":"","type": msgType,"leavemsg_type":(isVoice ? "AUDIO":"TEXT"),"leavemsg_name":(isVoice ? recorderManager.recordName!:""),"type":sourceType]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"day_time":day_time,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":(isVoice ? "":contentTxtView.text!),"loop":isLoop ? 1 : 0,"day_of_year":day,"msg_type":"app_leavemsg_edit","app_interface_tag":"","leavemsg_type":(isVoice ? "AUDIO":"TEXT"),"leavemsg_name":(isVoice ? recorderManager.recordName!:""),"type":sourceType]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
     /// mqtt发布主题 删除留言
     func sendSaveDeleteMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_leavemsg_del","app_interface_tag":"","type": msgType]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_leavemsg_del","app_interface_tag":"","type": sourceType]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }

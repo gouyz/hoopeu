@@ -151,6 +151,7 @@ class HOOPModifyReNewPwdVC: GYZBaseVC {
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
+                MBProgressHUD.showAutoDismissHUD(message: "请重新登录")
                 userDefaults.set(response["data"].stringValue, forKey: "token")
                 weakSelf?.goBack()
             }else{
