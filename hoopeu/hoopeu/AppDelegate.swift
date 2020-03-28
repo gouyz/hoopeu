@@ -381,6 +381,7 @@ extension AppDelegate: CocoaMQTTDelegate {
         //        mqtt!.willMessage = CocoaMQTTWill(topic: "hoopeu_app", message: "dieout")
         mqtt!.keepAlive = 150
         mqtt!.delegate = self
+        mqtt?.autoReconnect = true
         mqtt!.connect()
     }
     /// 配网提示
