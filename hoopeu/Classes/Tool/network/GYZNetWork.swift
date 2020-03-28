@@ -19,8 +19,11 @@ let kDefaultMQTTHost = "121.43.122.86"
 //let BaseRequestURL = "http://www.hoopeurobot.com/app/"
 #else
 /// mqtt host
-let kDefaultMQTTHost = "119.29.107.14"
-let BaseRequestURL = "http://www.hoopeurobot.com/app/"
+let BaseRequestURL = "http://121.43.122.86/app/"
+/// mqtt host
+let kDefaultMQTTHost = "121.43.122.86"
+//let kDefaultMQTTHost = "119.29.107.14"
+//let BaseRequestURL = "http://www.hoopeurobot.com/app/"
 #endif
 
 class GYZNetWork: NSObject {
@@ -161,6 +164,53 @@ class GYZNetWork: NSObject {
         })
     }
     
+    /// 音频文件上传
+    ///
+    /// - Parameters:
+    ///   - url: 服务器地址
+    ///   - parameters: 参数
+    ///   - uploadParam: 上传图片的信息
+    ///   - success: 上传成功的回调
+    ///   - failture: 上传失败的回调
+    static func uploadVideoRequest(_ url : String,
+                                   baseUrl: String = BaseRequestURL,
+                                   parameters : [String:Any]? = nil,
+                                   fileUrl : URL,
+                                   keyName: String,
+                                   fileName: String,
+                                   success : @escaping (_ response : JSON)->Void,
+                                   failture : @escaping (_ error : Error?)-> Void){
+        
+        let requestUrl = baseUrl + url
+        
+        let headers = ["content-type":"multipart/form-data"]
+        
+        
+        Alamofire.upload(multipartFormData: { (multipartFormData) in
+            
+            if parameters != nil{
+                for param in parameters!{
+                    multipartFormData.append( ((param.value as AnyObject).data(using: String.Encoding.utf8.rawValue)!), withName: param.key)
+                }
+            }
+            multipartFormData.append(fileUrl, withName: keyName, fileName: fileName, mimeType: "audio/amr")
+        }, to: requestUrl,
+           headers: headers,
+           encodingCompletion: {
+            encodingResult in
+            switch encodingResult {
+            case .success(let upload, _, _):
+                upload.responseJSON(completionHandler: { (response) in
+                    if let value = response.result.value {
+                        success(JSON(value))
+                    }
+                })
+            case .failure(let encodingError):
+                failture(encodingError)
+            }
+        })
+    }
+    
     /// 下载文件网络请求
     ///
     /// - Parameters:
@@ -170,27 +220,33 @@ class GYZNetWork: NSObject {
     /// - success: 上传成功的回调
     /// - failture: 上传失败的回调
     static func downLoadRequest(_ url : String,
-                                parameters : Parameters? = nil,
+                                parameters : [String:Any]? = nil,
                                 method : HTTPMethod = .get,
                                 success : @escaping (_ response : JSON)->Void,
                                 failture : @escaping (_ error : Error?)-> Void){
         
         ///下载到用户文档目录下
-        let destination = DownloadRequest.suggestedDownloadDestination(
-            for: .cachesDirectory,
-            in: .userDomainMask
-        )
-        
-        Alamofire.download(url, method: method, parameters: parameters, to: destination).response { (response) in
+//        let destination = DownloadRequest.suggestedDownloadDestination(
+//            for: .cachesDirectory,
+//            in: .userDomainMask
+//        )
+        Alamofire.download(url, method: method, parameters: parameters) { (temporaryURL, response) -> (destinationURL: URL, options: DownloadRequest.DownloadOptions) in
+            
+            // 下载到Documents中的哪个文件夹folioName这里是文件夹
+                    let documentURL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/voiceMsg")
+                    // 在路径追加文件名称
+                    let fileUrl = documentURL.appendingPathComponent(response.suggestedFilename! + ".amr")
+                    // .createIntermediateDirectories：如果指定了目标URL，将会创建中间目录。
+                    // .removePreviousFile：如果指定了目标URL，将会移除之前的文件
+                    return (fileUrl , [.removePreviousFile, .createIntermediateDirectories])
+        }.response { (response) in
             if response.error == nil{
                 success(JSON(""))
             }else{
                 failture(response.error)
             }
         }
-        
-            
-//            .responseJSON { (response) in
+//        .responseJSON { (response) in
 //            if response.result.isSuccess{
 //                if let value = response.result.value {
 //
@@ -200,7 +256,26 @@ class GYZNetWork: NSObject {
 //                failture(response.result.error)
 //            }
 //        }
-       
+//        Alamofire.download(url, method: method, parameters: parameters, to: destination).response { (response) in
+//            if response.error == nil{
+//                success(JSON(""))
+//            }else{
+//                failture(response.error)
+//            }
+//        }
+        
+        
+        //            .responseJSON { (response) in
+        //            if response.result.isSuccess{
+        //                if let value = response.result.value {
+        //
+        //                    success(JSON(value))
+        //                }
+        //            }else{
+        //                failture(response.result.error)
+        //            }
+        //        }
+        
     }
     
 }

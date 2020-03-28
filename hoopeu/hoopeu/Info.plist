@@ -44,7 +44,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>用于获取当前位置,获取当前WiFi名称时需要</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>用于播放叮当宝贝视频监控声音</string>
+	<string>用于播放叮当宝贝视频监控声音或语音留言</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>用于保存视频截图或报警日志图片</string>
 	<key>NSPhotoLibraryUsageDescription</key>

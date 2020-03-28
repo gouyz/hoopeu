@@ -34,6 +34,14 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     var user_define_times: [String] = [String]()
     /// 轮询播报 默认true
     var isLoop: Bool = true
+    /// 语音留言 默认false
+    var isVoice: Bool = false
+    /// 语音留言 是否上传语音
+    var isVoiceUpload: Bool = false
+    let recorderManager = RecordManager()
+    
+    /// 1:app端留言 2:设备端语音
+    var sourceType: String = "1"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,10 +63,14 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightBtn)
         
         setUpUI()
+        voiceBtn.isHidden = !isVoice
+        delImg.isHidden = !isVoice
+        playBtn.isHidden = !isVoice
         contentTxtView.delegate = self
         contentTxtView.text = placeHolder
         
         iconTimeView.addOnClickListener(target: self, action: #selector(onClickedEditTime))
+        delImg.addOnClickListener(target: self, action: #selector(onClickedDelVoice))
         
         if isEdit {
             requestMessageInfo()
@@ -72,6 +84,10 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     
     func setUpUI(){
         view.addSubview(desLab)
+        view.addSubview(voiceCheckView)
+        view.addSubview(playBtn)
+        view.addSubview(delImg)
+        view.addSubview(voiceBtn)
         view.addSubview(bgView)
         bgView.addSubview(contentTxtView)
         bgView.addSubview(fontCountLab)
@@ -88,10 +104,30 @@ class HOOPLeaveMessageVC: GYZBaseVC {
             make.top.equalTo(kTitleAndStateHeight + kMargin)
             make.size.equalTo(CGSize.init(width: kTitleHeight, height: 20))
         }
+        voiceCheckView.snp.makeConstraints { (make) in
+            make.left.equalTo(kMargin)
+            make.top.equalTo(desLab.snp.bottom).offset(kMargin)
+            make.height.equalTo(34)
+            make.width.equalTo(160)
+        }
+        
+        voiceBtn.snp.makeConstraints { (make) in
+            make.left.top.right.equalTo(bgView)
+            make.height.equalTo(kUIButtonHeight)
+        }
+        playBtn.snp.makeConstraints { (make) in
+            make.left.top.height.equalTo(voiceBtn)
+            make.right.equalTo(delImg.snp.left).offset(-kMargin)
+        }
+        delImg.snp.makeConstraints { (make) in
+            make.right.equalTo(-kMargin)
+            make.centerY.equalTo(playBtn)
+            make.size.equalTo(CGSize.init(width: 24, height: 24))
+        }
         bgView.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
             make.right.equalTo(-kMargin)
-            make.top.equalTo(desLab.snp.bottom).offset(kMargin)
+            make.top.equalTo(voiceCheckView.snp.bottom).offset(kMargin)
             make.height.equalTo(100)
         }
         contentTxtView.snp.makeConstraints { (make) in
@@ -155,6 +191,47 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         lab.cornerRadius = kCornerRadius
         
         return lab
+    }()
+    /// 是否语音留言
+    lazy var voiceCheckView : LHSCheckView = {
+        let checkView = LHSCheckView()
+        checkView.nameLab.text = "是否语音留言"
+        checkView.tagImgView.image = UIImage.init(named: "icon_check_normal")
+        checkView.tagImgView.highlightedImage = UIImage.init(named: "icon_check_selected")
+        checkView.tagImgView.isHighlighted = isVoice
+        checkView.addOnClickListener(target: self, action: #selector(onClickedVoiceSelect))
+        
+        return checkView
+    }()
+    lazy var delImg: UIImageView = UIImageView.init(image: UIImage.init(named: "icon_cancel"))
+    /// 播放
+    lazy var playBtn : UIButton = {
+        let btn = UIButton.init(type: .custom)
+        btn.backgroundColor = kBtnClickBGColor
+        btn.setTitleColor(kWhiteColor, for: .normal)
+        btn.setTitle("点击播放", for: .normal)
+        btn.titleLabel?.font = k15Font
+        btn.cornerRadius = kCornerRadius
+        
+        btn.addTarget(self, action: #selector(playRecordVoice) , for: .touchUpInside)
+        
+        
+        return btn
+    }()
+    /// 录音
+    lazy var voiceBtn : UIButton = {
+        let btn = UIButton.init(type: .custom)
+        btn.backgroundColor = kBtnClickBGColor
+        btn.setTitleColor(kWhiteColor, for: .normal)
+        btn.setTitle("按住录音", for: .normal)
+        btn.titleLabel?.font = k15Font
+        btn.cornerRadius = kCornerRadius
+        
+        btn.addTarget(self, action: #selector(startRecordVoice), for: .touchDown)
+        btn.addTarget(self, action: #selector(cancelRecordVoice) , for: .touchUpInside)
+        
+        
+        return btn
     }()
     /// 背景View
     lazy var bgView: UIView = {
@@ -252,11 +329,79 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         return btn
     }()
     
+    /// 是否语音留言
+    @objc func onClickedVoiceSelect(){
+        isVoice = !isVoice
+        voiceCheckView.tagImgView.isHighlighted = isVoice
+        bgView.isHidden = isVoice
+        voiceBtn.isHidden = !isVoice
+        if isVoice && recorderManager.recordName != nil {
+            delImg.isHidden = false
+            voiceBtn.isHidden = true
+            playBtn.isHidden = false
+        }else{
+            delImg.isHidden = true
+            voiceBtn.isHidden = !isVoice
+            playBtn.isHidden = true
+        }
+    }
+    
     /// 是否要轮询播报
     @objc func onClickedSelect(){
     
         isLoop = !isLoop
         singleCheckView.tagImgView.isHighlighted = isLoop
+    }
+    
+    /// 开始录音
+    @objc func startRecordVoice(){
+        isVoiceUpload = true
+        voiceBtn.setTitle("录音中...", for: .normal)
+        recorderManager.beginRcord(recordType: .Wav)
+    }
+    /// 停止录音
+    @objc func cancelRecordVoice(){
+        recorderManager.stopRecord()
+        voiceBtn.isHidden = true
+        voiceBtn.setTitle("按住录音", for: .normal)
+        playBtn.isHidden = false
+        playBtn.setTitle("点击播放 \(recorderManager.recordSeconds)s", for: .normal)
+        delImg.isHidden = false
+    }
+    /// 播放录音
+    @objc func playRecordVoice(){
+//        recorderManager.convertWavToAmr()
+//        recorderManager.convertAmrToWav()
+//        recorderManager.playWav()
+        if isVoiceUpload {
+            recorderManager.play(recordType: .Wav)
+        }else{
+            downLoadVoice()
+        }
+    }
+    
+    /// 删除本地录音
+    @objc func onClickedDelVoice(){
+        if isEdit {
+            voiceBtn.isHidden = false
+            playBtn.isHidden = true
+            delImg.isHidden = true
+            return
+        }
+        if recorderManager.recordName == nil {
+            return
+        }
+        
+        let fileManager = FileManager.default
+        do{
+            try fileManager.removeItem(atPath: NSHomeDirectory() + "/Documents/voiceMsg/\(recorderManager.recordName!).wav")
+            voiceBtn.isHidden = false
+            playBtn.isHidden = true
+            delImg.isHidden = true
+            recorderManager.recordName = nil
+        }catch{
+            print("Failed to remove file.")
+        }
     }
     
     /// 留言信息
@@ -287,9 +432,27 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         })
     }
     func setMessageInfo(dataModel: HOOPLeaveMessageModel){
-        contentTxtView.text = dataModel.msg
-        contentTxtView.textColor = kBlackFontColor
-        fontCountLab.text =  "\(contentTxtView.text.count)/\(contentMaxCount)"
+        if dataModel.leavemsgType == "AUDIO" {// 语音留言
+            isVoice = true
+            voiceCheckView.tagImgView.isHighlighted = true
+            bgView.isHidden = isVoice
+            delImg.isHidden = false
+            voiceBtn.isHidden = true
+            playBtn.isHidden = false
+            recorderManager.recordName = dataModel.leavemsgName
+        }else{
+            isVoice = false
+            bgView.isHidden = false
+            voiceCheckView.tagImgView.isHighlighted = false
+            delImg.isHidden = true
+            voiceBtn.isHidden = !isVoice
+            playBtn.isHidden = true
+            
+            contentTxtView.text = dataModel.msg
+            contentTxtView.textColor = kBlackFontColor
+            fontCountLab.text =  "\(contentTxtView.text.count)/\(contentMaxCount)"
+        }
+        sourceType = dataModel.type!
         self.week_time = dataModel.weak_time!
         self.day_time = dataModel.day_time!
         self.day = dataModel.yml!
@@ -299,10 +462,18 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     }
     /// 保存
     @objc func clickedSaveBtn(){
-        if contentTxtView.text == placeHolder {
-            MBProgressHUD.showAutoDismissHUD(message: placeHolder)
-            return
+        if isVoiceUpload {
+            if recorderManager.recordSeconds < 2 {
+                MBProgressHUD.showAutoDismissHUD(message: "语音留言要大于2秒，请删除后重新录制")
+                return
+            }
+        }else if !isVoice{
+            if contentTxtView.text == placeHolder {
+                MBProgressHUD.showAutoDismissHUD(message: placeHolder)
+                return
+            }
         }
+        
         if day_time.isEmpty {
             MBProgressHUD.showAutoDismissHUD(message: "请选择留言时间")
             return
@@ -315,6 +486,9 @@ class HOOPLeaveMessageVC: GYZBaseVC {
             sendSaveEditMqttCmd()
         }else{// 记录
             sendSaveMqttCmd()
+        }
+        if isVoiceUpload {
+            uploadVoice()
         }
     }
     
@@ -356,23 +530,60 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     /// mqtt发布主题 新增
     func sendSaveMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","day_time":day_time,"loop":isLoop ? 1 : 0,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":contentTxtView.text!,"day_of_year":day,"msg_type":"app_leavemsg_add","app_interface_tag":""]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","day_time":day_time,"loop":isLoop ? 1 : 0,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":(isVoice ? "":contentTxtView.text!),"day_of_year":day,"msg_type":"app_leavemsg_add","app_interface_tag":"","leavemsg_type":(isVoice ? "AUDIO":"TEXT"),"leavemsg_name":(isVoice ? recorderManager.recordName!:"")]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
     /// mqtt发布主题 修改留言
     func sendSaveEditMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"day_time":day_time,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":contentTxtView.text!,"loop":isLoop ? 1 : 0,"day_of_year":day,"msg_type":"app_leavemsg_edit","app_interface_tag":"","type": msgType]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"day_time":day_time,"week_time":week_time,"user_define_times":user_define_times,"phone":userDefaults.string(forKey: "phone") ?? "","tts":(isVoice ? "":contentTxtView.text!),"loop":isLoop ? 1 : 0,"day_of_year":day,"msg_type":"app_leavemsg_edit","app_interface_tag":"","leavemsg_type":(isVoice ? "AUDIO":"TEXT"),"leavemsg_name":(isVoice ? recorderManager.recordName!:""),"type":sourceType]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
     /// mqtt发布主题 删除留言
     func sendSaveDeleteMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_leavemsg_del","app_interface_tag":"","type": msgType]
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":messageId,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_leavemsg_del","app_interface_tag":"","type": sourceType]
         
         mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    
+    func uploadVoice(){
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        recorderManager.convertWavToAmr()
+        GYZNetWork.uploadVideoRequest("voiceMessage/upload.html",baseUrl:"http://119.29.107.14:8080/robot_filter-web/", parameters: ["boardId":userDefaults.string(forKey: "devId") ?? ""], fileUrl: URL.init(fileURLWithPath: NSHomeDirectory() + "/Documents/voiceMsg/\(recorderManager.recordName!).amr"), keyName: "uploadFiles", fileName: recorderManager.recordName! + ".amr", success: { (response) in
+            
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            if response["successful"].boolValue{//请求成功
+                
+                
+            }
+        }) { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        }
+        
+    }
+    func downLoadVoice(){
+        weak var weakSelf = self
+        createHUD(message: "加载中...")
+        GYZNetWork.downLoadRequest("http://119.29.107.14:8080/robot_filter-web/voiceMessage/download.html", parameters: ["boardId":userDefaults.string(forKey: "devId") ?? "","fileName":recorderManager.recordName!], method: .post, success: { (response) in
+//            sleep(1)
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(response)
+            weakSelf?.playDownLoadVoice()
+        }) { (error) in
+            weakSelf?.hud?.hide(animated: true)
+            GYZLog(error)
+        }
+    }
+    
+    func playDownLoadVoice(){
+        recorderManager.convertAmrToWav()
+        recorderManager.playWav()
     }
     
     /// 重载CocoaMQTTDelegate

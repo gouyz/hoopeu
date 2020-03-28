@@ -199,6 +199,7 @@ class HOOPRegisterRePwdVC: GYZBaseVC {
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
+                MBProgressHUD.showAutoDismissHUD(message: "请重新登录")
                 userDefaults.removeObject(forKey: "token")
                 weakSelf?.goLoginVC()
             }else{

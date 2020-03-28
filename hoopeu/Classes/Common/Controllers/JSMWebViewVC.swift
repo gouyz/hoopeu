@@ -20,6 +20,7 @@ class JSMWebViewVC: GYZBaseVC {
         
         self.navigationItem.title = webTitle
         self.view.backgroundColor = kWhiteColor
+        self.automaticallyAdjustsScrollViewInsets = false
         
         view.addSubview(webView)
         webView.snp.makeConstraints { (make) in
@@ -54,6 +55,14 @@ class JSMWebViewVC: GYZBaseVC {
             webView.load(URLRequest.init(url: URL.init(string: url)!))
         }else{
             webView.loadHTMLString(url.dealFuTextImgSize(), baseURL: nil)
+        }
+    }
+    
+    override func clickedBackBtn() {
+        if self.webView.canGoBack {
+            self.webView.goBack()
+        }else{
+            super.clickedBackBtn()
         }
     }
 }

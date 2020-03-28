@@ -9,16 +9,20 @@
 import UIKit
 
 class HOOPMessageRecordManagerVC: GYZBaseVC ,ContentViewDelegate {
-    var titleArr : [String] = ["我的留言","语音留言","收到留言"]
+    var titleArr : [String] = ["我的留言","设备留言","收到留言"]
     
     var stateValue : [String] = ["1","2","3"]
     var scrollPageView: ScrollSegmentView?
     var contentView: ContentView?
+    var currIndex: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setScrollView()
+        if currIndex != 0{
+            scrollPageView?.selectedIndex(currIndex, animated: true)
+        }
     }
     ///设置控制器
     func setChildVcs() -> [UIViewController] {
