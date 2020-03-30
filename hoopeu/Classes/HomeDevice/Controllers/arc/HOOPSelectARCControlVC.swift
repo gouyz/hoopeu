@@ -322,8 +322,8 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyName = "菜单"
                 mKeyCodeTag = 5
             }else if stepIndex == 3{
-                mKeyName = "频道+"
-                mKeyCodeTag = 3
+                mKeyName = "音量+"
+                mKeyCodeTag = 9
             }
         case .tvBox: //机顶盒
             ir_type = "ir_stb"
@@ -333,10 +333,10 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyCodeTag = 1
             }else if stepIndex == 2{
                 mKeyName = "菜单"
-                mKeyCodeTag = 41
-            }else if stepIndex == 3{
-                mKeyName = "频道+"
                 mKeyCodeTag = 45
+            }else if stepIndex == 3{
+                mKeyName = "音量+"
+                mKeyCodeTag = 37
             }
         case .IPTV: //IPTV 网络电视
             ir_type = "ir_iptv"
@@ -361,8 +361,8 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyName = "菜单"
                 mKeyCodeTag = 33
             }else if stepIndex == 3{
-                mKeyName = "静音"
-                mKeyCodeTag = 15
+                mKeyName = "音量+"
+                mKeyCodeTag = 13
             }
         case .PJT: //投影仪
             ir_type = "ir_proj"

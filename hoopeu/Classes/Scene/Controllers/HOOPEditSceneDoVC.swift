@@ -193,7 +193,7 @@ class HOOPEditSceneDoVC: GYZBaseVC {
         let lab = UILabel()
         lab.font = k15Font
         lab.textColor = kBlueFontColor
-        lab.text = "动作"
+        lab.text = "说话"
         lab.textAlignment = .center
         lab.borderColor = kBlueFontColor
         lab.borderWidth = klineWidth

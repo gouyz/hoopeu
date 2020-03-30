@@ -18,6 +18,7 @@ class HOOPSaveARCControlVC: GYZBaseVC {
     var curMatchBrandIndex: Int = 0
     var deviceType: DeviceType = .ARC
     var ir_type: String = "ir_air"
+    var ir_name: String = "空调"
     /// 临时id
     var deviceId: String = ""
     /// 临时开按键id
@@ -41,6 +42,7 @@ class HOOPSaveARCControlVC: GYZBaseVC {
         self.navigationItem.title = "遥控器命名"
         
         setUpUI()
+        arcNameTxtFiled.text = ir_name
         requestRoomList()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -161,8 +163,7 @@ class HOOPSaveARCControlVC: GYZBaseVC {
         let textFiled = UITextField()
         textFiled.font = k15Font
         textFiled.textColor = kBlackFontColor
-        textFiled.clearButtonMode = .whileEditing
-        textFiled.placeholder = "如：客厅空调"
+        textFiled.isEnabled = false
         
         return textFiled
     }()
