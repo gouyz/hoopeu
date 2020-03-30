@@ -77,7 +77,7 @@ class HOOPSeeVideoCell: UITableViewCell {
         let lab = UILabel()
         lab.font = k15Font
         lab.textColor = kBlackFontColor
-        lab.text = "客厅叮当看看"
+        lab.text = "叮当看看"
         
         return lab
     }()

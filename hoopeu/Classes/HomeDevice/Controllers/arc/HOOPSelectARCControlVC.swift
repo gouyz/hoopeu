@@ -62,6 +62,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
         bgView.addSubview(numLab)
         bgView.addSubview(sendBtn)
         bgView.addSubview(noResponseBtn)
+        bgView.addSubview(preBtn)
         bgView.addSubview(responseBtn)
         
         bgView.snp.makeConstraints { (make) in
@@ -100,6 +101,10 @@ class HOOPSelectARCControlVC: GYZBaseVC {
             make.left.height.equalTo(sendBtn)
             make.top.equalTo(sendBtn.snp.bottom).offset(20)
             make.width.equalTo(80)
+        }
+        preBtn.snp.makeConstraints { (make) in
+            make.top.height.width.equalTo(noResponseBtn)
+            make.centerX.equalTo(sendBtn)
         }
         responseBtn.snp.makeConstraints { (make) in
             make.top.height.width.equalTo(noResponseBtn)
@@ -174,6 +179,19 @@ class HOOPSelectARCControlVC: GYZBaseVC {
         
         return btn
     }()
+    /// 上一组
+    lazy var preBtn : UIButton = {
+        let btn = UIButton.init(type: .custom)
+        btn.backgroundColor = kBtnClickBGColor
+        btn.setTitleColor(kWhiteColor, for: .normal)
+        btn.setTitle("上一组", for: .normal)
+        btn.titleLabel?.font = k15Font
+        btn.cornerRadius = 8
+        
+        btn.addTarget(self, action: #selector(clickedPreBtn), for: .touchUpInside)
+        
+        return btn
+    }()
     /// 没响应
     lazy var noResponseBtn : UIButton = {
         let btn = UIButton.init(type: .custom)
@@ -233,7 +251,15 @@ class HOOPSelectARCControlVC: GYZBaseVC {
         stepIndex = 1
         initStepKey()
     }
-    
+    /// 上一组
+    @objc func clickedPreBtn(){
+        if curMatchIndex > 0 {
+            curMatchIndex -= 1
+            numLab.text = "第\(curMatchIndex + 1)/\(dataList.count)套方案"
+            stepIndex = 1
+            initStepKey()
+        }
+    }
     /// 设置按钮不可点击
     func noEnableBtn(){
         noResponseBtn.backgroundColor = kBtnNoClickBGColor
