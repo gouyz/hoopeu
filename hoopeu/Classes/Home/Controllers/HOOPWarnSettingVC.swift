@@ -19,6 +19,8 @@ class HOOPWarnSettingVC: GYZBaseVC {
     var week_time: String = ""
     /// 用户自定义时间选择，可多选。EVERY_MONDAY:每周一,EVERY_TUESDAY:每周二,EVERY_WEDNESDAY:每周三,EVERY_THURSDAY:每周四,EVERY_FRIDAY:每周五,EVERY_SATURDAY:每周六,EVERY_SUNDAY:每周日
     var user_define_times: [String] = [String]()
+    /// 用户想要播报的语句的日期，在单次时传值，非单值是传 “”,格式 “2019-01-01”
+    var day: String = ""
     /// 用户想要播报的语句的时间
     var day_time: String = ""
     /// 延时布防时间(秒)
@@ -210,12 +212,14 @@ class HOOPWarnSettingVC: GYZBaseVC {
     @objc func onClickedEditTime(){
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
         let vc = HOOPWarnEditTimeVC()
+        vc.isShowDate = true
         vc.resultBlock = {[weak self] (dayTime, weekTime,customWeek,day) in
             
             self?.isRequest = false
             self?.week_time = weekTime
             self?.day_time = dayTime
             self?.user_define_times = customWeek
+            self?.day = day
             self?.setGuardTime()
             self?.isSetDayTime = true
         }
@@ -234,7 +238,7 @@ class HOOPWarnSettingVC: GYZBaseVC {
     /// mqtt发布主题
     func sendSaveMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg":["is_set":isSetDayTime,"guard_time":["day_time":day_time,"week_time":week_time,"user_define_times":user_define_times],"guard_delay":guard_delay],"msg_type":"guard_setting","app_interface_tag":""]
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg":["is_set":isSetDayTime,"guard_time":["day_of_year":day,"day_time":day_time,"week_time":week_time,"user_define_times":user_define_times],"guard_delay":guard_delay],"msg_type":"guard_setting","app_interface_tag":""]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -301,6 +305,7 @@ class HOOPWarnSettingVC: GYZBaseVC {
                         guard_delay = result["guard_delay"].stringValue
                         timeLab.text = guard_delay + "秒"
                     }
+                    day = result["guard_time"]["day_of_year"].stringValue
                     
                     guard let itemInfo = result["guard_time"]["user_define_times"].array else { return }
                     for item in itemInfo{
@@ -332,10 +337,10 @@ class HOOPWarnSettingVC: GYZBaseVC {
                 days = days.subString(start: 0, length: days.count - 1)
             }
             warnTimeLab.text = day_time + "\n" + days
+        }else if week_time == "ONCE"{
+            warnTimeLab.text = day + " " + day_time + "\n" + GUARDBUFANGTIME[week_time]!
         }else{
-            if !day_time.isEmpty && !week_time.isEmpty{
-                warnTimeLab.text = day_time + "\n" + GUARDBUFANGTIME[week_time]!
-            }
+            warnTimeLab.text = day_time + "\n" + GUARDBUFANGTIME[week_time]!
         }
     }
 }

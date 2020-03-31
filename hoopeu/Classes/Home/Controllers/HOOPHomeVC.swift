@@ -22,33 +22,36 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     
     var selectTopImage: UIImage?
     var currIndex: Int = 0
+    var rightBtn: UIButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = "智慧家居"
         self.view.backgroundColor = kWhiteColor
-        self.navigationController?.delegate = self
+//        self.navigationController?.delegate = self
         
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_home_menu")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: #selector(onClickedMenuImg))
+        rightBtn = UIButton(type: .custom)
+        rightBtn?.frame = CGRect.init(x: 0, y: 0, width: 64, height: kTitleHeight)
+        navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: rightBtn!)
         //        userDefaults.set("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMzMqKioqMjE0NiIsInVzZXJJZCI6NTQsImlhdCI6MTU2NDU4MzcxNSwiZXhwIjoxNTY1MTg4NTE1fQ.VLhChXpc3k4rMau4zKLyah-URk2SzVrQZI5ZmNaZbp0", forKey: "token")
         //        var y: CGFloat = kStateHeight
         //        if #available(iOS 11.0, *) {
         //            y = kTitleAndStateHeight + kStateHeight
         //        }
-        topImgView.frame = CGRect.init(x: kMargin, y: kStateHeight, width: kScreenWidth - kMargin * 2, height: kScreenWidth * 0.34)
-        menuImgView.frame = CGRect.init(x: kMargin, y: kMargin, width: 40, height: 20)
+        topImgView.frame = CGRect.init(x: kMargin, y: kTitleAndStateHeight + kMargin, width: kScreenWidth - kMargin * 2, height: kScreenWidth * 0.34)
         
         view.addSubview(topImgView)
-        topImgView.addSubview(menuImgView)
-        topImgView.addSubview(powerLab)
-        topImgView.addSubview(powerImgView)
+        
+        rightBtn?.addSubview(powerLab)
+        rightBtn?.addSubview(powerImgView)
         powerLab.snp.makeConstraints { (make) in
-            make.top.equalTo(menuImgView)
-            make.right.equalTo(-5)
+            make.top.right.height.equalTo(rightBtn!)
             make.width.equalTo(40)
-            make.height.equalTo(menuImgView)
         }
         powerImgView.snp.makeConstraints { (make) in
-            make.centerY.equalTo(powerLab)
+            make.centerY.equalTo(rightBtn!)
             make.right.equalTo(powerLab.snp.left)
             make.size.equalTo(CGSize.init(width: 18, height: 18))
         }
@@ -63,7 +66,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+//        self.navigationController?.setNavigationBarHidden(true, animated: true)
         
 //        settingMqtt()
         // 本页面开启支持打开侧滑菜单
@@ -214,13 +217,6 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         return imgView
     }()
     
-    lazy var menuImgView: UIImageView = {
-        let imgView = UIImageView.init(image: UIImage.init(named: "icon_home_menu"))
-        
-        imgView.addOnClickListener(target: self, action: #selector(onClickedMenuImg))
-        
-        return imgView
-    }()
     lazy var powerImgView: UIImageView = {
         let imgView = UIImageView.init()
         return imgView
@@ -511,11 +507,11 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
 }
 
 /// mark - UINavigationControllerDelegate
-extension HOOPHomeVC : UINavigationControllerDelegate{
-    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        
-        /// 首页隐藏导航栏
-        let isShow = viewController.isKind(of: HOOPHomeVC.self)
-        self.navigationController?.setNavigationBarHidden(isShow, animated: true)
-    }
-}
+//extension HOOPHomeVC : UINavigationControllerDelegate{
+//    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+//
+//        /// 首页隐藏导航栏
+//        let isShow = viewController.isKind(of: HOOPHomeVC.self)
+//        self.navigationController?.setNavigationBarHidden(isShow, animated: true)
+//    }
+//}

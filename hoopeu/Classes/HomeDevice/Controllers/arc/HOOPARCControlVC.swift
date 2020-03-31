@@ -249,7 +249,7 @@ class HOOPARCControlVC: HOOPBaseControlVC {
     /// 开
     lazy var onBtn : UIButton = {
         let btn = UIButton.init(type: .custom)
-        btn.backgroundColor = kBtnClickBGColor
+        btn.backgroundColor = kRedFontColor
         btn.setTitle("开", for: .normal)
         btn.setTitleColor(kWhiteColor, for: .normal)
         btn.titleLabel?.font = k15Font
@@ -263,7 +263,7 @@ class HOOPARCControlVC: HOOPBaseControlVC {
     /// 关
     lazy var offBtn : UIButton = {
         let btn = UIButton.init(type: .custom)
-        btn.backgroundColor = kBtnClickBGColor
+        btn.backgroundColor = kRedFontColor
         btn.setTitle("关", for: .normal)
         btn.setTitleColor(kWhiteColor, for: .normal)
         btn.titleLabel?.font = k15Font

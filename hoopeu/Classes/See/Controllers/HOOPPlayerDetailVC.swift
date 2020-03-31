@@ -384,6 +384,13 @@ class HOOPPlayerDetailVC: GYZBaseVC {
                     hiddenEmptyView()
 //                    self.showVideo()
                 }else if result["ret"].intValue == 0 && result["order"].stringValue == "camera_start_push"{
+                    MBProgressHUD.showAutoDismissHUD(message: "摄像头打开失败")
+                    weak var weakSelf = self
+                    showEmptyView(content: "加载失败，请点击重新加载", reload: {
+                        weakSelf?.startOrEndPlayer(order: "camera_start_push")
+                    })
+                }else if result["ret"].intValue == 2 && result["order"].stringValue == "camera_start_push"{
+                    MBProgressHUD.showAutoDismissHUD(message: "摄像头权限已关闭")
                     weak var weakSelf = self
                     showEmptyView(content: "加载失败，请点击重新加载", reload: {
                         weakSelf?.startOrEndPlayer(order: "camera_start_push")

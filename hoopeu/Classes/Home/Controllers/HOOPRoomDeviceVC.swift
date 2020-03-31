@@ -18,12 +18,14 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     var roomId: String = ""
     var dataModel: HOOPRoomDeviceModel?
 
-    var titleArray = ["小夜灯", "防盗报警", "爱心看护"]
-    var iconArray = ["icon_home_xiaoyedeng", "icon_home_warn", "icon_home_aixinkanhu"]
+    var titleArray = ["小夜灯", "防盗报警","麦克风", "爱心看护"]
+    var iconArray = ["icon_home_xiaoyedeng", "icon_home_warn", "icon_home_mike", "icon_home_aixinkanhu"]
     /// 小夜灯开关状态
     var lightState: String = "on"
     /// 安防开关状态
     var guardState: String = "on"
+    /// 麦克风开关状态
+    var mikeState: String = "on"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -322,12 +324,10 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                     sendLightMqttCmd()
                 }else if row == 1{//安防
                     guardState = sender.isOn ? "on" : "off"
-//                    if guardState == "off"{
-//                        guardState = "on"
-//                    }else{
-//                        sendGuardMqttCmd()
-//                    }
                     sendGuardMqttCmd()
+                }else if row == 2{//麦克风
+                    mikeState = sender.isOn ? "on" : "off"
+                    sendMikeMqttCmd()
                 }
             }else if section == 1{// 开关
                 sendOnOffMqttCmd(row: row, state: sender.isOn ? "on" : "off")
@@ -390,7 +390,13 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
-    
+    /// mqtt发布主题 麦克风控制-开闭安防状态
+    func sendMikeMqttCmd(){
+        //        createHUD(message: "加载中...")
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg":["mic_state":mikeState],"msg_type":"mic_ctrl","app_interface_tag":""]
+        
+        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
     /// mqtt发布主题 开闭灯
     func sendOnOffMqttCmd(row: Int,state: String){
         //        createHUD(message: "加载中...")
@@ -501,6 +507,16 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                 if result["ret"].intValue == 1{
                     dataModel?.light = result["light_state"].stringValue == "on" ? "1":"0"
                     lightState = result["light_state"].stringValue
+                    MBProgressHUD.showAutoDismissHUD(message: "设置成功")
+                }else{
+                    MBProgressHUD.showAutoDismissHUD(message: "设置失败")
+                }
+                tableView.reloadData()
+            }else if type == "mic_ctrl_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
+                //                hud?.hide(animated: true)
+                if result["ret"].intValue == 1{
+                    dataModel?.mic = result["mic_state"].stringValue == "on" ? "1":"0"
+                    mikeState = result["mic_state"].stringValue
                     MBProgressHUD.showAutoDismissHUD(message: "设置成功")
                 }else{
                     MBProgressHUD.showAutoDismissHUD(message: "设置失败")
@@ -656,12 +672,14 @@ extension HOOPRoomDeviceVC: UITableViewDelegate,UITableViewDataSource{
                 if indexPath.section == 0{
                     cell.nameLab.text = titleArray[indexPath.row]
                     cell.iconView.image = UIImage.init(named: iconArray[indexPath.row])
-                    if indexPath.row == 2{
+                    if indexPath.row == 3{
                         cell.switchView.isHidden = true
                     }else if indexPath.row == 0{//小夜灯
                         cell.switchView.isOn = dataModel?.light == "1"
                     }else if indexPath.row == 1{//报警
                         cell.switchView.isOn = dataModel?.guard == "1"
+                    }else if indexPath.row == 2{//麦克风
+                        cell.switchView.isOn = dataModel?.mic == "1"
                     }
                 }else if indexPath.section == 1{// 开关
                     cell.nameLab.text = dataModel?.switchList[indexPath.row].switch_name
@@ -738,7 +756,7 @@ extension HOOPRoomDeviceVC: UITableViewDelegate,UITableViewDataSource{
                     goIRControlVC(model: model!)
                 }
             }else if indexPath.section == 0{
-                if indexPath.row == 2{// 爱心看护
+                if indexPath.row == 3{// 爱心看护
                     goSeeVC()
                 }
             }
@@ -766,7 +784,7 @@ extension HOOPRoomDeviceVC: UITableViewDelegate,UITableViewDataSource{
     }
     /// 实现左滑
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if dataModel?.exist == "1" && indexPath.section == 0 && indexPath.row == 2 {//爱心看护不能左滑
+        if dataModel?.exist == "1" && indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 3) {//爱心看护、麦克风不能左滑
             return false
         }
         return true
