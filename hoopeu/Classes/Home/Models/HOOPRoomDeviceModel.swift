@@ -16,6 +16,8 @@ class HOOPRoomDeviceModel: LHSBaseModel {
     var light : String? = ""
     /// 安防报警开关状态 exist为0时不存在该项 false true
     var `guard` : String? = ""
+    /// 麦克风开关状态 exist为0时不存在该项 false true
+    var mic : String? = ""
     
     /// 开关list
     var switchList: [HOOPRoomDeviceSwitchModel] = [HOOPRoomDeviceSwitchModel]()

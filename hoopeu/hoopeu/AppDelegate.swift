@@ -380,6 +380,7 @@ extension AppDelegate: CocoaMQTTDelegate {
         mqtt!.password = kDefaultMQTTUserPwd
         //        mqtt!.willMessage = CocoaMQTTWill(topic: "hoopeu_app", message: "dieout")
         mqtt!.keepAlive = 150
+        mqtt?.autoReconnect = true
         mqtt!.delegate = self
         mqtt!.connect()
     }

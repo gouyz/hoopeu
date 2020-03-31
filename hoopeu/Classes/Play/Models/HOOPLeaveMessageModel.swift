@@ -49,7 +49,13 @@ class HOOPLeaveMessageModel: LHSBaseModel {
                 user_define_times.append(item)
             }
         }else {
-            super.setValue(value, forKey: key)
+            if key == "dayTime"{
+                super.setValue(value, forKey: "day_time")
+            }else if key == "weakTime"{
+                super.setValue(value, forKey: "weak_time")
+            }else{
+                super.setValue(value, forKey: key)
+            }
         }
     }
 }
