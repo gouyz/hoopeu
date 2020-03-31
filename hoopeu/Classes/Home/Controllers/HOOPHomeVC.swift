@@ -210,6 +210,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     lazy var topImgView: UIImageView = {
         let imgView = UIImageView.init(image: UIImage.init(named: "icon_home_top_default"))
         imgView.cornerRadius = 10
+        imgView.contentMode = .scaleAspectFill
         
         imgView.addOnClickListener(target: self, action: #selector(onClickedTopImg))
         
@@ -234,7 +235,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
             MBProgressHUD.showAutoDismissHUD(message: "默认房间不能更换图片")
             return
         }
-        GYZOpenCameraPhotosTool.shareTool.choosePicture(self, editor: false, finished: { [weak self] (image) in
+        GYZOpenCameraPhotosTool.shareTool.choosePicture(self, editor: true, finished: { [weak self] (image) in
             
             self?.selectTopImage = image
             self?.requestUpdateHeaderImg()
