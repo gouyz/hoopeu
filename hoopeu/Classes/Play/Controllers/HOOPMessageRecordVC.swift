@@ -39,6 +39,11 @@ class HOOPMessageRecordVC: GYZBaseVC {
         table.separatorStyle = .none
         table.backgroundColor = kWhiteColor
         
+        // 设置大概高度
+        table.estimatedRowHeight = 60
+        // 设置行高为自动适配
+        table.rowHeight = UITableView.automaticDimension
+        
         table.register(HOOPLeaveMessageRecordCell.self, forCellReuseIdentifier: messageRecordCell)
         
         return table
@@ -126,7 +131,7 @@ class HOOPMessageRecordVC: GYZBaseVC {
     @objc func onClickedPlay(sender: UIButton){
         let tag = sender.tag
         let model = dataList[tag]
-        downLoadVoice(name: model.leavemsgName!)
+        downLoadVoice(name: model.msgName!)
     }
     func downLoadVoice(name:String){
         weak var weakSelf = self
@@ -171,15 +176,31 @@ extension HOOPMessageRecordVC: UITableViewDelegate,UITableViewDataSource{
                 cell.playBtn.isHidden = true
                 cell.nameLab.text = model.tts
             }else{
-                cell.nameLab.text = model.createTime
+                cell.nameLab.text = "语音留言"
                 cell.playBtn.isHidden = false
             }
+            cell.dateLab.text = model.createTime
         }else{
-            if model.leavemsgName!.isEmpty {
+            if model.weak_time == "USER_DEFINE" {// 自定义
+                let timeArr: [String] = (model.userDefineTimes?.components(separatedBy: ";"))!
+                var days: String = ""
+                for item in timeArr{
+                    days += GUARDBUFANGTIMEBYWEEKDAY[item]! + ","
+                }
+                if days.count > 0{
+                    days = days.subString(start: 0, length: days.count - 1)
+                }
+                cell.dateLab.text = days + " " + model.day_time!
+            }else if model.weak_time == "ONCE"{
+                cell.dateLab.text = GUARDBUFANGTIME[model.weak_time!]! + " " + model.yml! + " " + model.day_time!
+            }else{
+                cell.dateLab.text = GUARDBUFANGTIME[model.weak_time!]! + " " + model.day_time!
+            }
+            if model.msgName!.isEmpty {
                 cell.playBtn.isHidden = true
                 cell.nameLab.text = model.msg
             }else{
-                cell.nameLab.text = model.createTime
+                cell.nameLab.text = "语音留言"
                 cell.playBtn.isHidden = false
             }
         }
@@ -200,10 +221,6 @@ extension HOOPMessageRecordVC: UITableViewDelegate,UITableViewDataSource{
         goDetailVC(model: dataList[indexPath.row])
     }
     ///MARK : UITableViewDelegate
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        return 60
-    }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0.00001
     }

@@ -20,7 +20,7 @@ class HOOPLeaveMessageModel: LHSBaseModel {
     /// 1：app 2语音留言内容
     var msg : String? = ""
     /// 文件名称
-    var leavemsgName : String? = ""
+//    var leavemsgName : String? = ""
     /// 每周循环时间 ,ONCE:仅此一次,EVERYDAY :每天,WEEKDAY:工作日,WEEKEND:每周末,USER_DEFINE:自定义
     var weak_time : String? = ""
     /// 用户自定义时间选择（以“;”间隔），可多选。EVERY_MONDAY:每周一,EVERY_TUESDAY:每周二,EVERY_WEDNESDAY:每周三,EVERY_THURSDAY:每周四,EVERY_FRIDAY:每周五,EVERY_SATURDAY:每周六,EVERY_SUNDAY:每周日
@@ -41,6 +41,8 @@ class HOOPLeaveMessageModel: LHSBaseModel {
     var msgName : String? = ""
     /// 
     var createTime : String? = ""
+    /// 用户自定义时间选择（以“;”间隔），可多选。EVERY_MONDAY:每周一,EVERY_TUESDAY:每周二,EVERY_WEDNESDAY:每周三,EVERY_THURSDAY:每周四,EVERY_FRIDAY:每周五,EVERY_SATURDAY:每周六,EVERY_SUNDAY:每周日
+    var userDefineTimes : String? = ""
     
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "user_define_times"{
@@ -53,6 +55,8 @@ class HOOPLeaveMessageModel: LHSBaseModel {
                 super.setValue(value, forKey: "day_time")
             }else if key == "weakTime"{
                 super.setValue(value, forKey: "weak_time")
+            }else if key == "leavemsgName"{
+                super.setValue(value, forKey: "msgName")
             }else{
                 super.setValue(value, forKey: key)
             }

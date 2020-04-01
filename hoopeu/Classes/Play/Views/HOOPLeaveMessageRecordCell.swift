@@ -23,16 +23,20 @@ class HOOPLeaveMessageRecordCell: UITableViewCell {
     
     func setupUI(){
         contentView.addSubview(nameLab)
+        contentView.addSubview(dateLab)
         contentView.addSubview(playBtn)
         contentView.addSubview(rightIconView)
         contentView.addSubview(lineView)
         
         nameLab.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
-            make.top.equalTo(contentView)
-            make.bottom.equalTo(lineView.snp.top)
-            make.height.greaterThanOrEqualTo(kTitleHeight)
+            make.top.equalTo(kMargin)
             make.right.equalTo(playBtn.snp.left).offset(-kMargin)
+        }
+        dateLab.snp.makeConstraints { (make) in
+            make.left.right.equalTo(nameLab)
+            make.top.equalTo(nameLab.snp.bottom).offset(kMargin)
+            make.bottom.equalTo(-kMargin)
         }
         playBtn.snp.makeConstraints { (make) in
             make.right.equalTo(rightIconView.snp.left).offset(-kMargin)
@@ -55,6 +59,13 @@ class HOOPLeaveMessageRecordCell: UITableViewCell {
         let lab = UILabel()
         lab.font = k15Font
         lab.textColor = kBlackFontColor
+        
+        return lab
+    }()
+    lazy var dateLab : UILabel = {
+        let lab = UILabel()
+        lab.font = k13Font
+        lab.textColor = kGaryFontColor
         
         return lab
     }()
