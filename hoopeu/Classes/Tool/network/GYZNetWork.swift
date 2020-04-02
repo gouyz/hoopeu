@@ -65,6 +65,7 @@ class GYZNetWork: NSObject {
                     let result = JSON(value)
                     let code = result["code"].intValue
                     if code == -200 || code == -105 || code == -106{// 需要重新登录
+                        GYZTool.removeUserInfo()
                         KeyWindow.rootViewController = GYZBaseNavigationVC(rootViewController: HOOPLoginVC())
                     }else if code == -203{// 需要重新配网
                         MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)

@@ -215,7 +215,7 @@ class HOOPRegisterRePwdVC: GYZBaseVC {
         for i in 0..<(navigationController?.viewControllers.count)!{
             
             if navigationController?.viewControllers[i].isKind(of: HOOPLoginVC.self) == true {
-                
+                GYZTool.removeUserInfo()
                 let vc = navigationController?.viewControllers[i] as! HOOPLoginVC
                 _ = navigationController?.popToViewController(vc, animated: true)
                 

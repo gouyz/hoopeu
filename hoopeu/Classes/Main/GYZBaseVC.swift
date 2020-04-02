@@ -206,6 +206,7 @@ extension GYZBaseVC: CocoaMQTTDelegate {
             let result = JSON.init(parseJSON: data)
             let type = result["msg_type"].stringValue
             if result["code"].int == -200 || (type == "app_login" && result["user_id"].stringValue == userDefaults.string(forKey: "phone") && result["msg"].stringValue != userDefaults.string(forKey: "token")){
+                GYZTool.removeUserInfo()
                 MBProgressHUD.showAutoDismissHUD(message: "账号在其他设备登录")
                 KeyWindow.rootViewController = GYZBaseNavigationVC(rootViewController: HOOPLoginVC())
                 

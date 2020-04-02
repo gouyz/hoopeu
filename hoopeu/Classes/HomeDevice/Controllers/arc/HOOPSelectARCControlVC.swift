@@ -28,7 +28,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
     var mKeyCodeTag: NSInteger = 0
     /// 学习按键的名称
     var mKeyName: String = ""
-    /// 学习按键设备类型名称
+    /// 学习设备类型名称
     var mDeviceTypeName: String = ""
     /// 临时id
     var deviceId: String = ""
@@ -278,6 +278,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
         vc.curMatchIndex = self.curMatchIndex
         vc.curMatchBrandIndex = self.curMatchBrandIndex
         vc.ir_type = self.ir_type
+        vc.ir_name = mDeviceTypeName
         vc.deviceId = self.deviceId
         vc.deviceType = self.deviceType
         if deviceType == .ARC {

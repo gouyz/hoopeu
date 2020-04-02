@@ -145,9 +145,9 @@ class GYZTool: NSObject {
     class func removeUserInfo(){
         userDefaults.removeObject(forKey: kIsLoginTagKey)
         userDefaults.removeObject(forKey: "token")//用户token
-        //        userDefaults.removeObject(forKey: "phone")//用户电话
+        userDefaults.removeObject(forKey: "devId")//设备ID
         //        userDefaults.removeObject(forKey: "head")//用户ID
-        //        userDefaults.removeObject(forKey: "realName")//用户电话
+        userDefaults.removeObject(forKey: "phone")//用户电话
         //        userDefaults.removeObject(forKey: "code")//用户ID
         //        userDefaults.removeObject(forKey: "sex")//用户电话
         //        userDefaults.removeObject(forKey: "birthday")//用户ID
