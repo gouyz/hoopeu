@@ -303,20 +303,20 @@ class HOOPSelectARCControlVC: GYZBaseVC {
             ir_type = "ir_air"
             mDeviceTypeName = "空调"
             if stepIndex == 1{
-                mKeyName = "开"
+                mKeyName = "电源开"
                 mKeyCodeTag = 0x77
             }else if stepIndex == 2{
+                mKeyName = "模式"
+                mKeyCodeTag = 0x02
+            }else if stepIndex == 3{
                 mKeyName = "温度+"
                 mKeyCodeTag = 0x06
-            }else if stepIndex == 3{
-                mKeyName = "温度-"
-                mKeyCodeTag = 0x07
             }
         case .TV: //电视机
             ir_type = "ir_tv"
             mDeviceTypeName = "电视机"
             if stepIndex == 1{
-                mKeyName = "电源"
+                mKeyName = "电源开"
                 mKeyCodeTag = 11
             }else if stepIndex == 2{
                 mKeyName = "菜单"
@@ -329,7 +329,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
             ir_type = "ir_stb"
             mDeviceTypeName = "机顶盒"
             if stepIndex == 1{
-                mKeyName = "待机"
+                mKeyName = "电源开"
                 mKeyCodeTag = 1
             }else if stepIndex == 2{
                 mKeyName = "菜单"
@@ -342,11 +342,11 @@ class HOOPSelectARCControlVC: GYZBaseVC {
             ir_type = "ir_iptv"
             mDeviceTypeName = "网络电视"
             if stepIndex == 1{
-                mKeyName = "电源"
+                mKeyName = "电源开"
                 mKeyCodeTag = 1
             }else if stepIndex == 2{
-                mKeyName = "频道+"
-                mKeyCodeTag = 9
+                mKeyName = "右方向"
+                mKeyCodeTag = 19
             }else if stepIndex == 3{
                 mKeyName = "音量+"
                 mKeyCodeTag = 5
@@ -355,7 +355,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
             ir_type = "ir_sound"
             mDeviceTypeName = "音响"
             if stepIndex == 1{
-                mKeyName = "电源"
+                mKeyName = "电源开"
                 mKeyCodeTag = 11
             }else if stepIndex == 2{
                 mKeyName = "菜单"
@@ -368,7 +368,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
             ir_type = "ir_proj"
             mDeviceTypeName = "投影仪"
             if stepIndex == 1{
-                mKeyName = "开机"
+                mKeyName = "电源开"
                 mKeyCodeTag = 1
             }else if stepIndex == 2{
                 mKeyName = "菜单"
@@ -381,11 +381,11 @@ class HOOPSelectARCControlVC: GYZBaseVC {
             ir_type = "ir_fan"
             mDeviceTypeName = "风扇"
             if stepIndex == 1{
-                mKeyName = "开关"
+                mKeyName = "电源开"
                 mKeyCodeTag = 1
             }else if stepIndex == 2{
-                mKeyName = "风量"
-                mKeyCodeTag = 37
+                mKeyName = "风速"
+                mKeyCodeTag = 3
             }else if stepIndex == 3{
                 mKeyName = "摇头"
                 mKeyCodeTag = 5
