@@ -439,7 +439,7 @@ class HOOPLeaveMessageVC: GYZBaseVC {
             delImg.isHidden = false
             voiceBtn.isHidden = true
             playBtn.isHidden = false
-            recorderManager.recordName = dataModel.leavemsgName
+            recorderManager.recordName = dataModel.msgName
         }else{
             isVoice = false
             bgView.isHidden = false
