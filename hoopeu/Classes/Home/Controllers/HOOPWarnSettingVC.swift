@@ -340,7 +340,11 @@ class HOOPWarnSettingVC: GYZBaseVC {
         }else if week_time == "ONCE"{
             warnTimeLab.text = day + " " + day_time + "\n" + GUARDBUFANGTIME[week_time]!
         }else{
-            warnTimeLab.text = day_time + "\n" + GUARDBUFANGTIME[week_time]!
+            if week_time.isEmpty {
+                warnTimeLab.text = day_time
+            }else{
+                warnTimeLab.text = day_time + "\n" + GUARDBUFANGTIME[week_time]!
+            }
         }
     }
 }
