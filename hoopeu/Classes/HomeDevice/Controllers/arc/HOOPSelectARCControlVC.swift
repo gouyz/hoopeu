@@ -313,9 +313,9 @@ class HOOPSelectARCControlVC: GYZBaseVC {
                 mKeyName = "温度+"
                 mKeyCodeTag = 0x06
             }
-        case .TV: //电视机
+        case .TV: //电视
             ir_type = "ir_tv"
-            mDeviceTypeName = "电视机"
+            mDeviceTypeName = "电视"
             if stepIndex == 1{
                 mKeyName = "电源开"
                 mKeyCodeTag = 11

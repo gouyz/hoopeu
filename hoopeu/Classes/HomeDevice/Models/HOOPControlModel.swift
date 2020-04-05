@@ -27,7 +27,7 @@ class HOOPControlModel: LHSBaseModel {
             for dict in datas {
                 let model = HOOPCustomKeyModel(dict: dict)
                 funcList.append(model)
-                funcNameList.append(model.custom_num!)
+                funcNameList.append(model.customNum!)
             }
         }else {
             super.setValue(value, forKey: key)
@@ -39,9 +39,9 @@ class HOOPControlModel: LHSBaseModel {
 class HOOPCustomKeyModel: LHSBaseModel {
     
     /// 自定义按钮id
-    var sensor_id : String? = "0"
+    var sensorId : String? = "0"
     /// 按键名称
-    var ctrl_name : String? = ""
+    var customNum : String? = ""
     /// 按钮位置
-    var custom_num : String? = ""
+    var ctrlName : String? = ""
 }

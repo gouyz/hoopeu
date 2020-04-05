@@ -247,6 +247,7 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
     }()
     /// 保存
     @objc func clickedSaveBtn(sender: UIButton){
+        hiddenKeyBoard()
         let tag = sender.tag
         if !validPhoneNO() {
             return
@@ -272,6 +273,11 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
             return
         }
         requestCode()
+    }
+    func hiddenKeyBoard(){
+        phoneTxtFiled.resignFirstResponder()
+        codeTxtFiled.resignFirstResponder()
+        toPhoneTxtFiled.resignFirstResponder()
     }
     /// 选择地区代码
     @objc func onClickedSelectCode(){
@@ -411,7 +417,7 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
         
         if let data = message.string {
             let result = JSON.init(parseJSON: data)
-            let phone = result["phone"].stringValue
+            let devId = result["device_id"].stringValue
             let type = result["msg_type"].stringValue
             if let tag = result["app_interface_tag"].string{
                 if tag.hasPrefix("system_"){
@@ -419,8 +425,12 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
                 }
             }
             
-            if type == "app_user_change_re" && phone == phoneTxtFiled.text!{
-                goBack()
+            if type == "app_user_change_re" && devId == userDefaults.string(forKey: "devId"){
+                if result["ret"].intValue == 1{
+                    goBack()
+                }else{
+                    MBProgressHUD.showAutoDismissHUD(message: "解绑失败")
+                }
             }
             
         }

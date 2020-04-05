@@ -541,13 +541,13 @@ class HOOPFanControlVC: HOOPBaseControlVC {
                 if dataModel?.funcList.count > 0{// 有自定义按键
                     for item in (dataModel?.funcList)!{
                         for key in keyNumList.keys{
-                            if key == item.custom_num{
+                            if key == item.customNum{
                                 let tag = keyNumList[key]
                                 let btn: UIButton = self.view.viewWithTag(tag!) as! UIButton
-                                btn.setTitle(item.ctrl_name, for: .normal)
+                                btn.setTitle(item.ctrlName, for: .normal)
                                 /// 记录自定义按键id
-                                btn.accessibilityIdentifier = item.sensor_id
-                                let keyId: Int = Int.init(item.sensor_id!)!
+                                btn.accessibilityIdentifier = item.sensorId
+                                let keyId: Int = Int.init(item.sensorId!)!
                                 if keyMaxId < keyId {
                                     keyMaxId = keyId
                                 }
