@@ -13,17 +13,18 @@ import MBProgressHUD
 
 /// 网络请求基地址
 #if DEBUG
-let BaseRequestURL = "http://121.43.122.86/app/"
-/// mqtt host
-let kDefaultMQTTHost = "121.43.122.86"
-//let BaseRequestURL = "http://www.hoopeurobot.com/app/"
+//let BaseRequestURL = "http://121.43.122.86/app/"
+///// mqtt host
+//let kDefaultMQTTHost = "121.43.122.86"
+let kDefaultMQTTHost = "119.29.107.14"
+let BaseRequestURL = "http://www.hoopeurobot.com/app/"
 #else
 /// mqtt host
-let BaseRequestURL = "http://121.43.122.86/app/"
-/// mqtt host
-let kDefaultMQTTHost = "121.43.122.86"
-//let kDefaultMQTTHost = "119.29.107.14"
-//let BaseRequestURL = "http://www.hoopeurobot.com/app/"
+//let BaseRequestURL = "http://121.43.122.86/app/"
+///// mqtt host
+//let kDefaultMQTTHost = "121.43.122.86"
+let kDefaultMQTTHost = "119.29.107.14"
+let BaseRequestURL = "http://www.hoopeurobot.com/app/"
 #endif
 
 class GYZNetWork: NSObject {
@@ -234,7 +235,7 @@ class GYZNetWork: NSObject {
         Alamofire.download(url, method: method, parameters: parameters) { (temporaryURL, response) -> (destinationURL: URL, options: DownloadRequest.DownloadOptions) in
             
             // 下载到Documents中的哪个文件夹folioName这里是文件夹
-                    let documentURL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents/voiceMsg")
+                    let documentURL = URL(fileURLWithPath: NSHomeDirectory() + "/Documents")
                     // 在路径追加文件名称
                     let fileUrl = documentURL.appendingPathComponent(response.suggestedFilename! + ".amr")
                     // .createIntermediateDirectories：如果指定了目标URL，将会创建中间目录。

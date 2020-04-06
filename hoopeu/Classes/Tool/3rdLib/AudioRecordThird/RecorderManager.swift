@@ -53,8 +53,9 @@ class RecordManager: NSObject {
             let timeStamp = Int(timeInterval)
             recordName = now.dateToStringWithFormat(format: "yyyyMMdd") + "\(timeStamp)"
             let fileType = (recordType == RecordType.Caf) ? "caf" : "wav"
-            let filePath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).\(fileType)"
-            let url = URL(fileURLWithPath: filePath)
+//            let filePath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).\(fileType)"
+//            let filePath = documentsDirectoryURL(name: "/voiceMsg/\(recordName!).\(fileType)")
+            let url = documentsDirectoryURL(name: "\(recordName!).\(fileType)")//URL(fileURLWithPath: filePath)
             recorder = try AVAudioRecorder(url: url, settings: recordSetting)
             recorder!.prepareToRecord()
             recorder!.record()
@@ -92,8 +93,10 @@ class RecordManager: NSObject {
     func play(recordType:RecordType) {
         do {
             let fileType = (recordType == RecordType.Caf) ? "caf" : "wav"
-            let filePath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).\(fileType)"
-            player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: filePath))
+            let url = documentsDirectoryURL(name: "\(recordName!).\(fileType)")
+//            let filePath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).\(fileType)"
+            player = try AVAudioPlayer(contentsOf: url)
+            player?.prepareToPlay()
             print("播放录音长度：\(player!.duration)")
             player!.play()
         } catch let err {
@@ -110,12 +113,12 @@ class RecordManager: NSObject {
     }
     
     func convertWavToAmr(){
-        let wavPath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).wav"
+        let wavPath = documentsDirectoryURL(name: "\(recordName!).wav")//NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).wav"
         do {
-            let wavData = try Data(contentsOf: URL(fileURLWithPath: wavPath))
+            let wavData = try Data(contentsOf: wavPath)
             let amrData = convert8khzWaveToAmr(waveData: wavData)//convert16khzWaveToAmr(waveData: wavData)
-            let amrPath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).amr"
-            try amrData?.write(to: URL(fileURLWithPath: amrPath))
+            let amrPath = documentsDirectoryURL(name: "\(recordName!).amr")//NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).amr"
+            try amrData?.write(to: amrPath)
             print("wav源文件：\(wavPath)")
             print("amr文件：\(amrPath)")
         }catch let err {
@@ -125,12 +128,14 @@ class RecordManager: NSObject {
     }
     
     func convertAmrToWav(){
-        let amrPath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).amr"
+//        let amrPath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!).amr"
+        let amrPath = documentsDirectoryURL(name: "\(recordName!).amr")
         do {
-            let amrData = try Data(contentsOf: URL(fileURLWithPath: amrPath))
+            let amrData = try Data(contentsOf: amrPath)
             let wavData = convertAmrNBToWave(data: amrData)//convertAmrWBToWave(data: amrData)
-            let wavPath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!)_fromAmr.wav"
-            try wavData?.write(to: URL(fileURLWithPath: wavPath))
+//            let wavPath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!)_fromAmr.wav"
+            let wavPath = documentsDirectoryURL(name: "\(recordName!)_fromAmr.wav")
+            try wavData?.write(to: wavPath)
             print("amr源文件：\(amrPath)")
             print("wav文件：\(wavPath)")
         }catch let err {
@@ -140,13 +145,17 @@ class RecordManager: NSObject {
     
     func playWav(){
         do {
-            let filePath = NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!)_fromAmr.wav"
-            player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: filePath))
+            let filePath = documentsDirectoryURL(name: "\(recordName!)_fromAmr.wav")//NSHomeDirectory() + "/Documents/voiceMsg/\(recordName!)_fromAmr.wav"
+            player = try AVAudioPlayer(contentsOf: filePath)
             print("播放录音长度：\(player!.duration)")
+            player?.prepareToPlay()
             player!.play()
         } catch let err {
             print("播放失败:\(err.localizedDescription)")
         }
     }
     
+    func documentsDirectoryURL(name: String) -> URL {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(name)
+    }
 }

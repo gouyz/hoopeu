@@ -29,7 +29,7 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         
         self.navigationItem.title = "智慧家居"
         self.view.backgroundColor = kWhiteColor
-//        self.navigationController?.delegate = self
+        //        self.navigationController?.delegate = self
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_home_menu")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: #selector(onClickedMenuImg))
         rightBtn = UIButton(type: .custom)
@@ -66,9 +66,9 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        //        self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-//        settingMqtt()
+        //        settingMqtt()
         // 本页面开启支持打开侧滑菜单
         self.menuContainerViewController.sideMenuPanMode = .defaults
         if userDefaults.bool(forKey: "isAddRoom") {
@@ -106,17 +106,17 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
             scrollPageView?.selectedIndex(currIndex, animated: true)
         }
     }
-//    func settingMqtt(){
-//        if mqtt == nil {
-//            mqttSetting()
-//        }else {
-//            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
-//                self.mqtt?.connect()
-//            }else{
-//                sendMqttCmd()
-//            }
-//        }
-//    }
+    //    func settingMqtt(){
+    //        if mqtt == nil {
+    //            mqttSetting()
+    //        }else {
+    //            if self.mqtt?.connState == CocoaMQTTConnState.disconnected{
+    //                self.mqtt?.connect()
+    //            }else{
+    //                sendMqttCmd()
+    //            }
+    //        }
+    //    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // 本页面开启支持关闭侧滑菜单
@@ -359,20 +359,22 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
         
         GYZLog(noti.userInfo)
         let userInfo = noti.userInfo!
-        let type = userInfo["type"] as! String
-        if type == "leavemsg" {
-            goLeaveMsgVC()
-        }else{
-//            let deviceName = userInfo["deviceName"] as! String
-            let deviceId = userInfo["deviceId"] as! String
-            if deviceId == userDefaults.string(forKey: "devId") {
-                goWarnLogVC()
-            }else{// 提示切换设备
-                weak var weakSelf = self
-                GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "确定要切换小叮当吗", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
-                    
-                    if index != cancelIndex{
-                        weakSelf?.requestUserDevice(devId: deviceId)
+        if userInfo.keys.contains("type") {
+            let type = userInfo["type"] as! String
+            if type == "leavemsg" {
+                goLeaveMsgVC()
+            }else{
+                //            let deviceName = userInfo["deviceName"] as! String
+                let deviceId = userInfo["deviceId"] as! String
+                if deviceId == userDefaults.string(forKey: "devId") {
+                    goWarnLogVC()
+                }else{// 提示切换设备
+                    weak var weakSelf = self
+                    GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "确定要切换小叮当吗", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
+                        
+                        if index != cancelIndex{
+                            weakSelf?.requestUserDevice(devId: deviceId)
+                        }
                     }
                 }
             }
@@ -458,52 +460,52 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
     }
     
     /// mqtt发布主题 查询设备当前电量
-//    func sendMqttCmd(){
-//        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_power","app_interface_tag":"ok"]
-//
-//        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
-//    }
-//
-//    /// 重载CocoaMQTTDelegate
-//    override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
-//        GYZLog("new state: \(state)")
-//        if state == .connected {
-//            sendMqttCmd()
-//
-//        }
-//    }
-//    override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-//        super.mqtt(mqtt, didConnectAck: ack)
-//        GYZLog("new ack: \(ack)")
-//        if ack == .accept {
-//            mqtt.subscribe("hoopeu_app", qos: CocoaMQTTQOS.qos1)
-//        }
-//    }
-//    override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
-//        super.mqtt(mqtt, didReceiveMessage: message, id: id)
-//
-//        if let data = message.string {
-//            let result = JSON.init(parseJSON: data)
-//            //            let phone = result["phone"].stringValue
-//            let type = result["msg_type"].stringValue
-//            if let tag = result["app_interface_tag"].string{
-//                if tag.hasPrefix("system_"){
-//                    return
-//                }
-//            }
-//
-//            if type == "query_power_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
-//
-//                let power = result["msg"]["power"].intValue
-//                powerBtn.set(image: UIImage.init(named: "battery_\(power)"), title: "\(power)%", titlePosition: .right, additionalSpacing: 5, state: .normal)
-//                if power > 30 {
-//                    powerBtn.isSelected = false
-//                }else{
-//                    powerBtn.isSelected = true
-//                }
-//            }
-//        }
-//    }
+    //    func sendMqttCmd(){
+    //        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_power","app_interface_tag":"ok"]
+    //
+    //        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    //    }
+    //
+    //    /// 重载CocoaMQTTDelegate
+    //    override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
+    //        GYZLog("new state: \(state)")
+    //        if state == .connected {
+    //            sendMqttCmd()
+    //
+    //        }
+    //    }
+    //    override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+    //        super.mqtt(mqtt, didConnectAck: ack)
+    //        GYZLog("new ack: \(ack)")
+    //        if ack == .accept {
+    //            mqtt.subscribe("hoopeu_app", qos: CocoaMQTTQOS.qos1)
+    //        }
+    //    }
+    //    override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
+    //        super.mqtt(mqtt, didReceiveMessage: message, id: id)
+    //
+    //        if let data = message.string {
+    //            let result = JSON.init(parseJSON: data)
+    //            //            let phone = result["phone"].stringValue
+    //            let type = result["msg_type"].stringValue
+    //            if let tag = result["app_interface_tag"].string{
+    //                if tag.hasPrefix("system_"){
+    //                    return
+    //                }
+    //            }
+    //
+    //            if type == "query_power_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
+    //
+    //                let power = result["msg"]["power"].intValue
+    //                powerBtn.set(image: UIImage.init(named: "battery_\(power)"), title: "\(power)%", titlePosition: .right, additionalSpacing: 5, state: .normal)
+    //                if power > 30 {
+    //                    powerBtn.isSelected = false
+    //                }else{
+    //                    powerBtn.isSelected = true
+    //                }
+    //            }
+    //        }
+    //    }
 }
 
 /// mark - UINavigationControllerDelegate

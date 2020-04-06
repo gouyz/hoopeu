@@ -2097,7 +2097,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Hoopeu Electronic S&T (Shanghai) Co., Ltd (38HNQ33A47)";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 38HNQ33A47;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2125,7 +2125,7 @@
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird/opencore-amr/lib",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.1.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2199,7 +2199,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Hoopeu Electronic S&T (Shanghai) Co., Ltd (38HNQ33A47)";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 38HNQ33A47;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2227,7 +2227,7 @@
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird/opencore-amr/lib",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

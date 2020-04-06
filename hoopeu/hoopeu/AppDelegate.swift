@@ -20,6 +20,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var mqtt: CocoaMQTT?
     /// mqtt是否断开
     var isNetWorkMqtt = false
+    
+    /// 是否检测过版本更新
+    var isFirstCheckVersion: Bool = false
+    /// 当前系统版本
+    var currSystemVersion: String = ""
+    /// 最新系统版本model
+    var newSystemVersionModel: HOOPVersionModel?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         /// 检测网络状态
@@ -205,6 +212,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             GYZLog(error)
         })
     }
+    ///获取设备版本信息
+    func requestDeviceVersion(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("appVersion",parameters: nil,method:.get,  success: { (response) in
+            
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                
+                guard let data = response["data"].dictionaryObject else { return }
+                
+                weakSelf?.newSystemVersionModel = HOOPVersionModel.init(dict: data)
+                weakSelf?.showSystemVersion()
+            }
+            
+        }, failture: { (error) in
+            
+            GYZLog(error)
+        })
+    }
+    // 设备系统升级
+    func showSystemVersion(){
+        if newSystemVersionModel != nil && newSystemVersionModel?.versionName != currSystemVersion {
+            let alert = UIAlertView.init(title: "系统升级", message: newSystemVersionModel?.updateMessage ?? "", delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确认")
+            alert.tag = 105
+            alert.show()
+        }
+//        else{
+//            let alert = UIAlertView.init(title: nil, message: "当前已是最新版本", delegate: nil, cancelButtonTitle: "我知道了")
+//            alert.show()
+//        }
+        
+    }
+    
     /// 检测APP更新
     func checkVersion(newVersion: String,content: String){
         
@@ -339,8 +385,11 @@ extension AppDelegate : UIAlertViewDelegate{
             if buttonIndex == 0{//立即更新
                 GYZUpdateVersionTool.goAppStore()
             }
+        }else if tag == 105{
+            if buttonIndex == 1 { //设备更新
+                sendMqttCmdUpdateVerison()
+            }
         }
-        
     }
 }
 extension AppDelegate: CocoaMQTTDelegate {
@@ -366,8 +415,26 @@ extension AppDelegate: CocoaMQTTDelegate {
         if userDefaults.string(forKey: "devId") == nil {
             return
         }
+        if !isFirstCheckVersion {
+            return
+        }
         
         let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_online","app_interface_tag":"ok"]
+        
+        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    /// mqtt发布主题 系统更新检测
+    func sendMqttCmdVerison(){
+        if userDefaults.string(forKey: "devId") == nil {
+            return
+        }
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"get_dev_info","app_interface_tag":userDefaults.string(forKey: "devId") ?? ""]
+        
+        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    /// mqtt发布主题 系统更新
+    func sendMqttCmdUpdateVerison(){
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"send_sys_update","app_interface_tag":"ok"]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -450,7 +517,9 @@ extension AppDelegate: CocoaMQTTDelegate {
         GYZLog("new state: \(state)")
         if state == .connected {
             sendMqttCheckOnlineCmd()
-            
+            if !isFirstCheckVersion {
+                sendMqttCmdVerison()
+            }
         }
     }
     
@@ -471,6 +540,16 @@ extension AppDelegate: CocoaMQTTDelegate {
             let type = result["msg_type"].stringValue
             if type == "query_online_re" && result["device_id"].stringValue == userDefaults.string(forKey: "devId"){
                 isNetWorkMqtt = true
+            }else if type == "get_dev_info_re" && result["app_interface_tag"].stringValue == userDefaults.string(forKey: "devId"){
+                currSystemVersion = result["msg"]["sys_version"].stringValue
+                isFirstCheckVersion = true
+                requestDeviceVersion()
+            }else if type == "send_sys_update_re"{
+                if result["ret"].intValue == 1{
+                    MBProgressHUD.showAutoDismissHUD(message: "发送成功")
+                }else{
+                    MBProgressHUD.showAutoDismissHUD(message: "发送失败")
+                }
             }
         }
     }

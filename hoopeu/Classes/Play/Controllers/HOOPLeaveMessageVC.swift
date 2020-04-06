@@ -81,7 +81,9 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         
         mqttSetting()
     }
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        recorderManager.stopRecord()
+    }
     func setUpUI(){
         view.addSubview(desLab)
         view.addSubview(voiceCheckView)
@@ -392,9 +394,10 @@ class HOOPLeaveMessageVC: GYZBaseVC {
             return
         }
         
-        let fileManager = FileManager.default
+//        let fileManager = FileManager.default
         do{
-            try fileManager.removeItem(atPath: NSHomeDirectory() + "/Documents/voiceMsg/\(recorderManager.recordName!).wav")
+            try FileManager.default.removeItem(at: recorderManager.documentsDirectoryURL(name: "\(recorderManager.recordName!).wav"))
+//            try fileManager.removeItem(atPath: NSHomeDirectory() + "/Documents/voiceMsg/\(recorderManager.recordName!).wav")
             voiceBtn.isHidden = false
             playBtn.isHidden = true
             delImg.isHidden = true
@@ -553,7 +556,7 @@ class HOOPLeaveMessageVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         recorderManager.convertWavToAmr()
-        GYZNetWork.uploadVideoRequest("voiceMessage/upload.html",baseUrl:"http://119.29.107.14:8080/robot_filter-web/", parameters: ["boardId":userDefaults.string(forKey: "devId") ?? ""], fileUrl: URL.init(fileURLWithPath: NSHomeDirectory() + "/Documents/voiceMsg/\(recorderManager.recordName!).amr"), keyName: "uploadFiles", fileName: recorderManager.recordName! + ".amr", success: { (response) in
+        GYZNetWork.uploadVideoRequest("voiceMessage/upload.html",baseUrl:"http://119.29.107.14:8080/robot_filter-web/", parameters: ["boardId":userDefaults.string(forKey: "devId") ?? ""], fileUrl: recorderManager.documentsDirectoryURL(name: "\(recorderManager.recordName!).amr"), keyName: "uploadFiles", fileName: recorderManager.recordName! + ".amr", success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
