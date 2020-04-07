@@ -223,7 +223,7 @@ class HOOPSaveARCControlVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("room/deviceRoomList",parameters: nil,method :.get,  success: { (response) in
+        GYZNetWork.requestNetwork("room/drList",parameters: ["deviceId": userDefaults.string(forKey: "devId") ?? ""],method :.get,  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)

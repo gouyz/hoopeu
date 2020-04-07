@@ -155,9 +155,13 @@ class HOOPDeviceManagerVC: GYZBaseVC {
     
     /// mqtt发布主题 查询设备在线状态
     func sendMqttCmd(devId: String){
-        let paramDic:[String:Any] = ["device_id":devId,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_online","app_interface_tag":"ok"]
-        
-        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+        if mqtt?.connState == CocoaMQTTConnState.disconnected{
+            mqtt?.connect()
+        }else{
+            let paramDic:[String:Any] = ["device_id":devId,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_online","app_interface_tag":"ok"]
+            
+            mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+        }
     }
     /// 重载CocoaMQTTDelegate
     override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
@@ -207,9 +211,11 @@ extension HOOPDeviceManagerVC: UITableViewDelegate,UITableViewDataSource{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: deviceManagerCell) as! HOOPDeviceManagerCell
         let model = dataList[indexPath.row]
-        var name = model.deviceName
-        if model.onLine == "1" && model.status == "1"{/// 正在使用
-            name = model.deviceName! + "(使用中)"
+        var name = model.deviceName!
+        if model.onLine == "1"{/// 正在使用
+            if model.status == "1"{
+                name += "(使用中)"
+            }
             
             cell.nameLab.textColor = kBlueFontColor
         }else{
