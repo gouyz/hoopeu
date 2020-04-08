@@ -416,6 +416,7 @@ extension AppDelegate: CocoaMQTTDelegate {
             return
         }
         if !isFirstCheckVersion {
+            self.isNetWorkMqtt = true
             return
         }
         
