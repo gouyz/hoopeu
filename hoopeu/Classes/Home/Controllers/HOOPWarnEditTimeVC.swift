@@ -222,6 +222,7 @@ class HOOPWarnEditTimeVC: GYZBaseVC {
             dayIndexs.sort()
             
             weakSelf?.week_time = "USER_DEFINE"
+            weakSelf?.user_define_times.removeAll()
             var str: String = ""
             for i in dayIndexs {
                 str += (weakSelf?.weekDayArray[i])! + ","
