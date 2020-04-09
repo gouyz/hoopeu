@@ -450,7 +450,6 @@ extension AppDelegate: CocoaMQTTDelegate {
         mqtt!.keepAlive = 150
         mqtt?.autoReconnect = true
         mqtt!.delegate = self
-        mqtt?.autoReconnect = true
         mqtt!.connect()
     }
     /// 配网提示

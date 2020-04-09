@@ -38,8 +38,6 @@ class HOOPDeviceManagerVC: GYZBaseVC {
                 make.top.equalTo(kTitleAndStateHeight)
             }
         }
-        
-        requestDeviceList()
         mqttSetting()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -107,6 +105,7 @@ class HOOPDeviceManagerVC: GYZBaseVC {
                     weakSelf?.sendMqttCmd(devId: model.deviceId!)
                 }
                 if weakSelf?.dataList.count > 0{
+//                    weakSelf?.sendMqttCmd(devId: (weakSelf?.dataList[1].deviceId)!)
                     weakSelf?.hiddenEmptyView()
                     weakSelf?.tableView.reloadData()
                 }else{
@@ -155,6 +154,10 @@ class HOOPDeviceManagerVC: GYZBaseVC {
     
     /// mqtt发布主题 查询设备在线状态
     func sendMqttCmd(devId: String){
+        if mqtt?.connState == CocoaMQTTConnState.disconnected{
+            mqtt?.connect()
+            sendMqttCmd(devId: devId)
+        }
         let paramDic:[String:Any] = ["device_id":devId,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_online","app_interface_tag":"ok"]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
@@ -164,7 +167,7 @@ class HOOPDeviceManagerVC: GYZBaseVC {
         super.mqtt(mqtt, didConnectAck: ack)
         if ack == .accept {
             mqtt.subscribe("hoopeu_app", qos: CocoaMQTTQOS.qos1)
-            
+            requestDeviceList()
         }
     }
     override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
@@ -192,6 +195,14 @@ class HOOPDeviceManagerVC: GYZBaseVC {
             
         }
     }
+    override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
+        if state == .disconnected && self.mqtt != nil{//   断线重连
+            self.mqtt?.connect()
+        }
+    }
+//    override func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
+//        mqtt.connect()
+//    }
 }
 
 extension HOOPDeviceManagerVC: UITableViewDelegate,UITableViewDataSource{
@@ -209,13 +220,13 @@ extension HOOPDeviceManagerVC: UITableViewDelegate,UITableViewDataSource{
         let model = dataList[indexPath.row]
         var name = model.deviceName!
         if model.onLine == "1"{/// 正在使用
-            if model.status == "1"{
-                name += "(使用中)"
-            }
             
             cell.nameLab.textColor = kBlueFontColor
         }else{
             cell.nameLab.textColor = kGaryFontColor
+        }
+        if model.status == "1"{
+            name += "(使用中)"
         }
         cell.nameLab.text = name
         cell.devIdLab.text = model.deviceId

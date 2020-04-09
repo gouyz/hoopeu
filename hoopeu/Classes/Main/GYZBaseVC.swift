@@ -89,6 +89,7 @@ class GYZBaseVC: UIViewController {
         //        mqtt!.willMessage = CocoaMQTTWill(topic: "hoopeu_app", message: "dieout")
         mqtt!.keepAlive = 60
         mqtt!.delegate = self
+//        mqtt?.logLevel = .debug
         //        mqtt?.didReceiveMessage = { mqtt, message, id in
         //            print("Message received in topic \(message.topic) with payload \(message.string!)")
         //        }

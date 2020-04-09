@@ -223,7 +223,7 @@ class HOOPSaveARCControlVC: GYZBaseVC {
         weak var weakSelf = self
         createHUD(message: "加载中...")
         
-        GYZNetWork.requestNetwork("room/drList",parameters: ["deviceId": userDefaults.string(forKey: "devId") ?? ""],method :.get,  success: { (response) in
+        GYZNetWork.requestNetwork("room/drList",parameters: ["deviceId": userDefaults.string(forKey: "devId") ?? ""],  success: { (response) in
             
             weakSelf?.hud?.hide(animated: true)
             GYZLog(response)
@@ -233,6 +233,7 @@ class HOOPSaveARCControlVC: GYZBaseVC {
                 guard let data = response["data"].array else { return }
                 
                 weakSelf?.dataList.removeAll()
+                weakSelf?.roomNameList.removeAll()
                 for item in data{
                     guard let itemInfo = item.dictionaryObject else { return }
                     let model = HOOPRoomModel.init(dict: itemInfo)
