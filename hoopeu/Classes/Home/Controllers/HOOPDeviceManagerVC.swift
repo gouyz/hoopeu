@@ -154,10 +154,6 @@ class HOOPDeviceManagerVC: GYZBaseVC {
     
     /// mqtt发布主题 查询设备在线状态
     func sendMqttCmd(devId: String){
-        if mqtt?.connState == CocoaMQTTConnState.disconnected{
-            mqtt?.connect()
-            sendMqttCmd(devId: devId)
-        }
         let paramDic:[String:Any] = ["device_id":devId,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_online","app_interface_tag":"ok"]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
