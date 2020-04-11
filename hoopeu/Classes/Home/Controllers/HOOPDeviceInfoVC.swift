@@ -56,7 +56,7 @@ class HOOPDeviceInfoVC: GYZBaseVC {
     /// mqtt发布主题 查询设备信息
     func sendMqttCmd(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["device_id":deviceId,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"get_dev_info","app_interface_tag":"ok"]
+        let paramDic:[String:Any] = ["device_id":deviceId,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"get_dev_info","app_interface_tag":deviceId]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -86,7 +86,7 @@ class HOOPDeviceInfoVC: GYZBaseVC {
                 }
             }
             
-            if type == "get_dev_info_re"{
+            if type == "get_dev_info_re" && result["app_interface_tag"].stringValue == deviceId{
                 hud?.hide(animated: true)
                 guard let data = result["msg"].dictionaryObject else { return }
                 deviceInfoModel = HOOPDeviceInfoModel.init(dict: data)

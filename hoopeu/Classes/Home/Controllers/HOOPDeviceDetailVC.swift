@@ -308,7 +308,7 @@ class HOOPDeviceDetailVC: GYZBaseVC {
     /// mqtt发布主题 系统更新检测
     func sendMqttCmdVerison(){
         createHUD(message: "加载中...")
-        let paramDic:[String:Any] = ["device_id":(deviceModel?.deviceId)!,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"get_dev_info","app_interface_tag":"ok"]
+        let paramDic:[String:Any] = ["device_id":(deviceModel?.deviceId)!,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"get_dev_info","app_interface_tag":(deviceModel?.deviceId)!]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -356,7 +356,7 @@ class HOOPDeviceDetailVC: GYZBaseVC {
                 hud?.hide(animated: true)
                 MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
                 
-            }else if type == "get_dev_info_re"{
+            }else if type == "get_dev_info_re" && result["app_interface_tag"].stringValue == deviceModel?.deviceId{
                 hud?.hide(animated: true)
                 currSystemVersion = result["msg"]["sys_version"].stringValue
                 requestDeviceVersion()
