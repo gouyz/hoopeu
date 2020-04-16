@@ -100,7 +100,7 @@ class HOOPReadyNetWorkVC: GYZBaseVC {
     }()
     /// 出现橙光闪烁
     @objc func clickedBlueBtn(){
-        let vc = HOOPConnectWiFiVC()//HOOPBlueToothContentVC()
+        let vc = HOOPBlueToothContentVC()
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 未出现橙色灯光
