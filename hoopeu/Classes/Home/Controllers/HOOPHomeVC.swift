@@ -370,9 +370,10 @@ class HOOPHomeVC: GYZBaseVC,ContentViewDelegate {
                     goWarnLogVC()
                 }else{// 提示切换设备
                     weak var weakSelf = self
-                    GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "确定要切换小叮当吗", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
+                    GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "是否切换设备以查看报警信息？", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
                         
                         if index != cancelIndex{
+                            userDefaults.set(deviceId, forKey: "devId")
                             weakSelf?.requestUserDevice(devId: deviceId)
                         }
                     }

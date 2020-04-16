@@ -95,7 +95,7 @@ class HOOPDeviceDetailVC: GYZBaseVC {
                 
                 if index != cancelIndex{
                     weakSelf?.requestUserDevice()
-                    weakSelf?.goHomeVC()
+//                    weakSelf?.goHomeVC()
                 }
             }
             
@@ -108,13 +108,13 @@ class HOOPDeviceDetailVC: GYZBaseVC {
         if !GYZTool.checkNetWork() {
             return
         }
-        
+        weak var weakSelf = self
         GYZNetWork.requestNetwork("userDevice", parameters: ["devId":(deviceModel?.deviceId)!],  success: { (response) in
             
             GYZLog(response)
             if response["code"].intValue == kQuestSuccessTag{//请求成功
-                
-                
+                userDefaults.set((weakSelf?.deviceModel?.deviceId)!, forKey: "devId")
+                weakSelf?.goHomeVC()
             }
             
         }, failture: { (error) in

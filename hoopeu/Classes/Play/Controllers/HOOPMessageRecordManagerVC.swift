@@ -9,7 +9,7 @@
 import UIKit
 
 class HOOPMessageRecordManagerVC: GYZBaseVC ,ContentViewDelegate {
-    var titleArr : [String] = ["我的留言","设备留言","收到留言"]
+    var titleArr : [String] = ["我的留言","我的提醒","收到留言"]
     
     var stateValue : [String] = ["1","2","3"]
     var scrollPageView: ScrollSegmentView?

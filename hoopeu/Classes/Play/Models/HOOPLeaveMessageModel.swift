@@ -43,7 +43,8 @@ class HOOPLeaveMessageModel: LHSBaseModel {
     var createTime : String? = ""
     /// 用户自定义时间选择（以“;”间隔），可多选。EVERY_MONDAY:每周一,EVERY_TUESDAY:每周二,EVERY_WEDNESDAY:每周三,EVERY_THURSDAY:每周四,EVERY_FRIDAY:每周五,EVERY_SATURDAY:每周六,EVERY_SUNDAY:每周日
     var userDefineTimes : String? = ""
-    
+    //仅传参type==2时有此参数，1标记蓝色，0标记灰色
+    var state :String? = "0"
     override func setValue(_ value: Any?, forKey key: String) {
         if key == "user_define_times"{
             guard let datas = value as? [String] else { return }

@@ -8,6 +8,8 @@
 
 import UIKit
 import MBProgressHUD
+import CocoaMQTT
+import SwiftyJSON
 
 private let messageRecordCell = "messageRecordCell"
 
@@ -30,6 +32,7 @@ class HOOPMessageRecordVC: GYZBaseVC {
                 make.top.equalTo(kTitleAndStateHeight)
             }
         }
+        mqttSetting()
         requestDataList()
     }
     lazy var tableView : UITableView = {
@@ -153,6 +156,57 @@ class HOOPMessageRecordVC: GYZBaseVC {
         recorderManager.convertAmrToWav()
         recorderManager.playWav()
     }
+    /// 删除我的提醒
+    func deleteMsg2(indexRow:Int){
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "是否删除该提醒?", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (index) in
+            
+            if index != cancelIndex{
+                weakSelf?.sendSaveDeleteMqttCmd(indexRow: indexRow)
+            }
+        }
+    }
+    
+    /// mqtt发布主题 删除留言
+    func sendSaveDeleteMqttCmd(indexRow: Int){
+        createHUD(message: "加载中...")
+        let paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","leavemsg_id":dataList[indexRow].id!,"phone":userDefaults.string(forKey: "phone") ?? "","msg_type":"app_leavemsg_del","app_interface_tag":"\(indexRow)","type": "2"]
+        
+        mqtt?.publish("api_send", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    
+    /// 重载CocoaMQTTDelegate
+    override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+        super.mqtt(mqtt, didConnectAck: ack)
+        if ack == .accept {
+            mqtt.subscribe("api_receive", qos: CocoaMQTTQOS.qos1)
+        }
+    }
+    override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
+        super.mqtt(mqtt, didReceiveMessage: message, id: id)
+        
+        if let data = message.string {
+            let result = JSON.init(parseJSON: data)
+            let phone = result["phone"].stringValue
+            let type = result["msg_type"].stringValue
+            if let tag = result["app_interface_tag"].string{
+                if tag.hasPrefix("system_"){
+                    return
+                }
+            }
+            if type == "app_leavemsg_del_re" && phone == userDefaults.string(forKey: "phone"){
+                hud?.hide(animated: true)
+                MBProgressHUD.showAutoDismissHUD(message: result["msg"].stringValue)
+                if result["code"].intValue == kQuestSuccessTag{
+                    
+                    let index: Int = result["app_interface_tag"].intValue
+                    dataList.remove(at: index)
+                    tableView.reloadData()
+                }
+            }
+            
+        }
+    }
 }
 
 extension HOOPMessageRecordVC: UITableViewDelegate,UITableViewDataSource{
@@ -168,6 +222,7 @@ extension HOOPMessageRecordVC: UITableViewDelegate,UITableViewDataSource{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: messageRecordCell) as! HOOPLeaveMessageRecordCell
         
+        cell.rightIconView.isHidden = false
         cell.playBtn.tag = indexPath.row
         cell.playBtn.addTarget(self, action: #selector(onClickedPlay(sender:)), for: .touchUpInside)
         let model = dataList[indexPath.row]
@@ -203,6 +258,20 @@ extension HOOPMessageRecordVC: UITableViewDelegate,UITableViewDataSource{
                 cell.nameLab.text = "语音留言"
                 cell.playBtn.isHidden = false
             }
+            
+            if messageType == "2" {//我的提醒
+                cell.rightIconView.isHidden = true
+                if model.state == "1" {
+                    cell.nameLab.textColor = kBlueFontColor
+                    cell.dateLab.textColor = kBlueFontColor
+                }else{
+                    cell.nameLab.textColor = kGaryFontColor
+                    cell.dateLab.textColor = kGaryFontColor
+                }
+            }else{
+                cell.nameLab.textColor = kBlackFontColor
+                cell.dateLab.textColor = kGaryFontColor
+            }
         }
         
         cell.selectionStyle = .none
@@ -226,5 +295,27 @@ extension HOOPMessageRecordVC: UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.00001
+    }
+    
+    /// 实现左滑
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if messageType == "2" {
+            return true
+        }
+        return false
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+    }
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        
+        let deleteAction = UITableViewRowAction(style: .normal, title: "删除") { [weak self] (action, index) in
+            self?.deleteMsg2(indexRow: index.row)
+        }
+        deleteAction.backgroundColor = kRedFontColor
+        
+        return [deleteAction]
     }
 }
