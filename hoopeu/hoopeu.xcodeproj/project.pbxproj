@@ -214,6 +214,7 @@
 		0A48036222A7AAD700335419 /* HOOPLinkPersonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036122A7AAD700335419 /* HOOPLinkPersonVC.swift */; };
 		0A48036422A7ABFE00335419 /* HOOPLinkPersonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036322A7ABFE00335419 /* HOOPLinkPersonCell.swift */; };
 		0A48036622A7B0BC00335419 /* HOOPAddLinkPersonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48036522A7B0BC00335419 /* HOOPAddLinkPersonVC.swift */; };
+		0A49AA98244B5D9100390462 /* HOOPPhoneNetWorkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A49AA97244B5D9100390462 /* HOOPPhoneNetWorkVC.swift */; };
 		0A4A27C122BCD9040070605A /* ZFIJKPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4A27BF22BCD9040070605A /* ZFIJKPlayerManager.m */; };
 		0A4AF262223F7F8000E2E891 /* HOOPSeeVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4AF261223F7F8000E2E891 /* HOOPSeeVideoCell.swift */; };
 		0A4D229B22B9BD0D000A56ED /* HOOPPlayerDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4D229A22B9BD0D000A56ED /* HOOPPlayerDetailVC.swift */; };
@@ -516,6 +517,7 @@
 		0A48036122A7AAD700335419 /* HOOPLinkPersonVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLinkPersonVC.swift; sourceTree = "<group>"; };
 		0A48036322A7ABFE00335419 /* HOOPLinkPersonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLinkPersonCell.swift; sourceTree = "<group>"; };
 		0A48036522A7B0BC00335419 /* HOOPAddLinkPersonVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPAddLinkPersonVC.swift; sourceTree = "<group>"; };
+		0A49AA97244B5D9100390462 /* HOOPPhoneNetWorkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPPhoneNetWorkVC.swift; sourceTree = "<group>"; };
 		0A4A27BE22BCD9040070605A /* ZFIJKPlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZFIJKPlayerManager.h; sourceTree = "<group>"; };
 		0A4A27BF22BCD9040070605A /* ZFIJKPlayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZFIJKPlayerManager.m; sourceTree = "<group>"; };
 		0A4A27C022BCD9040070605A /* IJKMediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IJKMediaFramework.framework; sourceTree = "<group>"; };
@@ -1105,6 +1107,7 @@
 				0A37E043221D42A9002EAA74 /* HOOPLinkPowerVC.swift */,
 				0A37E045221D4ADE002EAA74 /* HOOPReadyNetWorkVC.swift */,
 				0A011E53233A0C1A0008F153 /* HOOPRepairVC.swift */,
+				0A49AA97244B5D9100390462 /* HOOPPhoneNetWorkVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1808,6 +1811,7 @@
 				0A3B8478221E7EFF007ADEAE /* HOOPModifyOldPwdVC.swift in Sources */,
 				0A0B324D22CCF3C200679E58 /* HOOPCustomOtherControlVC.swift in Sources */,
 				0A388062221FD95000E51EDA /* HOOPOnOffProblemVC.swift in Sources */,
+				0A49AA98244B5D9100390462 /* HOOPPhoneNetWorkVC.swift in Sources */,
 				0A47D0D923CC00BB00DFA96C /* HOOPAddTimeSceneVC.swift in Sources */,
 				0A3C851F224B65AD002C794E /* HOOPLeaveMessageVC.swift in Sources */,
 				0A3ABB0F21DDE8DE0048F0F3 /* GYZNetWork.swift in Sources */,
@@ -2125,7 +2129,7 @@
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird/opencore-amr/lib",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2227,7 +2231,7 @@
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird/opencore-amr/lib",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

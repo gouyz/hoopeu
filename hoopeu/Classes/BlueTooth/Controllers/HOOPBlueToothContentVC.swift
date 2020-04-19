@@ -19,6 +19,8 @@ class HOOPBlueToothContentVC: GYZBaseVC {
     var currentPeripheral: CBPeripheral?
     //保存收到的蓝牙设备
     var deviceList:[CBPeripheral] = [CBPeripheral]()
+    //保存收到的蓝牙设备名称
+    var deviceNameList:[String] = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,6 +125,7 @@ class HOOPBlueToothContentVC: GYZBaseVC {
     /// 刷新
     @objc func onClickRightBtn(){
         deviceList.removeAll()
+        deviceNameList.removeAll()
         tableView.reloadData()
         scanDevice()
     }
@@ -195,7 +198,7 @@ extension HOOPBlueToothContentVC: UITableViewDelegate,UITableViewDataSource{
         
         let device: CBPeripheral = deviceList[indexPath.row]
         
-        cell.nameLab.text = device.name
+        cell.nameLab.text = deviceNameList[indexPath.row]
         if currentPeripheral?.identifier.uuidString == device.identifier.uuidString {
             cell.nameLab.backgroundColor = kBtnClickBGColor
             cell.nameLab.textColor = kWhiteColor
@@ -258,12 +261,16 @@ extension HOOPBlueToothContentVC :CBCentralManagerDelegate{
     //广播、扫描的响应数据保存在advertisementData 中，可以通过CBAdvertisementData 来访问它。
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         GYZLog(peripheral.name)
-        if let name = peripheral.name {
+        let name: String = advertisementData["kCBAdvDataLocalName"] as! String
+        GYZLog(peripheral.name)
+        if !name.isEmpty {
             if name.hasPrefix("HoopeuRobot"){//HoopeuRobot
                 self.desLab1.text = "选择设备"
                 self.hud?.hide(animated: true)
+                
                 if(!self.deviceList.contains(peripheral)){
                     self.deviceList.append(peripheral)
+                    self.deviceNameList.append(name)
                     self.tableView.reloadData()
                 }
             }

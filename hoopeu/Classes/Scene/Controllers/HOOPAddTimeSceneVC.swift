@@ -245,7 +245,7 @@ class HOOPAddTimeSceneVC: GYZBaseVC {
     func goSceneDo(index: Int){
         
         if index == doArr.count - 1 {//添加叮当宝贝会做
-            let mmShareSheet = MMShareSheet.init(title: nil, cards: kConditionSceneDoCards, duration: nil, cancelBtn: nil)
+            let mmShareSheet = MMShareSheet.init(title: nil, cards: kSceneDoCards, duration: nil, cancelBtn: nil)
             mmShareSheet.callBack = { [weak self](handler) ->() in
                 
                 if handler != "cancel" {// 取消

@@ -138,7 +138,8 @@ class HOOPDeviceManagerVC: GYZBaseVC {
     }
     /// 连接电源
     func goLinkPower(){
-        let vc = HOOPLinkPowerVC()
+//        let vc = HOOPLinkPowerVC()
+        let vc = HOOPPhoneNetWorkVC()
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -215,7 +216,7 @@ extension HOOPDeviceManagerVC: UITableViewDelegate,UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: deviceManagerCell) as! HOOPDeviceManagerCell
         let model = dataList[indexPath.row]
         var name = model.deviceName!
-        if model.onLine == "1"{/// 正在使用
+        if model.onLine == "1"{/// 设备在线
             
             cell.nameLab.textColor = kBlueFontColor
         }else{
@@ -241,8 +242,11 @@ extension HOOPDeviceManagerVC: UITableViewDelegate,UITableViewDataSource{
         return UIView()
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        goDeviceDetailVC(index: indexPath.row)
+        let model = dataList[indexPath.row]
+        if model.onLine == "1"{/// 设备在线
+            
+            goDeviceDetailVC(index: indexPath.row)
+        }
     }
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

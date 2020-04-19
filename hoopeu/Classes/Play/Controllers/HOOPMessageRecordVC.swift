@@ -287,7 +287,10 @@ extension HOOPMessageRecordVC: UITableViewDelegate,UITableViewDataSource{
         return UIView()
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        goDetailVC(model: dataList[indexPath.row])
+        if messageType != "2" {
+            goDetailVC(model: dataList[indexPath.row])
+        }
+        
     }
     ///MARK : UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

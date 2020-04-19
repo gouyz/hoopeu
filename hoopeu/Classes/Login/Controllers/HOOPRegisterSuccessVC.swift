@@ -86,7 +86,8 @@ class HOOPRegisterSuccessVC: GYZBaseVC {
     }
     /// 连接电源
     func goLinkPower(){
-        let vc = HOOPLinkPowerVC()
+//        let vc = HOOPLinkPowerVC()
+        let vc = HOOPPhoneNetWorkVC()
         navigationController?.pushViewController(vc, animated: true)
     }
 }

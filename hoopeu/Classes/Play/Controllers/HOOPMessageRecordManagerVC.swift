@@ -57,6 +57,8 @@ class HOOPMessageRecordManagerVC: GYZBaseVC ,ContentViewDelegate {
         style.normalTitleColor = kBlackFontColor
         /// 显示角标
         style.showBadge = false
+        /// 滑动控制器不可以切换
+        style.vcIsScroll = false
         
         scrollPageView = ScrollSegmentView.init(frame: CGRect.init(x: 0, y: 0, width: kScreenWidth * 0.6, height: 28), segmentStyle: style, titles: titleArr)
         navigationItem.titleView = scrollPageView

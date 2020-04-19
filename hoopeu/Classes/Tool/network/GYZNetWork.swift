@@ -76,9 +76,10 @@ class GYZNetWork: NSObject {
                                 let currVC = nvc.visibleViewController
                                 if UIApplication.shared.applicationState == .active{
                                     //防止同一界面多次 push
-                                    if !(currVC?.isMember(of: HOOPLinkPowerVC.self))!{
-                                        let logVC = HOOPLinkPowerVC()
-                                        currVC?.navigationController?.pushViewController(logVC, animated: true)
+                                    if !(currVC?.isMember(of: HOOPPhoneNetWorkVC.self))!{
+//                                        let logVC = HOOPLinkPowerVC()
+                                        let vc = HOOPPhoneNetWorkVC()
+                                        currVC?.navigationController?.pushViewController(vc, animated: true)
                                     }
                                 }
                             }

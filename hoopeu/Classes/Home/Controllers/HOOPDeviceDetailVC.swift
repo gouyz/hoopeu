@@ -168,7 +168,8 @@ class HOOPDeviceDetailVC: GYZBaseVC {
     /// 重新配网
     func goResetNetWorkVC(){
 //        let vc = HOOPLinkPowerVC()
-        let vc = HOOPBlueToothContentVC()
+//        let vc = HOOPBlueToothContentVC()
+        let vc = HOOPPhoneNetWorkVC()
         navigationController?.pushViewController(vc, animated: true)
     }
     // 恢复出厂设置
