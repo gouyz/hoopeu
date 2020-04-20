@@ -246,6 +246,8 @@ extension HOOPDeviceManagerVC: UITableViewDelegate,UITableViewDataSource{
         if model.onLine == "1"{/// 设备在线
             
             goDeviceDetailVC(index: indexPath.row)
+        }else{
+            MBProgressHUD.showAutoDismissHUD(message: "所选设备不在线")
         }
     }
     ///MARK : UITableViewDelegate
