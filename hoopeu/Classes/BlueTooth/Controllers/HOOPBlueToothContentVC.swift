@@ -260,18 +260,19 @@ extension HOOPBlueToothContentVC :CBCentralManagerDelegate{
     //3.查到外设后，停止扫描，连接设备
     //广播、扫描的响应数据保存在advertisementData 中，可以通过CBAdvertisementData 来访问它。
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        GYZLog(peripheral.name)
-        let name: String = advertisementData["kCBAdvDataLocalName"] as! String
-        GYZLog(peripheral.name)
-        if !name.isEmpty {
-            if name.hasPrefix("HoopeuRobot"){//HoopeuRobot
-                self.desLab1.text = "选择设备"
-                self.hud?.hide(animated: true)
-                
-                if(!self.deviceList.contains(peripheral)){
-                    self.deviceList.append(peripheral)
-                    self.deviceNameList.append(name)
-                    self.tableView.reloadData()
+        
+        if let name = advertisementData["kCBAdvDataLocalName"] as? String{
+//            GYZLog(peripheral.name)
+            if !name.isEmpty {
+                if name.hasPrefix("HoopeuRobot"){//HoopeuRobot
+                    self.desLab1.text = "选择设备"
+                    self.hud?.hide(animated: true)
+                    
+                    if(!self.deviceList.contains(peripheral)){
+                        self.deviceList.append(peripheral)
+                        self.deviceNameList.append(name)
+                        self.tableView.reloadData()
+                    }
                 }
             }
         }

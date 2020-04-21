@@ -52,6 +52,10 @@ class HOOPDeviceDetailVC: GYZBaseVC {
             addBtn.setTitle("使用中", for: .normal)
         }
         requestRoomList()
+//        mqttSetting()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         mqttSetting()
     }
     lazy var tableView : UITableView = {
