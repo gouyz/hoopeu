@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import MBProgressHUD
+import CocoaMQTT
+import SwiftyJSON
 
 class HOOPPhoneNetWorkVC: GYZBaseVC {
     
@@ -18,7 +21,11 @@ class HOOPPhoneNetWorkVC: GYZBaseVC {
         
         setupUI()
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        mqttSetting()
+    }
     /// 创建UI
     func setupUI(){
         view.addSubview(linkBtn)
@@ -62,8 +69,12 @@ class HOOPPhoneNetWorkVC: GYZBaseVC {
         
         return btn
     }()
+    
     /// 设备已联网
     @objc func clickedLinkBtn(){
+        sendMqttCmdBle()
+    }
+    func goResetNetWorkVC(){
         let vc = HOOPBlueToothContentVC()
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -71,5 +82,46 @@ class HOOPPhoneNetWorkVC: GYZBaseVC {
     @objc func clickedNoLinkBtn(){
         let vc = HOOPLinkPowerVC()
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    /// mqtt发布主题 打开设备蓝牙
+    func sendMqttCmdBle(){
+        createHUD(message: "加载中...")
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"bt_open","app_interface_tag":""]
+        
+        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    
+    /// 重载CocoaMQTTDelegate
+    override func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
+        super.mqtt(mqtt, didConnectAck: ack)
+        if ack == .accept {
+            mqtt.subscribe("hoopeu_app", qos: CocoaMQTTQOS.qos1)
+        }
+    }
+    override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
+        super.mqtt(mqtt, didReceiveMessage: message, id: id)
+        
+        if let data = message.string {
+            let result = JSON.init(parseJSON: data)
+            let type = result["msg_type"].stringValue
+            if let tag = result["app_interface_tag"].string{
+                if tag.hasPrefix("system_"){
+                    return
+                }
+            }
+            
+            if type == "bt_open_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
+                hud?.hide(animated: true)
+                
+                if result["ret"].intValue == 1{
+                    goResetNetWorkVC()
+                }else{
+                    MBProgressHUD.showAutoDismissHUD(message: "请先打开设备蓝牙，然后进行重新配网")
+                }
+                
+            }
+            
+        }
     }
 }

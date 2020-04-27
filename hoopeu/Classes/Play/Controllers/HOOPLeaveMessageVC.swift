@@ -309,7 +309,7 @@ class HOOPLeaveMessageVC: GYZBaseVC {
     /// 轮询播报
     lazy var singleCheckView : LHSCheckView = {
         let checkView = LHSCheckView()
-        checkView.nameLab.text = "是否要轮询播报"
+        checkView.nameLab.text = "是否要循环播报"
         checkView.tagImgView.image = UIImage.init(named: "icon_check_normal")
         checkView.tagImgView.highlightedImage = UIImage.init(named: "icon_check_selected")
         checkView.tagImgView.isHighlighted = isLoop
