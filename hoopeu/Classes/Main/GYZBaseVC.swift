@@ -192,7 +192,7 @@ extension GYZBaseVC: CocoaMQTTDelegate {
     
     func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
         GYZLog("message: \(message.string!.description), id: \(id)")
-        startMqttWithDuration(duration: 5)
+        startMqttWithDuration(duration: 10)
     }
     
     func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {

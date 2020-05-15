@@ -413,26 +413,31 @@ extension AppDelegate: CocoaMQTTDelegate {
     
     /// 检测网络信息查询
     func sendMqttCheckOnlineCmd(){
-        if userDefaults.string(forKey: "devId") == nil {
-            return
-        }
+    
         if !isFirstCheckVersion {
             self.isNetWorkMqtt = true
             return
         }
+        if let devId = userDefaults.string(forKey: "devId") {
+            if devId.isEmpty {
+                return
+            }
+            let paramDic:[String:Any] = ["device_id":devId,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_online","app_interface_tag":"ok"]
+            
+            mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+        }
         
-        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"query_online","app_interface_tag":"ok"]
-        
-        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
     /// mqtt发布主题 系统更新检测
     func sendMqttCmdVerison(){
-        if userDefaults.string(forKey: "devId") == nil {
-            return
+        if let devId = userDefaults.string(forKey: "devId") {
+            if devId.isEmpty {
+                return
+            }
+            let paramDic:[String:Any] = ["device_id":devId,"user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"get_dev_info","app_interface_tag":userDefaults.string(forKey: "devId") ?? ""]
+            
+            mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
         }
-        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"get_dev_info","app_interface_tag":userDefaults.string(forKey: "devId") ?? ""]
-        
-        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
     /// mqtt发布主题 系统更新
     func sendMqttCmdUpdateVerison(){

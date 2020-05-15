@@ -55,6 +55,7 @@ class HOOPConnectWiFiVC: GYZBaseVC {
         bgNameView.addSubview(nameLab)
         view.addSubview(bgPwdView)
         bgPwdView.addSubview(pwdTxtFiled)
+        bgPwdView.addSubview(seePwdBtn)
         view.addSubview(connectBtn)
         view.addSubview(questionBtn)
         
@@ -91,10 +92,14 @@ class HOOPConnectWiFiVC: GYZBaseVC {
         }
         pwdTxtFiled.snp.makeConstraints { (make) in
             make.left.equalTo(kMargin)
-            make.right.equalTo(-kMargin)
             make.top.bottom.equalTo(bgPwdView)
+            make.right.equalTo(seePwdBtn.snp.left).offset(-kMargin)
         }
-        
+        seePwdBtn.snp.makeConstraints { (make) in
+            make.centerY.equalTo(pwdTxtFiled)
+            make.right.equalTo(-kMargin)
+            make.size.equalTo(CGSize.init(width: 20, height: 20))
+        }
         connectBtn.snp.makeConstraints { (make) in
             make.left.equalTo(20)
             make.right.equalTo(-20)
@@ -165,6 +170,7 @@ class HOOPConnectWiFiVC: GYZBaseVC {
         bgview.cornerRadius = 8
         bgview.borderColor = kGrayLineColor
         bgview.borderWidth = klineWidth
+        bgview.isUserInteractionEnabled = true
         
         return bgview
     }()
@@ -179,6 +185,16 @@ class HOOPConnectWiFiVC: GYZBaseVC {
         textFiled.placeholder = "密码"
         
         return textFiled
+    }()
+    /// 查看密码
+    lazy var seePwdBtn : UIButton = {
+        let btn = UIButton.init(type: .custom)
+        btn.setImage(UIImage.init(named: "icon_no_see_pwd"), for: .normal)
+        btn.setImage(UIImage.init(named: "icon_see_pwd"), for: .selected)
+        
+        btn.addTarget(self, action: #selector(clickedSeePwdBtn), for: .touchUpInside)
+        
+        return btn
     }()
     /// 连接
     lazy var connectBtn : UIButton = {
@@ -205,6 +221,11 @@ class HOOPConnectWiFiVC: GYZBaseVC {
         
         return btn
     }()
+    /// 显示密码
+    @objc func clickedSeePwdBtn(){
+        seePwdBtn.isSelected = !seePwdBtn.isSelected
+        pwdTxtFiled.isSecureTextEntry = !seePwdBtn.isSelected
+    }
     /// 用户资料是否完善
     func requestIsPerfect(){
         if !GYZTool.checkNetWork() {
