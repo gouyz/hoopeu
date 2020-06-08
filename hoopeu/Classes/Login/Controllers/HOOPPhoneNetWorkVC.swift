@@ -73,6 +73,7 @@ class HOOPPhoneNetWorkVC: GYZBaseVC {
     /// 设备已联网
     @objc func clickedLinkBtn(){
         sendMqttCmdBle()
+        goResetNetWorkVC()
     }
     func goResetNetWorkVC(){
         let vc = HOOPBlueToothContentVC()
@@ -86,7 +87,7 @@ class HOOPPhoneNetWorkVC: GYZBaseVC {
     
     /// mqtt发布主题 打开设备蓝牙
     func sendMqttCmdBle(){
-        createHUD(message: "加载中...")
+//        createHUD(message: "加载中...")
         let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg_type":"bt_open","app_interface_tag":""]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
@@ -112,13 +113,13 @@ class HOOPPhoneNetWorkVC: GYZBaseVC {
             }
             
             if type == "bt_open_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
-                hud?.hide(animated: true)
+//                hud?.hide(animated: true)
                 
-                if result["ret"].intValue == 1{
-                    goResetNetWorkVC()
-                }else{
-                    MBProgressHUD.showAutoDismissHUD(message: "请先打开设备蓝牙，然后进行重新配网")
-                }
+//                if result["ret"].intValue == 1{
+//                    goResetNetWorkVC()
+//                }else{
+//                    MBProgressHUD.showAutoDismissHUD(message: "请先打开设备蓝牙，然后进行重新配网")
+//                }
                 
             }
             
