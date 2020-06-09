@@ -220,6 +220,7 @@ extension HOOPLeftMenuVC: UITableViewDelegate,UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: leftMenuCell) as! HOOPLeftMenuCell
         
         cell.nameLab.text = titleArray[indexPath.row]
+        cell.contentLab.text = ""
        
         if indexPath.row == titleArray.count - 1 {//保修
             if let model = dataModel {
@@ -239,6 +240,7 @@ extension HOOPLeftMenuVC: UITableViewDelegate,UITableViewDataSource{
             }else{
                 cell.nameLab.clearBadge(animated: false)
             }
+            cell.contentLab.text = "V" + GYZUpdateVersionTool.getCurrVersion()
         }else{
             cell.nameLab.clearBadge(animated: false)
         }
