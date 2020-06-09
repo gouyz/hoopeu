@@ -21,6 +21,7 @@ class HOOPPlayVC: GYZBaseVC {
     var currPage : Int = 1
     /// 说false或做true
     var isSpeakOrDo: Bool = false
+    var tagsList:[String] = ["晚上6点天气怎么样","打开蓝牙","播放纸短情长","我要听抖音神曲","我要听小猪佩奇","播放郭德纲的相声","帮我找下手机","现在几点了"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +52,8 @@ class HOOPPlayVC: GYZBaseVC {
                 make.top.equalTo(kTitleAndStateHeight)
             }
         }
+        
+        bottomView.tagsList = tagsList
         /// 切换说或做
         bottomView.onClickedChangeBlock = {[weak self](isSpeak) in
             self?.isSpeakOrDo = isSpeak
@@ -58,6 +61,15 @@ class HOOPPlayVC: GYZBaseVC {
         /// 发送
         bottomView.onClickedSendBlock = {[weak self](message) in
             self?.sendMessage(message: message)
+        }
+        bottomView.onClickedIsExpandBlock = {[weak self](isExpand) in
+            self?.bottomView.snp.updateConstraints({ (make) in
+                if isExpand{
+                    make.height.equalTo(kBottomTabbarHeight + 230)
+                }else{
+                    make.height.equalTo(kBottomTabbarHeight)
+                }
+            })
         }
         
 //        requestChatDatas()
