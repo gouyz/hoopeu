@@ -18,7 +18,7 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     var roomId: String = ""
     var dataModel: HOOPRoomDeviceModel?
 
-    var titleArray = ["小夜灯", "防盗报警","麦克风", "爱心看护"]
+    var titleArray = ["小夜灯", "防盗报警","静音", "爱心看护"]
     var iconArray = ["icon_home_xiaoyedeng", "icon_home_warn", "icon_home_mike", "icon_home_aixinkanhu"]
     /// 小夜灯开关状态
     var lightState: String = "on"

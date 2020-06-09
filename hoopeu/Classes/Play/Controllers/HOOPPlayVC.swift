@@ -21,6 +21,7 @@ class HOOPPlayVC: GYZBaseVC {
     var currPage : Int = 1
     /// 说false或做true
     var isSpeakOrDo: Bool = false
+    var tagsList:[String] = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +52,7 @@ class HOOPPlayVC: GYZBaseVC {
                 make.top.equalTo(kTitleAndStateHeight)
             }
         }
+        
         /// 切换说或做
         bottomView.onClickedChangeBlock = {[weak self](isSpeak) in
             self?.isSpeakOrDo = isSpeak
@@ -59,9 +61,19 @@ class HOOPPlayVC: GYZBaseVC {
         bottomView.onClickedSendBlock = {[weak self](message) in
             self?.sendMessage(message: message)
         }
+        bottomView.onClickedIsExpandBlock = {[weak self](isExpand) in
+            self?.bottomView.snp.updateConstraints({ (make) in
+                if isExpand{
+                    make.height.equalTo(kBottomTabbarHeight + 230)
+                }else{
+                    make.height.equalTo(kBottomTabbarHeight)
+                }
+            })
+        }
         
 //        requestChatDatas()
 //        mqttSetting()
+        requestGetappSendSay()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -158,6 +170,34 @@ class HOOPPlayVC: GYZBaseVC {
         })
     }
     
+    ///获取指令列表
+    func requestGetappSendSay(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("appSendSay",parameters: nil,method :.get,  success: { (response) in
+            
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.tagsList.removeAll()
+                guard let data = response["data"].array else { return }
+                
+                for item in data{
+                    
+                    weakSelf?.tagsList.append(item["name"].stringValue)
+                }
+                weakSelf?.bottomView.tagsList = (weakSelf?.tagsList)!
+            }
+            
+        }, failture: { (error) in
+            
+            GYZLog(error)
+        })
+    }
     // MARK: - 上拉加载更多/下拉刷新
     /// 下拉刷新
     func refresh(){
