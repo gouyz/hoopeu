@@ -21,7 +21,7 @@ class HOOPPlayVC: GYZBaseVC {
     var currPage : Int = 1
     /// 说false或做true
     var isSpeakOrDo: Bool = false
-    var tagsList:[String] = ["晚上6点天气怎么样","打开蓝牙","播放纸短情长","我要听抖音神曲","我要听小猪佩奇","播放郭德纲的相声","帮我找下手机","现在几点了"]
+    var tagsList:[String] = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +53,6 @@ class HOOPPlayVC: GYZBaseVC {
             }
         }
         
-        bottomView.tagsList = tagsList
         /// 切换说或做
         bottomView.onClickedChangeBlock = {[weak self](isSpeak) in
             self?.isSpeakOrDo = isSpeak
@@ -74,6 +73,7 @@ class HOOPPlayVC: GYZBaseVC {
         
 //        requestChatDatas()
 //        mqttSetting()
+        requestGetappSendSay()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -170,6 +170,34 @@ class HOOPPlayVC: GYZBaseVC {
         })
     }
     
+    ///获取指令列表
+    func requestGetappSendSay(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        
+        weak var weakSelf = self
+        
+        GYZNetWork.requestNetwork("appSendSay",parameters: nil,method :.get,  success: { (response) in
+            
+            GYZLog(response)
+            
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                weakSelf?.tagsList.removeAll()
+                guard let data = response["data"].array else { return }
+                
+                for item in data{
+                    
+                    weakSelf?.tagsList.append(item["name"].stringValue)
+                }
+                weakSelf?.bottomView.tagsList = (weakSelf?.tagsList)!
+            }
+            
+        }, failture: { (error) in
+            
+            GYZLog(error)
+        })
+    }
     // MARK: - 上拉加载更多/下拉刷新
     /// 下拉刷新
     func refresh(){
