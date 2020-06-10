@@ -223,6 +223,9 @@ class HOOPChatBottomView: UIView {
 }
 extension HOOPChatBottomView: TTGTextTagCollectionViewDelegate {
     func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTapTag tagText: String!, at index: UInt, selected: Bool, tagConfig config: TTGTextTagConfig!) {
+        if onClickedChangeBlock != nil {
+            onClickedChangeBlock!(true)
+        }
         if onClickedSendBlock != nil {
             onClickedSendBlock!(tagsList[Int(index)])
             hiddenExpand()
