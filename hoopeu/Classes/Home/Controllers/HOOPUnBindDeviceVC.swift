@@ -15,6 +15,7 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
     
     var deviceId: String = ""
     var userToken: String = ""
+    var isBind: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -397,6 +398,11 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
     
     /// mqtt发布主题 查询设备在线状态
     func sendMqttCmd(){
+        if mqtt?.connState == CocoaMQTTConnState.disconnected{
+            isBind = true
+            mqtt?.connect()
+            return
+        }
         var paramDic:[String:Any] = ["token":userDefaults.string(forKey: "token") ?? "","smsToken":self.userToken,"phone":phoneTxtFiled.text!,"msg_type":"app_user_change","app_interface_tag":"ok"]
         if !toPhoneTxtFiled.text!.isEmpty {
             paramDic["toPhone"] = toPhoneTxtFiled.text!
@@ -412,12 +418,20 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
             
         }
     }
+    override func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
+        GYZLog("new state: \(state)")
+        if state == .connected {
+            if isBind {
+                sendMqttCmd()
+                isBind = false
+            }
+        }
+    }
     override func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
         super.mqtt(mqtt, didReceiveMessage: message, id: id)
         
         if let data = message.string {
             let result = JSON.init(parseJSON: data)
-            let devId = result["device_id"].stringValue
             let type = result["msg_type"].stringValue
             if let tag = result["app_interface_tag"].string{
                 if tag.hasPrefix("system_"){
@@ -425,8 +439,8 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
                 }
             }
             
-            if type == "app_user_change_re" && devId == userDefaults.string(forKey: "devId"){
-                if result["ret"].intValue == 1{
+            if type == "app_user_change_re" && result["phone"].stringValue == phoneTxtFiled.text!{
+                if result["code"].intValue == 0{
                     goBack()
                 }else{
                     MBProgressHUD.showAutoDismissHUD(message: "解绑失败")
