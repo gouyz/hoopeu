@@ -69,7 +69,7 @@ class HOOPReadyNetWorkVC: GYZBaseVC {
         lab.textColor = kBlackFontColor
         lab.font = k13Font
         lab.textAlignment = .center
-        lab.text = "出现橙光"
+        lab.text = "出现黄光"
         
         return lab
     }()
@@ -80,7 +80,7 @@ class HOOPReadyNetWorkVC: GYZBaseVC {
         let btn = UIButton.init(type: .custom)
         btn.backgroundColor = kBlueFontColor
         btn.setTitleColor(kWhiteColor, for: .normal)
-        btn.setTitle("出现橙光闪烁", for: .normal)
+        btn.setTitle("出现黄光", for: .normal)
         btn.titleLabel?.font = k15Font
         btn.cornerRadius = 8
         
@@ -93,7 +93,7 @@ class HOOPReadyNetWorkVC: GYZBaseVC {
         lab.textColor = kBlueFontColor
         lab.font = k13Font
         lab.textAlignment = .center
-        lab.text = "未出现橙色灯光？"
+        lab.text = "未出现黄色灯光？"
         lab.addOnClickListener(target: self, action: #selector(onClickedNoBlue))
         
         return lab
@@ -110,7 +110,7 @@ class HOOPReadyNetWorkVC: GYZBaseVC {
     /// 未出现蓝色灯光
     func goWebVC(){
         let vc = JSMWebViewVC()
-        vc.webTitle = "未出现橙色灯光"
+        vc.webTitle = "未出现黄色灯光"
         vc.url = "http://www.hoopeurobot.com/page/protocol.html?id=4"
         navigationController?.pushViewController(vc, animated: true)
     }

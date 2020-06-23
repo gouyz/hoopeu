@@ -16,12 +16,22 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
     var deviceId: String = ""
     var userToken: String = ""
     var isBind: Bool = false
+    var deviceList: [HOOPDeviceModel] = [HOOPDeviceModel]()
+    var onLineList: [HOOPDeviceModel] = [HOOPDeviceModel]()
+    var onLineTitleList: [String] = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "解绑设备"
         self.view.backgroundColor = kWhiteColor
+        
+        for item in deviceList { // 是否还有设备在线
+            if item.deviceId != deviceId && item.onLine == "1"{
+                onLineList.append(item)
+                onLineTitleList.append(item.deviceName! + "(" + item.deviceId! + ")")
+            }
+        }
         
         setUpUI()
         mqttSetting()
@@ -267,6 +277,15 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
             }
         }
         requestCheckCode()
+    }
+    /// 自定义
+    func showCustomView(){
+        let actionSheet = GYZActionSheet.init(title: "请选择切换设备", style: .Table, itemTitles: onLineTitleList,isMult:false)
+    
+        actionSheet.didMultSelectIndex = { [unowned self](indexs: [Int],titles: [String]) in
+            
+        
+        }
     }
     /// 获取验证码
     @objc func clickedCodeBtn(){

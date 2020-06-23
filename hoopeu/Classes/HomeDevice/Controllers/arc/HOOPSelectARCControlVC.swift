@@ -126,7 +126,7 @@ class HOOPSelectARCControlVC: GYZBaseVC {
         lab.textColor = kGaryFontColor
         lab.numberOfLines = 0
         lab.textAlignment = .center
-        lab.text = "请把叮当宝贝对准您的家电设备，\n点击发射按钮发射红外指令，\n然后选择家电设备的响应结果。"
+        lab.text = "请把叮当宝贝对准您的家电设备，\n点击发射按钮发射红外指令，\n然后选择家电设备的响应结果。\n如果下方按键不是电源键，\n请让电器处于开机状态"
         
         return lab
     }()

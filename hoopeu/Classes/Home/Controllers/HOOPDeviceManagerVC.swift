@@ -145,8 +145,11 @@ class HOOPDeviceManagerVC: GYZBaseVC {
     
     /// 设备详情
     func goDeviceDetailVC(index: Int){
+//        var deviceArr:[HOOPDeviceModel] = dataList
+//        deviceArr.remove(at: index)
         let vc = HOOPDeviceDetailVC()
         vc.deviceModel = dataList[index]
+        vc.deviceList = dataList
         vc.resultBlock = {[weak self] () in
             self?.tableView.reloadData()
         }
