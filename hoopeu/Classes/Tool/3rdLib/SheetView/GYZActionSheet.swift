@@ -99,13 +99,16 @@ class GYZActionSheet: UIView {
     fileprivate var sheetStyle : GYZSheetStyle?
     /// 是否支持多选
     fileprivate var isMultSelected: Bool = false
+    /// 支持多选 数量限制 0不限
+    fileprivate var maxNum: Int = 0
     
-    init(title: String,style: GYZSheetStyle,itemTitles: [String],isMult: Bool = false){
+    init(title: String,style: GYZSheetStyle,itemTitles: [String],isMult: Bool = false,maxNum: Int = 0){
         super.init(frame: UIScreen.main.bounds)
         
         sheetStyle = style
         dataSource = itemTitles
         isMultSelected = isMult
+        self.maxNum = maxNum
         KeyWindow.addSubview(self)
         
         addSubview(bgButton)
@@ -309,6 +312,7 @@ class GYZActionSheet: UIView {
         sheetView.tableView.isScrollEnabled = true
         //设置单元格多选
         sheetView.tableView.allowsMultipleSelection = isMultSelected
+        sheetView.maxNum = self.maxNum
         
         contentViewY = kScreenHeight - contentVH
         contentView.frame = CGRect.init(x: 0, y: kScreenHeight, width: kScreenWidth, height: contentVH)

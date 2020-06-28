@@ -19,6 +19,7 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
     var deviceList: [HOOPDeviceModel] = [HOOPDeviceModel]()
     var onLineList: [HOOPDeviceModel] = [HOOPDeviceModel]()
     var onLineTitleList: [String] = [String]()
+    var changeDevId: String = "" // 切换devid
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -276,16 +277,44 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
                 return
             }
         }
-        requestCheckCode()
+        if self.onLineList.count > 0 {
+            showCustomView()
+        }else{
+            
+        }
     }
     /// 自定义
     func showCustomView(){
-        let actionSheet = GYZActionSheet.init(title: "请选择切换设备", style: .Table, itemTitles: onLineTitleList,isMult:false)
+        let actionSheet = GYZActionSheet.init(title: "请选择切换设备", style: .Table, itemTitles: onLineTitleList,isMult:true,maxNum: 1)
     
         actionSheet.didMultSelectIndex = { [unowned self](indexs: [Int],titles: [String]) in
-            
-        
+            self.changeDevId = self.onLineList[indexs[0]].deviceId!
+            self.requestCheckCode()
         }
+    }
+    /// 配网成功调用
+    func requestUserDevice(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        weak var weakSelf = self
+        GYZNetWork.requestNetwork("userDevice", parameters: ["devId":self.changeDevId],  success: { (response) in
+            
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                userDefaults.set((weakSelf?.changeDevId)!, forKey: "devId")
+                weakSelf?.goHomeVC()
+            }
+            
+        }, failture: { (error) in
+            GYZLog(error)
+        })
+    }
+    func goHomeVC(){
+        let menuContrainer = FWSideMenuContainerViewController.container(centerViewController: GYZMainTabBarVC(), centerLeftPanViewWidth: 20, centerRightPanViewWidth: 20, leftMenuViewController: HOOPLeftMenuVC(), rightMenuViewController: nil)
+        menuContrainer.leftMenuWidth = kLeftMenuWidth
+        
+        KeyWindow.rootViewController = menuContrainer
     }
     /// 获取验证码
     @objc func clickedCodeBtn(){
