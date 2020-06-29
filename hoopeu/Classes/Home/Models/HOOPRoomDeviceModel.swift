@@ -18,6 +18,8 @@ class HOOPRoomDeviceModel: LHSBaseModel {
     var `guard` : String? = ""
     /// 麦克风开关状态 exist为0时不存在该项 false true
     var mic : String? = ""
+    /// 静音开关状态 exist为0时不存在该项 false true
+    var mute : String? = ""
     
     /// 开关list
     var switchList: [HOOPRoomDeviceSwitchModel] = [HOOPRoomDeviceSwitchModel]()

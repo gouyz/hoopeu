@@ -250,6 +250,7 @@
 		0AB627E42225835B00E60856 /* HOOPWarnLogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB627E32225835B00E60856 /* HOOPWarnLogVC.swift */; };
 		0AB627E62225847F00E60856 /* HOOPLogDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB627E52225847F00E60856 /* HOOPLogDetailVC.swift */; };
 		0AB627E8222585A000E60856 /* HOOPLogDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB627E7222585A000E60856 /* HOOPLogDetailCell.swift */; };
+		88A1DC0E24A97BAE00DFCAA9 /* HOOPMuteSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88A1DC0D24A97BAE00DFCAA9 /* HOOPMuteSettingVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -560,6 +561,7 @@
 		0AB627E52225847F00E60856 /* HOOPLogDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLogDetailVC.swift; sourceTree = "<group>"; };
 		0AB627E7222585A000E60856 /* HOOPLogDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPLogDetailCell.swift; sourceTree = "<group>"; };
 		4ABD06B5661B0C6042DD9E60 /* Pods_hoopeu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_hoopeu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		88A1DC0D24A97BAE00DFCAA9 /* HOOPMuteSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HOOPMuteSettingVC.swift; sourceTree = "<group>"; };
 		B4CD812B84A2B19FADC98DC8 /* Pods-hoopeu.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoopeu.debug.xcconfig"; path = "Pods/Target Support Files/Pods-hoopeu/Pods-hoopeu.debug.xcconfig"; sourceTree = "<group>"; };
 		F92E84212ED4AC9EF106D10B /* Pods-hoopeu.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoopeu.release.xcconfig"; path = "Pods/Target Support Files/Pods-hoopeu/Pods-hoopeu.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -903,6 +905,7 @@
 				0AA23F2A2226729E0090F58B /* HOOPWarnSettingVC.swift */,
 				0AA23F2C222676C40090F58B /* HOOPWarnEditTimeVC.swift */,
 				0A48036122A7AAD700335419 /* HOOPLinkPersonVC.swift */,
+				88A1DC0D24A97BAE00DFCAA9 /* HOOPMuteSettingVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1741,6 +1744,7 @@
 				0A3ABAFD21DDE8DE0048F0F3 /* PickerView.swift in Sources */,
 				0A3ABB0D21DDE8DE0048F0F3 /* ScrollSegmentView.swift in Sources */,
 				0A3ABB1D21DDEA9A0048F0F3 /* HOOPSeeVC.swift in Sources */,
+				88A1DC0E24A97BAE00DFCAA9 /* HOOPMuteSettingVC.swift in Sources */,
 				0A3ABAF021DDE8DE0048F0F3 /* GYZUIViewController+Loading.swift in Sources */,
 				0A3ABB0B21DDE8DE0048F0F3 /* SegmentStyle.swift in Sources */,
 				0A0C9D54224CFA6A0055F7DF /* HOOPSceneDetailModel.swift in Sources */,

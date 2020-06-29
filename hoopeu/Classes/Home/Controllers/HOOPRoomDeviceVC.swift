@@ -26,6 +26,8 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     var guardState: String = "on"
     /// 麦克风开关状态
     var mikeState: String = "on"
+    /// 静音开关状态
+    var muteState: String = "on"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -161,8 +163,11 @@ class HOOPRoomDeviceVC: GYZBaseVC {
         if indexRow == 0 {/// 小夜灯设置
             let vc = HOOPNightLightVC()
             navigationController?.pushViewController(vc, animated: true)
-        }else if indexRow == 1{
+        }else if indexRow == 1{// 报警设置
             let vc = HOOPWarnSettingVC()
+            navigationController?.pushViewController(vc, animated: true)
+        }else if indexRow == 2{ // 静音设置
+            let vc = HOOPMuteSettingVC()
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -325,9 +330,11 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                 }else if row == 1{//安防
                     guardState = sender.isOn ? "on" : "off"
                     sendGuardMqttCmd()
-                }else if row == 2{//麦克风
-                    mikeState = sender.isOn ? "on" : "off"
-                    sendMikeMqttCmd()
+                }else if row == 2{//麦克风、静音
+                    muteState = sender.isOn ? "on" : "off"
+                    sendMuteMqttCmd()
+//                    mikeState = sender.isOn ? "on" : "off"
+//                    sendMikeMqttCmd()
                 }
             }else if section == 1{// 开关
                 sendOnOffMqttCmd(row: row, state: sender.isOn ? "on" : "off")
@@ -394,6 +401,13 @@ class HOOPRoomDeviceVC: GYZBaseVC {
     func sendMikeMqttCmd(){
         //        createHUD(message: "加载中...")
         let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg":["mic_state":mikeState],"msg_type":"mic_ctrl","app_interface_tag":""]
+        
+        mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
+    }
+    /// mqtt发布主题 静音控制-开闭安防状态
+    func sendMuteMqttCmd(){
+        //        createHUD(message: "加载中...")
+        let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg":["mute_state":muteState],"msg_type":"mute_ctrl","app_interface_tag":""]
         
         mqtt?.publish("hoopeu_device", withString: GYZTool.getJSONStringFromDictionary(dictionary: paramDic), qos: .qos1)
     }
@@ -522,6 +536,16 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                     MBProgressHUD.showAutoDismissHUD(message: "设置失败")
                 }
                 tableView.reloadData()
+            }else if type == "mute_ctrl_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
+                //                hud?.hide(animated: true)
+                if result["ret"].intValue == 1{
+                    dataModel?.mute = result["mute_state"].stringValue == "on" ? "1":"0"
+                    muteState = result["mute_state"].stringValue
+                    MBProgressHUD.showAutoDismissHUD(message: "设置成功")
+                }else{
+                    MBProgressHUD.showAutoDismissHUD(message: "设置失败")
+                }
+                tableView.reloadData()
             }else if type == "guard_ctrl_re" && result["user_id"].stringValue == userDefaults.string(forKey: "phone"){
                 //                hud?.hide(animated: true)
                 if result["ret"].intValue == 1{
@@ -591,6 +615,8 @@ class HOOPRoomDeviceVC: GYZBaseVC {
                         dataModel?.light = msg["dev_state"].boolValue ? "1" : "0"
                     }else if devType == "guard"{// 安防
                         dataModel?.guard = msg["dev_state"].boolValue ? "1" : "0"
+                    }else if devType == "mute"{// 静音
+                        dataModel?.mute = msg["dev_state"].boolValue ? "1" : "0"
                     }
                 }
             
@@ -678,8 +704,9 @@ extension HOOPRoomDeviceVC: UITableViewDelegate,UITableViewDataSource{
                         cell.switchView.isOn = dataModel?.light == "1"
                     }else if indexPath.row == 1{//报警
                         cell.switchView.isOn = dataModel?.guard == "1"
-                    }else if indexPath.row == 2{//麦克风
-                        cell.switchView.isOn = dataModel?.mic == "1"
+                    }else if indexPath.row == 2{//麦克风/静音
+//                        cell.switchView.isOn = dataModel?.mic == "1"
+                        cell.switchView.isOn = dataModel?.mute == "1"
                     }
                 }else if indexPath.section == 1{// 开关
                     cell.nameLab.text = dataModel?.switchList[indexPath.row].switch_name
@@ -784,7 +811,7 @@ extension HOOPRoomDeviceVC: UITableViewDelegate,UITableViewDataSource{
     }
     /// 实现左滑
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if dataModel?.exist == "1" && indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 3) {//爱心看护、麦克风不能左滑
+        if dataModel?.exist == "1" && indexPath.section == 0 && indexPath.row == 3 {//爱心看护不能左滑
             return false
         }
         return true
@@ -813,7 +840,7 @@ extension HOOPRoomDeviceVC: UITableViewDelegate,UITableViewDataSource{
         
         if dataModel?.exist == "1"{
             if indexPath.section == 0{
-                if indexPath.row == 0 {
+                if indexPath.row == 0 || indexPath.row == 2 {
                     return [settingAction]
                 }else if indexPath.row == 1 {
                     return [logAction,settingAction]
