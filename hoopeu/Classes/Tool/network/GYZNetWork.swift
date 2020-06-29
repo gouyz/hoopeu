@@ -13,18 +13,18 @@ import MBProgressHUD
 
 /// 网络请求基地址
 #if DEBUG
-//let BaseRequestURL = "http://121.43.122.86/app/"
-///// mqtt host
-//let kDefaultMQTTHost = "121.43.122.86"
-let kDefaultMQTTHost = "119.29.107.14"
-let BaseRequestURL = "http://www.hoopeurobot.com/app/"
+let BaseRequestURL = "http://121.43.122.86/app/"
+/// mqtt host
+let kDefaultMQTTHost = "121.43.122.86"
+//let kDefaultMQTTHost = "119.29.107.14"
+//let BaseRequestURL = "http://www.hoopeurobot.com/app/"
 #else
 /// mqtt host
-//let BaseRequestURL = "http://121.43.122.86/app/"
-///// mqtt host
-//let kDefaultMQTTHost = "121.43.122.86"
-let kDefaultMQTTHost = "119.29.107.14"
-let BaseRequestURL = "http://www.hoopeurobot.com/app/"
+let BaseRequestURL = "http://121.43.122.86/app/"
+/// mqtt host
+let kDefaultMQTTHost = "121.43.122.86"
+//let kDefaultMQTTHost = "119.29.107.14"
+//let BaseRequestURL = "http://www.hoopeurobot.com/app/"
 #endif
 
 class GYZNetWork: NSObject {
