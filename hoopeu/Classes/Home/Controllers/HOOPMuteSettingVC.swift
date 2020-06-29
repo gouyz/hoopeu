@@ -227,6 +227,10 @@ class HOOPMuteSettingVC: GYZBaseVC {
     
     /// mqtt发布主题
     func sendSaveMqttCmd(){
+        if mqtt?.connState == CocoaMQTTConnState.disconnected{
+            mqtt?.connect()
+            return
+        }
         createHUD(message: "加载中...")
         let paramDic:[String:Any] = ["device_id":userDefaults.string(forKey: "devId") ?? "","user_id":userDefaults.string(forKey: "phone") ?? "","msg":["mute_timer_state":mute_timer_state,"start_time":start_time,"end_time":end_time],"msg_type":"mute_setting","app_interface_tag":""]
         
@@ -246,6 +250,8 @@ class HOOPMuteSettingVC: GYZBaseVC {
         if state == .connected {
             if isRequest {
                 sendMqttCmd()
+            }else{
+                sendSaveMqttCmd()
             }
         }
     }
