@@ -16,12 +16,23 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
     var deviceId: String = ""
     var userToken: String = ""
     var isBind: Bool = false
+    var deviceList: [HOOPDeviceModel] = [HOOPDeviceModel]()
+    var onLineList: [HOOPDeviceModel] = [HOOPDeviceModel]()
+    var onLineTitleList: [String] = [String]()
+    var changeDevId: String = "" // 切换devid
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "解绑设备"
         self.view.backgroundColor = kWhiteColor
+        
+        for item in deviceList { // 是否还有设备在线
+            if item.deviceId != deviceId && item.onLine == "1"{
+                onLineList.append(item)
+                onLineTitleList.append(item.deviceName! + "(" + item.deviceId! + ")")
+            }
+        }
         
         setUpUI()
         mqttSetting()
@@ -266,7 +277,61 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
                 return
             }
         }
-        requestCheckCode()
+        if deviceId == userDefaults.string(forKey: "devId") {// 解绑当前使用设备
+            if self.onLineList.count > 0 {
+                showCustomView()
+            }else{
+                showAlert()
+            }
+        }else{
+            requestCheckCode()
+        }
+    }
+    /// 自定义
+    func showCustomView(){
+        let actionSheet = GYZActionSheet.init(title: "请选择切换设备", style: .Table, itemTitles: onLineTitleList,isMult:true,maxNum: 1)
+    
+        actionSheet.didMultSelectIndex = { [unowned self](indexs: [Int],titles: [String]) in
+            if indexs.count == 0 {
+                MBProgressHUD.showAutoDismissHUD(message: "请选择设备")
+                return
+            }
+            self.changeDevId = self.onLineList[indexs[0]].deviceId!
+            self.requestCheckCode()
+        }
+    }
+    func showAlert(){
+        weak var weakSelf = self
+        GYZAlertViewTools.alertViewTools.showAlert(title: nil, message: "当前无其他设备在线，解绑后请重新添加设备或配置网络", cancleTitle: "取消", viewController: self, buttonTitles: "确定") { (tag) in
+            
+            if tag != cancelIndex{
+                weakSelf?.requestCheckCode()
+            }
+        }
+    }
+    /// 切换成功调用
+    func requestUserDevice(){
+        if !GYZTool.checkNetWork() {
+            return
+        }
+        weak var weakSelf = self
+        GYZNetWork.requestNetwork("userDevice", parameters: ["devId":self.changeDevId],  success: { (response) in
+            
+            GYZLog(response)
+            if response["code"].intValue == kQuestSuccessTag{//请求成功
+                userDefaults.set((weakSelf?.changeDevId)!, forKey: "devId")
+                weakSelf?.goHomeVC()
+            }
+            
+        }, failture: { (error) in
+            GYZLog(error)
+        })
+    }
+    func goHomeVC(){
+        let menuContrainer = FWSideMenuContainerViewController.container(centerViewController: GYZMainTabBarVC(), centerLeftPanViewWidth: 20, centerRightPanViewWidth: 20, leftMenuViewController: HOOPLeftMenuVC(), rightMenuViewController: nil)
+        menuContrainer.leftMenuWidth = kLeftMenuWidth
+        
+        KeyWindow.rootViewController = menuContrainer
     }
     /// 获取验证码
     @objc func clickedCodeBtn(){
@@ -395,6 +460,13 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
             }
         }
     }
+    /// 重新配网
+        func goResetNetWorkVC(){
+    //        let vc = HOOPLinkPowerVC()
+            let vc = HOOPBlueToothContentVC()
+    //        let vc = HOOPPhoneNetWorkVC()
+            navigationController?.pushViewController(vc, animated: true)
+        }
     
     /// mqtt发布主题 查询设备在线状态
     func sendMqttCmd(){
@@ -441,7 +513,15 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
             
             if type == "app_user_change_re" && result["phone"].stringValue == phoneTxtFiled.text!{
                 if result["code"].intValue == 0{
-                    goBack()
+                    if deviceId == userDefaults.string(forKey: "devId") {// 解绑当前使用设备
+                        if onLineList.count > 0 {//有其他设备在线则切换选择的设备，没有则重新配网
+                            requestUserDevice()
+                        }else{
+                            goResetNetWorkVC()
+                        }
+                    }else{
+                        goBack()
+                    }
                 }else{
                     MBProgressHUD.showAutoDismissHUD(message: "解绑失败")
                 }
@@ -450,4 +530,3 @@ class HOOPUnBindDeviceVC: GYZBaseVC {
         }
     }
 }
-

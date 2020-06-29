@@ -19,6 +19,7 @@ class HOOPDeviceDetailVC: GYZBaseVC {
     var resultBlock:(() -> Void)?
     /// 设备model
     var deviceModel: HOOPDeviceModel?
+    var deviceList: [HOOPDeviceModel] = [HOOPDeviceModel]()
     let titleArray = ["设备名称", "房间选择", "设备信息", "重新配网", "解绑设备", "恢复出厂设置", "系统升级"]
     var roomList: [HOOPRoomModel] = [HOOPRoomModel]()
     var roomNameList: [String] = [String]()
@@ -167,6 +168,7 @@ class HOOPDeviceDetailVC: GYZBaseVC {
     func goUnbindVC(){
         let vc = HOOPUnBindDeviceVC()
         vc.deviceId = (deviceModel?.deviceId)!
+        vc.deviceList = deviceList
         navigationController?.pushViewController(vc, animated: true)
     }
     /// 重新配网

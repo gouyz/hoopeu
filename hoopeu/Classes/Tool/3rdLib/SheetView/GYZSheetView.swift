@@ -45,6 +45,8 @@ class GYZSheetView: UIView {
     
     //存储多选选中单元格的索引
     var selectedIndexs = [Int]()
+    /// 支持多选 数量限制 0不限
+    var maxNum: Int = 0
 
     // MARK: 生命周期方法
     override init(frame:CGRect){
@@ -130,7 +132,17 @@ extension GYZSheetView : UITableViewDelegate,UITableViewDataSource{
             if let index = selectedIndexs.index(of: indexPath.row){
                 selectedIndexs.remove(at: index)//原来选中的取消选中
             }else{
-                selectedIndexs.append(indexPath.row) //原来没选中的就选中
+                if maxNum > 0 {
+                    if maxNum == 1 {
+                        selectedIndexs.removeAll()
+                        selectedIndexs.append(indexPath.row) //原来没选中的就选中
+                    }else if selectedIndexs.count < maxNum {
+                        selectedIndexs.append(indexPath.row) //原来没选中的就选中
+                    }
+                }else{
+                    selectedIndexs.append(indexPath.row) //原来没选中的就选中
+                }
+//                selectedIndexs.append(indexPath.row) //原来没选中的就选中
             }
             
             ////刷新该行
