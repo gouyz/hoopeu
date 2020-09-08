@@ -38,4 +38,8 @@ pod 'ZFPlayer'
 #pod 'ZFPlayer/ijkplayer'
 pod 'ZFPlayer/ControlView'
 pod 'ZFPlayer/AVPlayer'
+
+pod 'CryptoSwift' #swift加密库, 支持md5,sha1,sha224,sha256 https://github.com/krzyzanowskim/CryptoSwift
+# 若琪
+pod 'RokidSDK', '~> 1.10.2'
 end

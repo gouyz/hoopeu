@@ -11,6 +11,7 @@ import IQKeyboardManagerSwift
 import MBProgressHUD
 import CocoaMQTT
 import SwiftyJSON
+//import RokidSDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
