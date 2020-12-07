@@ -12,8 +12,8 @@ private let selectChuanGanCell = "selectChuanGanCell"
 
 class HOOPChuanGanListVC: GYZBaseVC {
     
-    let titleArray = ["求助设备", "门磁设备", "防盗设备", "烟雾报警设备", "煤气报警设备","通用传感器"]
-    let typeArray = [1, 2, 3, 4, 5,6]
+    let titleArray = ["求助设备", "门磁设备", "防盗设备", "烟雾报警设备", "煤气报警设备","水溢传感器","通用传感器"]
+    let typeArray = [1, 2, 3, 4, 5,6,7]
 
     override func viewDidLoad() {
         super.viewDidLoad()

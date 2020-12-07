@@ -2102,10 +2102,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = hoopeu/hoopeu.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hoopeu Electronic S&T (Shanghai) Co., Ltd (38HNQ33A47)";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 38HNQ33A47;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2133,7 +2133,7 @@
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird/opencore-amr/lib",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.3;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2191,6 +2191,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.gouyz.hoopeu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "hoopeu/hoopeu-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2204,10 +2205,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = hoopeu/hoopeu.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hoopeu Electronic S&T (Shanghai) Co., Ltd (38HNQ33A47)";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 38HNQ33A47;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2235,7 +2236,7 @@
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird",
 					"$(PROJECT_DIR)/Classes/Tool/3rdLib/AudioRecordThird/opencore-amr/lib",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2292,6 +2293,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.gouyz.hoopeu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "hoopeu/hoopeu-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;

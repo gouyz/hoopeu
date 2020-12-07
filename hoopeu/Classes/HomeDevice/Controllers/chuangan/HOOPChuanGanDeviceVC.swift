@@ -19,7 +19,7 @@ class HOOPChuanGanDeviceVC: GYZBaseVC {
     var ctrlDevType: Int = 1
     /// 记录学习时返回的code码
     var codesDic: [[String: Any]] = [[String: Any]]()
-    let titleArray = ["求助设备", "门磁设备", "防盗设备", "烟雾报警设备", "煤气报警设备","通用传感器"]
+    let titleArray = ["求助设备", "门磁设备", "防盗设备", "烟雾报警设备", "煤气报警设备","水溢传感器","通用传感器"]
 
     override func viewDidLoad() {
         super.viewDidLoad()

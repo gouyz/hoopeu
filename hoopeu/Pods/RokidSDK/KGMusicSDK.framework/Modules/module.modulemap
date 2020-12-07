@@ -1,0 +1,6 @@
+framework module KGMusicSDK {
+  umbrella header "KGMusicSDK.h"
+
+  export *
+  module * { export * }
+}
